@@ -1,0 +1,166 @@
+{
+  "Actor": {
+    "types": ["character", "enemy", "vehicle"],
+    "templates": {
+      "common": {
+        "hp": {
+          "hd": "1d8",
+          "value": 20,
+          "max": 20
+        },
+        "ac": {
+          "value": 0,
+          "mod": 0
+        },
+        "aac": {
+          "value": 0,
+          "mod": 0
+        },
+        "thac0": {
+          "value": 19,
+          "bhb": 0,
+          "bba": 0,
+          "mod": {
+            "missile": 0,
+            "melee": 0
+          }
+        },
+        "saves": {
+          "save": {
+            "value": 0
+          }
+        },
+        "movement": {
+          "base": 120
+        },
+        "initiative": {
+          "value": 0,
+          "mod": 0
+        }
+      }
+    },
+    "character": {
+      "templates": ["common"],
+      "config": {
+        "movementAuto": true
+      },
+      "details": {
+        "biography": "",
+        "notes": "",
+        "class": "",
+        "nationality": "",
+        "profession": "",
+        "title": "",
+        "rank": 1,
+        "xp": {
+          "share": 100,
+          "next": 2000,
+          "value": 0,
+          "bonus": 0
+        }
+      },
+      "exploration": {
+        "hd": 1
+      },
+      "scores": {
+        "str": {
+          "value": 0,
+          "bonus": 0
+        },
+        "int": {
+          "value": 0,
+          "bonus": 0
+        },
+        "wis": {
+          "value": 0,
+          "bonus": 0
+        },
+        "dex": {
+          "value": 0,
+          "bonus": 0
+        },
+        "con": {
+          "value": 0,
+          "bonus": 0
+        },
+        "cha": {
+          "value": 0,
+          "bonus": 0
+        }
+      },
+      "encumbrance": {
+        "max": 1600
+      },
+      "languages": {
+        "value": []
+      },
+      "retainer": {
+        "enabled": false,
+        "loyalty": 0,
+        "wage": ""
+      }
+    },
+    "enemy": {
+      "templates": ["common"],
+      "details": {
+        "biography": "",
+        "xp": 0,
+        "morale": 0
+      },
+      "attacks": ""
+    }
+  },
+  "Item": {
+    "types": ["item", "weapon", "armor", "ability"],
+    "item": {
+      "description": "",
+      "quantity": {
+        "value": 1,
+        "max": 0
+      },
+      "treasure": false,
+      "weight": 0
+    },
+    "weapon": {
+      "range": {
+        "short": 0,
+        "medium": 0,
+        "long": 0,
+        "extreme": 0
+      },
+      "save": "",
+      "pattern": "transparent",
+      "description": "",
+      "damage": "1d6",
+      "bonus": 0,
+      "tags": [],
+      "slow": false,
+      "missile": false,
+      "melee": true,
+      "equipped": false,
+      "weight": 0,
+      "counter": {
+        "value": 0,
+        "max": 0
+      }
+    },
+    "armor": {
+      "description": "",
+      "ac": 9,
+      "aac": 10,
+      "type": "light",
+      "equipped": false,
+      "weight": 0
+    },
+    "ability": {
+      "pattern": "white",
+      "requirements": "",
+      "roll": "",
+      "rollType": "result",
+      "rollTarget": 0,
+      "blindroll": false,
+      "description": "",
+      "save": ""
+    }
+  }
+}

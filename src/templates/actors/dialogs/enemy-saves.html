@@ -1,0 +1,14 @@
+<form class="owb dialog">
+    <div class="form-group">
+        <label>{{localize 'OWB.HitDice'}}</label>
+        <div class="form-fields">
+            <select name="choice">
+                {{#select choices}}
+                {{#each choices as |saves mode|}}
+                <option value="{{mode}}">{{saves.label}}</option>
+                {{/each}}
+                {{/select}}
+            </select>
+        </div>
+    </div>
+</div>
