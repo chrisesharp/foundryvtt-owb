@@ -54,7 +54,6 @@ export const OWB = {
   tags: {
     melee: "OWB.items.Melee",
     missile: "OWB.items.Missile",
-    slow: "OWB.items.Slow",
     twohanded: "OWB.items.TwoHanded",
     blunt: "OWB.items.Blunt",
     brace: "OWB.items.Brace",
@@ -65,7 +64,6 @@ export const OWB = {
   tag_images: {
     melee: "/systems/owb/assets/default/ability.png",
     missile: "/systems/owb/assets/default/ability.png",
-    slow: "/systems/owb/assets/default/ability.png",
     twohanded: "/systems/owb/assets/default/ability.png",
     blunt: "/systems/owb/assets/default/ability.png",
     brace: "/systems/owb/assets/default/ability.png",

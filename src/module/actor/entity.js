@@ -11,7 +11,6 @@ export class OWBActor extends Actor {
 
     // Compute modifiers from actor scores
     this.computeModifiers();
-    this._isSlow();
     this.computeAC();
     this.computeEncumbrance();
 
@@ -386,9 +385,6 @@ export class OWBActor extends Actor {
         data.thac0.bhb.toString()
       );
     }
-    if (attData.item && attData.item.data.bonus) {
-      rollParts.push(attData.item.data.bonus);
-    }
     let thac0 = data.thac0.value;
     if (options.type == "melee") {
       dmgParts.push(data.scores.str.mod);
@@ -438,19 +434,6 @@ export class OWBActor extends Actor {
       }
     }
     return output;
-  }
-
-  _isSlow() {
-    this.data.data.isSlow = false;
-    if (this.data.type != "character") {
-      return;
-    }
-    this.data.items.forEach((item) => {
-      if (item.type == "weapon" && item.data.slow && item.data.equipped) {
-        this.data.data.isSlow = true;
-        return;
-      }
-    });
   }
 
   computeEncumbrance() {

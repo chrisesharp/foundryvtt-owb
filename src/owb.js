@@ -4,7 +4,7 @@ import { OWBActorSheetCharacter } from "./module/actor/character-sheet.js";
 import { OWBActorSheetEnemy } from "./module/actor/enemy-sheet.js";
 import { preloadHandlebarsTemplates } from "./module/preloadTemplates.js";
 import { OWBActor } from "./module/actor/entity.js";
-import { OWBItem } from "./module/item/entity.js";
+import { OWBItem } from "./module/item/item.js";
 import { OWB } from "./module/config.js";
 import { registerSettings } from "./module/settings.js";
 import { registerHelpers } from "./module/helpers.js";

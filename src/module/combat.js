@@ -22,12 +22,7 @@ export class OWBCombat {
       if (!data.combatants[i].actor) {
         return;
       }
-      if (data.combatants[i].actor.data.data.isSlow) {
-        data.combatants[i].initiative = -789;
-      } else {
-        data.combatants[i].initiative =
-          groups[data.combatants[i].flags.owb.group].initiative;
-      }
+      data.combatants[i].initiative = groups[data.combatants[i].flags.owb.group].initiative;
     }
     combat.setupTurns();
   }
@@ -139,10 +134,6 @@ export class OWBCombat {
   static updateCombatant(combat, combatant, data) {
     let init = game.settings.get("owb", "initiative");
     // Why do you reroll ?
-    if (combatant.actor.data.data.isSlow) {
-      data.initiative = -789;
-      return;
-    }
     if (data.initiative && init == "group") {
       let groupInit = data.initiative;
       // Check if there are any members of the group with init

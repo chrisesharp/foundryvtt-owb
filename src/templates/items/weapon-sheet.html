@@ -65,9 +65,16 @@
               />
           </div>
         </div>
+        <div class="form-group attack-type">
+          <a title="{{localize 'OWB.items.Melee'}}" class="melee-toggle {{#if
+            data.melee}}active{{/if}}"><i class="fas fa-fist-raised"></i></a>
+          <a title="{{localize 'OWB.items.Missile'}}" class="missile-toggle
+            {{#if data.missile}}active{{/if}}"><i class="fas fa-bullseye"></i></a>
+        </div>
+        {{#if data.missile}}
         <div class="form-group">
-          <label title="{{localize 'OWB.items.AtkBonus'}}">{{localize
-            'OWB.items.Bonus'}}</label>
+          <label title="{{localize 'OWB.items.ROF'}}">{{localize
+            'OWB.items.ROF'}}</label>
           <div class="form-fields">
             <input
               type="text"
@@ -77,13 +84,6 @@
               />
           </div>
         </div>
-        <div class="form-group attack-type">
-          <a title="{{localize 'OWB.items.Melee'}}" class="melee-toggle {{#if
-            data.melee}}active{{/if}}"><i class="fas fa-fist-raised"></i></a>
-          <a title="{{localize 'OWB.items.Missile'}}" class="missile-toggle
-            {{#if data.missile}}active{{/if}}"><i class="fas fa-bullseye"></i></a>
-        </div>
-        {{#if data.missile}}
         <div class="form-group block-input">
           <label>{{localize 'OWB.items.Range'}}</label>
           <div class="form-fields range">
@@ -104,14 +104,14 @@
               <input
               type="text"
               name="data.range.long"
-              value="{{mult data.range.short 3}}"
+              value="{{mult data.range.short 6}}"
               data-dtype="Number"
               />
               <div class="sep"></div>
               <input
               type="text"
               name="data.range.extreme"
-              value="{{mult data.range.short 4}}"
+              value="{{mult data.range.short 24}}"
               data-dtype="Number"
               />
           </div>
@@ -153,18 +153,6 @@
           </div>
         </div>
         {{/if}}
-        <div class="form-group">
-          <label>{{localize 'OWB.items.Slow'}}</label>
-          <div class="form-fields">
-            <input
-              type="checkbox"
-              name="data.slow"
-              value="{{data.slow}}"
-              {{checked data.slow}}
-              data-dtype="Number"
-              />
-          </div>
-        </div>
       </div>
       <div class="description weapon-editor">
         {{editor content=data.description target="data.description" button=true

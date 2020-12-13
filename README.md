@@ -5,7 +5,7 @@ An unofficial implementation of WWII: Operation Whitebox for Foundry VTT.
 ## Installation
 
 You can find this Foundry VTT game system within Foundry VTT in the system browser. You could also download the latest archive in the package folder, or use the manifest link below.\
-https://raw.github.com/chrissharp/foundryvtt-owb/main/src/system.json
+[https://raw.github.com/chrissharp/foundryvtt-owb/main/src/system.json](https://raw.github.com/chrissharp/foundryvtt-owb/main/src/system.json)
 
 ## License
 

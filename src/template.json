@@ -134,7 +134,6 @@
       "damage": "1d6",
       "bonus": 0,
       "tags": [],
-      "slow": false,
       "missile": false,
       "melee": true,
       "equipped": false,

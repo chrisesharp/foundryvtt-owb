@@ -201,9 +201,6 @@ export class OWBItem extends Item {
           case CONFIG.OWB.tags.melee:
             newData.melee = true;
             break;
-          case CONFIG.OWB.tags.slow:
-            newData.slow = true;
-            break;
           case CONFIG.OWB.tags.missile:
             newData.missile = true;
             break;
