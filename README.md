@@ -13,7 +13,6 @@ This Foundry VTT system requires Operation Whitebox:WW2 Rules that you can find 
 
 This third party product is not affiliated with or approved by Small Niche Games. \
 WWII: Operation Whitebox is a trademark of Necrotic Gnome.\
-The trademark and Old-School Essentials logo are used with permission of Necrotic Gnome, under license.
 
 ## Credits
 
