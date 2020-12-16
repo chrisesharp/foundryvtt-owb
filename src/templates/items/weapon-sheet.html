@@ -43,7 +43,7 @@
   </header>
   <section class="sheet-body">
     <div class="flexrow">
-      <div class="stats">
+      <div class="stats narrow">
         <div class="form-group">
           <div class="form-fields">
             <input
@@ -73,13 +73,13 @@
         </div>
         {{#if data.missile}}
         <div class="form-group">
-          <label title="{{localize 'OWB.items.ROF'}}">{{localize
-            'OWB.items.ROF'}}</label>
+          <label title="{{localize 'OWB.weapons.ROF'}}">{{localize
+            'OWB.weapons.ROF'}}</label>
           <div class="form-fields">
             <input
               type="text"
-              name="data.bonus"
-              value="{{data.bonus}}"
+              name="data.rof"
+              value="{{data.rof}}"
               data-dtype="Number"
               />
           </div>
@@ -146,7 +146,7 @@
             <input
               type="checkbox"
               name="data.save"
-              value="{{ 0 }}"
+              name="{{data.save}}"
               {{checked data.save}}
               data-dtype="Number"
               />

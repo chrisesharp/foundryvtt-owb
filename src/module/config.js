@@ -13,7 +13,7 @@ export const OWB = {
     below: "≤"
   },
   saves_short: {
-    save: "OWB.saves.save.short"
+    true: "OWB.saves.save.short"
   },
   saves_long: {
     save: "OWB.saves.save.long"
@@ -60,6 +60,8 @@ export const OWB = {
     splash: "OWB.items.Splash",
     reload: "OWB.items.Reload",
     charge: "OWB.items.Charge",
+    burst: "OWB.weapons.burst.short",
+    suppressive: "OWB.weapons.suppressive.short"
   },
   tag_images: {
     melee: "/systems/owb/assets/default/ability.png",
@@ -70,6 +72,8 @@ export const OWB = {
     splash: "/systems/owb/assets/default/ability.png",
     reload: "/systems/owb/assets/default/ability.png",
     charge: "/systems/owb/assets/default/ability.png",
+    burst: "/systems/owb/assets/default/ability.png",
+    suppressive: "/systems/owb/assets/default/ability.png"
   },
   enemy_saves: {
     0: {

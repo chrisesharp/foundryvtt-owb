@@ -4,6 +4,7 @@
       <div class="item-caret"><i class="fas fa-caret-down"></i></div>
       <div class="item-name">{{localize "OWB.items.Weapons"}}</div>
       <div class="icon-row">{{localize "OWB.items.Qualities"}}</div>
+      <div class="field-short">{{localize "OWB.weapons.ROF"}}</div>
       <div class="field-short"><i class="fas fa-weight-hanging"></i></div>
       <div class="item-controls">
         <a class="item-control item-create" data-type="weapon" title="{{localize 'OWB.Add'}}"><i
@@ -31,9 +32,11 @@
             {{#each item.data.tags as |tag|}}
             {{#unless (getTagIcon tag.value)}}
               <span title="{{tag.title}}">{{tag.value}}{{#unless @last}},{{/unless}}</span>
-
             {{/unless}}
             {{/each}}
+          </div>
+          <div class="field-short">
+            {{item.data.rof}}
           </div>
           <div class="field-short">
             {{#if (eq @root.config.encumbrance "basic")}}_{{else}}{{item.data.weight}}{{/if}}

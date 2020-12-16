@@ -173,7 +173,6 @@
   "OWB.items.Damage": "Damage",
   "OWB.items.ArmorAC": "AC",
   "OWB.items.ArmorAAC": "AAC",
-  "OWB.items.ROF": "ROF",
   "OWB.items.roundAttacks": "Attacks Spent this Round",
   "OWB.items.roundAttacksMax": "Maximum Attacks per Round",
   "OWB.items.resetAttacks": "Reset all Attacks per Round",
@@ -229,6 +228,7 @@
   "OWB.reaction.Friendly": "{name} is Friendly",
 
   "OWB.weapons.save": "Save",
+  "OWB.weapons.ROF": "ROF",
   "OWB.weapons.burst.short": "Brst",
   "OWB.weapons.burst.long": "Burst Fire",
   "OWB.weapons.suppressive.short": "Supp",

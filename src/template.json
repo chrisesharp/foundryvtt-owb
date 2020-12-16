@@ -128,7 +128,7 @@
         "long": 0,
         "extreme": 0
       },
-      "save": "",
+      "save": false,
       "pattern": "transparent",
       "description": "",
       "damage": "1d6",
@@ -137,6 +137,9 @@
       "missile": false,
       "melee": true,
       "equipped": false,
+      "burst": false,
+      "suppressive": false,
+      "rof": 0,
       "weight": 0,
       "counter": {
         "value": 0,

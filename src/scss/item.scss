@@ -59,10 +59,11 @@
         }
         .form-fields {
           &.range { 
+            font-size: 9px;
             .sep {
               flex: 0 0 1px;
               background: $colorTan;
-              margin: 4px 0;
+              margin: 2px 0;
             }
           }
         }
@@ -106,7 +107,7 @@
     }
     .description {
       .editor {
-        height: 250px;
+        height: 200px;
         .editor-content {
           padding: 0 5px;
         }
