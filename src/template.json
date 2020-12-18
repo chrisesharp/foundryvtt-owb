@@ -139,7 +139,6 @@
       "equipped": false,
       "burst": false,
       "suppressive": false,
-      "rof": 0,
       "weight": 0,
       "counter": {
         "value": 0,

@@ -151,7 +151,7 @@ export class OWBItem extends Item {
     switch (this.data.type) {
       case "weapon":
         let wTags = formatTag(data.damage, "fa-bolt");
-        wTags += formatTag(data.rof, "fa-times");
+        wTags += formatTag(data.counter.max, "fa-times");
         data.tags.forEach((t) => {
           wTags += formatTag(t.value);
         });
