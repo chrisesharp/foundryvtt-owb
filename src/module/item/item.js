@@ -150,7 +150,6 @@ export class OWBItem extends Item {
     const data = this.data.data;
     switch (this.data.type) {
       case "weapon":
-        console.log(data);
         let wTags = formatTag(data.damage, "fa-bolt");
         wTags += formatTag(data.rof, "fa-times");
         data.tags.forEach((t) => {
@@ -161,12 +160,6 @@ export class OWBItem extends Item {
             data.range.short + "/" + data.range.medium + "/" + data.range.long + "/" + data.range.extreme,
             "fa-bullseye"
           );
-          if (data.burst) {
-            wTags += formatTag(CONFIG.OWB.tags['burst'], "fa-stream");
-          }
-          if (data.suppressive) {
-            wTags += formatTag(CONFIG.OWB.tags['suppressive'], "fa-compress-arrows-alt");
-          }
           wTags += formatTag(CONFIG.OWB.saves_short[data.save], "fa-skull");
         }
         return wTags;

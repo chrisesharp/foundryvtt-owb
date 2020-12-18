@@ -16,4 +16,10 @@ WWII: Operation Whitebox is a trademark of Necrotic Gnome.\
 
 ## Credits
 
-Thanks to [U-man](https://gitlab.com/mesfoliesludiques) and his [OSE FoundryVTT system](https://gitlab.com/mesfoliesludiques/foundryvtt-ose/), which was a huge inspiration and basis for this project.
+- Thanks to [U-man](https://gitlab.com/mesfoliesludiques) and his [OSE FoundryVTT system](https://gitlab.com/mesfoliesludiques/foundryvtt-ose/), which was a huge inspiration and basis for this project.
+
+### Icons from the Noun Project
+
+- Explosion icon by Nico Tzogalis.
+- Target by andriwidodo.
+- Zoom In by Ahmad Romadon.

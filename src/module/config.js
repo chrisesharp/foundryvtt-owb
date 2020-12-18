@@ -72,8 +72,8 @@ export const OWB = {
     splash: "/systems/owb/assets/default/ability.png",
     reload: "/systems/owb/assets/default/ability.png",
     charge: "/systems/owb/assets/default/ability.png",
-    burst: "/systems/owb/assets/default/ability.png",
-    suppressive: "/systems/owb/assets/default/ability.png"
+    burst: "/systems/owb/assets/default/burst.png",
+    suppressive: "/systems/owb/assets/default/suppress.png"
   },
   enemy_saves: {
     0: {

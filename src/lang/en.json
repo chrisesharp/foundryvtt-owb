@@ -229,8 +229,8 @@
 
   "OWB.weapons.save": "Save",
   "OWB.weapons.ROF": "ROF",
-  "OWB.weapons.burst.short": "Brst",
+  "OWB.weapons.burst.short": "Burst",
   "OWB.weapons.burst.long": "Burst Fire",
-  "OWB.weapons.suppressive.short": "Supp",
+  "OWB.weapons.suppressive.short": "Suppress",
   "OWB.weapons.suppressive.long": "Suppressive Fire"
 }
