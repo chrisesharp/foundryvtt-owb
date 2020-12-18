@@ -205,6 +205,12 @@ export class OWBItem extends Item {
           case CONFIG.OWB.tags.missile:
             newData.missile = true;
             break;
+          case CONFIG.OWB.tags.burst:
+            newData.burst = true;
+            break;
+          case CONFIG.OWB.tags.suppressive:
+            newData.suppressive = true;
+            break;
         }
         update.push({ title: title, value: val });
       });
