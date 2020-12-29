@@ -366,6 +366,26 @@
           flex-basis: 45px;
         }
       }
+      &.languages {
+        .item-entry {
+          line-height: 19px;
+        }
+        .item-controls {
+          flex-basis: 0px;
+          margin-right: 0px;
+        }
+        .item-rollable {
+          &:hover .item-image {
+            background-image: url("/icons/svg/d20-grey.svg") !important;
+            background-size: cover;
+            cursor: pointer;
+          }
+          .item-image:hover {
+            background-image: url("/icons/svg/d20-black.svg") !important;
+            background-size: cover;
+          }
+        }
+      }
     }
     .editor {
       height: 300px;

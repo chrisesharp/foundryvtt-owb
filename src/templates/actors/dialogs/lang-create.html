@@ -5,9 +5,16 @@
             <select name="choice">
                 {{#select choices}}
                 {{#each choices as |label mode|}}
-                <option value="{{mode}}">{{label}}</option>
+                <option value="{{mode}}">{{label.name}}</option>
                 {{/each}}
                 {{/select}}
+            </select>
+        </div>
+        <div class="form-fields">
+            <select name="fluency">
+                <option value="F" selected>{{ localize 'OWB.Fluent'}}</option>
+                <option value="M">{{ localize 'OWB.MostlyFluent'}}</option>
+                <option value="B">{{ localize 'OWB.Basic'}}</option>
             </select>
         </div>
     </div>

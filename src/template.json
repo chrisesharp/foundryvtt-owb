@@ -111,7 +111,7 @@
     }
   },
   "Item": {
-    "types": ["item", "weapon", "armor", "ability"],
+    "types": ["item", "weapon", "armor", "ability", "language"],
     "item": {
       "description": "",
       "quantity": {
@@ -161,6 +161,11 @@
       "rollTarget": 0,
       "blindroll": false,
       "description": "",
+      "save": ""
+    },
+    "language": {
+      "name": "",
+      "fluency": "",
       "save": ""
     }
   }

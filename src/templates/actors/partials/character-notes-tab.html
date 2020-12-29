@@ -1,25 +1,32 @@
 <section class="notes-tab">
     <div class="inventory">
         <div class="flexrow">
-            <div class="languages">
+            <div class="inventory abilities languages">
                 <div class="item-titles flexrow">
-                    <div class="item-name">
-                        {{localize "OWB.category.languages"}}
-                    </div>
+                    <div class="item-name">{{localize "OWB.category.languages"}}</div>
                     <div class="item-controls">
-                        <a class="item-control item-push" data-array="languages" title="{{localize 'OWB.Add'}}"><i
-                                class="fa fa-plus"></i></a>
+                        {{#if owner}}
+                        <a class="item-control item-push" data-array="languages" data-type="language" title="{{localize 'OWB.Add'}}">
+                        <!-- <a class="item-control item-create" data-type="language" title="{{localize 'OWB.Add'}}"> -->
+                            <i class="fa fa-plus"></i>
+                        </a>
+                        {{/if}}
                     </div>
                 </div>
                 <ol>
-                    {{#each data.languages.value as |lang|}}
-                    <li class="item flexrow" data-lang="{{lang}}">
-                        <div class="item-name">
-                            {{lang}}
-                        </div>
+                    {{#each languages as |lang|}}
+                    <li class="item item-entry" data-lang="{{lang.name}}" data-item-id="{{lang._id}}">
+                        <div class="item-name attribute item-rollable flexrow">
+                            <div class="item-image" style="background-image: url({{lang.img}}); background-size: 32px; width: 32px"></div>
+                            {{lang.name}} ({{lang.data.fluency}})
+                        <div></div>
                         <div class="item-controls">
-                            <a class="item-control item-pop" data-array="languages" title="{{localize 'OWB.Del'}}"><i
-                                class="fa fa-trash"></i></a>
+                            {{#if ../owner}}
+                            <a class="item-control item-delete item-pop" data-array="languages" title="{{localize 'OWB.Delete'}}">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                            {{/if}}
+                        </div>
                         </div>
                     </li>
                     {{/each}}

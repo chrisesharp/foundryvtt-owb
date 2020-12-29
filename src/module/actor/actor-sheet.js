@@ -35,13 +35,14 @@ export class OWBActorSheet extends ActorSheet {
    */
   _prepareItems(data) {
     // Partition items by category
-    let [items, weapons, armors, abilities] = data.items.reduce(
+    let [items, weapons, armors, abilities, languages] = data.items.reduce(
       (arr, item) => {
         // Classify items into types
         if (item.type === "item") arr[0].push(item);
         else if (item.type === "weapon") arr[1].push(item);
         else if (item.type === "armor") arr[2].push(item);
         else if (item.type === "ability") arr[3].push(item);
+        else if (item.type === "language") arr[4].push(item);
         return arr;
       },
       [[], [], [], [], []]
@@ -54,6 +55,7 @@ export class OWBActorSheet extends ActorSheet {
       armors: armors,
     };
     data.abilities = abilities;
+    data.languages = languages;
   }
 
   _onItemSummary(event) {
@@ -107,6 +109,10 @@ export class OWBActorSheet extends ActorSheet {
           });
         }
         item.rollWeapon({ skipDialog: ev.ctrlKey });
+      } else if (item.type == "language") {
+        let actorObject = this.actor;
+        let language = item.data.data;
+        actorObject.rollLanguageSave(language, { event: ev });
       } else {
         item.rollFormula({ skipDialog: ev.ctrlKey });
       }

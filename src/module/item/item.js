@@ -26,6 +26,9 @@ export class OWBItem extends Item {
       case "item":
         img = "/systems/owb/assets/default/ability.png";
         break;
+      case "language":
+        img = "/systems/owb/assets/default/ability.png";
+        break;
     }
     if (!this.data.img) this.data.img = img;
     super.prepareData();
@@ -173,6 +176,8 @@ export class OWBItem extends Item {
         roll += data.rollTarget ? CONFIG.OWB.roll_type[data.rollType] : "";
         roll += data.rollTarget ? data.rollTarget : "";
         return `${formatTag(data.requirements)}${formatTag(roll)}`;
+      case "language":
+        return data.fluency;
     }
     return "";
   }
@@ -241,6 +246,9 @@ export class OWBItem extends Item {
         } else {
           this.show();
         }
+        break;
+      case "language":
+        this.rollFormula();
         break;
       case "item":
       case "armor":

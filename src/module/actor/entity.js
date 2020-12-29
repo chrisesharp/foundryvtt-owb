@@ -99,6 +99,96 @@ export class OWBActor extends Actor {
     });
   }
 
+  rollLanguageSave(language, options = {}) {
+    let target = this.data.data.saves["save"].value
+    let speakerRank = 1;
+    let speakerFluency = null;
+    let mod = 0;
+    let bonus = 0;
+    if (game.user.targets.size > 0) {
+      for (let t of game.user.targets.values()) {
+        speakerRank = t.actor.data.data.details.rank;
+        let speakerLangs = t.actor.data.data.languages.value.filter((el) => el.name === language.name);
+        if (speakerLangs.length > 0) {
+          speakerFluency = speakerLangs[0].fluency
+        }
+      }
+    }
+    if (language.fluency === "F") {
+      switch (speakerFluency) {
+          case "F":
+            mod = -2;
+            break;
+          case "M":
+            mod = -1;
+            break;
+          case "B":
+            mod = 0;
+            bonus = 5
+            break;
+          default:
+            bonus = 10;
+        }
+    } else if (language.fluency === "M") {
+      switch (speakerFluency) {
+        case "F":
+          mod = -3;
+          break;
+        case "M":
+          mod = -2;
+          break;
+        case "B":
+          mod = -1;
+          bonus = 1;
+          break;
+        default:
+          bonus = 5;
+      }
+    } else if (language.fluency === "B") {
+      switch (speakerFluency) {
+        case "F":
+          mod = -4;
+          break;
+        case "M":
+          mod = -3;
+          break;
+        case "B":
+          mod = -2;
+          break;
+        default:
+          bonus = 1;
+      }
+    }
+    
+    const label = game.i18n.localize(`OWB.Language`) + " (" + language.name + ")";
+    const rollParts = ["1d20", speakerRank * mod, bonus];
+
+    const data = {
+      actor: this.data,
+      roll: {
+        type: "above",
+        target: target,
+      },
+      details: game.i18n.format("OWB.roll.details.save", { save: label }),
+    };
+
+    // let skip = options.event && options.event.ctrlKey;
+    let skip = true;
+
+    const rollMethod = this.data.type == "character" ? OWBDice.RollSave : OWBDice.Roll;
+
+    // Roll and return
+    return rollMethod({
+      event: options.event,
+      parts: rollParts,
+      data: data,
+      skipDialog: skip,
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: game.i18n.format("OWB.roll.language", { lang: label }),
+      title: game.i18n.format("OWB.roll.language", { lang: label }),
+    });
+  }
+
   rollSave(save, options = {}) {
     const label = game.i18n.localize(`OWB.saves.${save}.long`);
     const rollParts = ["1d20"];

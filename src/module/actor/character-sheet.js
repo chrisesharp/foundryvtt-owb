@@ -59,7 +59,6 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
 
   async _chooseLang() {
     let choices = CONFIG.OWB.languages;
-
     let templateData = { choices: choices },
       dlg = await renderTemplate(
         "/systems/owb/templates/actors/dialogs/lang-create.html",
@@ -68,7 +67,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     //Create Dialog window
     return new Promise((resolve) => {
       new Dialog({
-        title: "",
+        title: "Choose Language",
         content: dlg,
         buttons: {
           ok: {
@@ -77,6 +76,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
             callback: (html) => {
               resolve({
                 choice: html.find('select[name="choice"]').val(),
+                fluency: html.find('select[name="fluency"]').val(),
               });
             },
           },
@@ -90,25 +90,40 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     });
   }
 
-  _pushLang(table) {
+  _pushLang(header) {
     const data = this.actor.data.data;
+    const type = header.dataset.type;
+    const table = header.dataset.array;
     let update = duplicate(data[table]);
     this._chooseLang().then((dialogInput) => {
-      const name = CONFIG.OWB.languages[dialogInput.choice];
+      const name = CONFIG.OWB.languages[dialogInput.choice].name;
+      const fluency = dialogInput.fluency;
+      const img = CONFIG.OWB.languages[dialogInput.choice].img;
       if (update.value) {
-        update.value.push(name);
+        update.value.push({name:name, fluency:fluency});
       } else {
-        update = { value: [name] };
+        update = { value: [{name:name, fluency:fluency}] };
       }
       let newData = {};
       newData[table] = update;
-      return this.actor.update({ data: newData });
+      const itemData = {
+        name: name,
+        type: type,
+        img:img,
+        data: duplicate(header.dataset),
+      };
+      delete itemData.data["type"];
+      itemData.data["name"] = name;
+      itemData.data["fluency"] = fluency;
+      itemData.data["save"] = "save";
+      this.actor.update({ data: newData });
+      return this.actor.createOwnedItem(itemData);
     });
   }
 
   _popLang(table, lang) {
     const data = this.actor.data.data;
-    let update = data[table].value.filter((el) => el != lang);
+    let update = data[table].value.filter((el) => el.name != lang);
     let newData = {};
     newData[table] = { value: update };
     return this.actor.update({ data: newData });
@@ -197,14 +212,13 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
       li.slideUp(200, () => this.render(false));
     });
 
-    html.find(".item-push").click((ev) => {
+    html.find(".item-push").click((event) => {
       event.preventDefault();
       const header = event.currentTarget;
-      const table = header.dataset.array;
-      this._pushLang(table);
+      return this._pushLang(header);
     });
 
-    html.find(".item-pop").click((ev) => {
+    html.find(".item-pop").click((event) => {
       event.preventDefault();
       const header = event.currentTarget;
       const table = header.dataset.array;

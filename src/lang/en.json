@@ -36,6 +36,7 @@
   "OWB.roll.attacksWith": "Attacks with {name}",
   "OWB.roll.attacks": "{name} attacks!",
   "OWB.roll.save": "{save} Save",
+  "OWB.roll.language": "{lang} Test",
   "OWB.roll.details.save": "Roll 1d20 >= {save} for success",
   "OWB.roll.attribute": "{attribute} check",
   "OWB.roll.details.attribute": "Roll 1d20 <= {score} for success",
@@ -125,6 +126,9 @@
   "OWB.Language": "Language",
   "OWB.FluentLanguages": "Fluent Languages",
   "OWB.BasicLanguages": "Basic Languages",
+  "OWB.Fluent": "Fluent",
+  "OWB.Basic": "Basic",
+  "OWB.MostlyFluent": "Mostly Fluent",
 
   "OWB.Reaction": "Reaction",
 
