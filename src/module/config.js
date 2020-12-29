@@ -40,7 +40,7 @@ export const OWB = {
     {name: "French", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931958%29.svg/32px-Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931958%29.svg.png"},
     {name: "Italian", img:"https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Flag_of_Italy.svg/32px-Flag_of_Italy.svg.png"},
     {name: "Spanish", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Flag_of_Spain_%281938%E2%80%931945%29.svg/32px-Flag_of_Spain_%281938%E2%80%931945%29.svg.png"},
-    {name: "Norwegian", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Norway.svg/32px-Flag_of_Norway.svg.png},
+    {name: "Norwegian", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Norway.svg/32px-Flag_of_Norway.svg.png"},
     {name: "Swedish", img:"https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Flag_of_Sweden.svg/32px-Flag_of_Sweden.svg.png"},
     {name: "Finnish", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_Finland.svg/32px-Flag_of_Finland.svg.png"},
     {name: "Danish", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Flag_of_Denmark.svg/32px-Flag_of_Denmark.svg.png"},
