@@ -367,7 +367,7 @@ export class OWBItem extends Item {
         return (button.disabled = false);
       }
       for (let t of targets) {
-        await t.rollSave(button.dataset.save, { event });
+        await t.rollSave(button.dataset.action, { event });
       }
     }
 

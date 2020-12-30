@@ -475,6 +475,7 @@ export class OWBActor extends Actor {
           range = -6;
           break;
       }
+      options.type = "missile";
       rollParts.push(
         data.scores.dex.mod.toString(),
         data.thac0.mod.missile.toString(),
@@ -503,7 +504,6 @@ export class OWBActor extends Actor {
         target: attData.roll.target,
       },
     };
-
     // Roll and return
     return OWBDice.Roll({
       event: options.event,

@@ -154,7 +154,7 @@ export class OWBDice {
       // B/X Historic THAC0 Calculation
       if (result.target - roll.total > targetAc) {
         result.details = game.i18n.format("OWB.messages.AttackFailure", {
-          bonus: result.target,
+          bonus: targetAc,
         });
         return result;
       }
@@ -162,7 +162,7 @@ export class OWBDice {
       let value = Math.clamped(result.target - roll.total, -3, 9);
       result.details = game.i18n.format("OWB.messages.AttackSuccess", {
         result: value,
-        bonus: result.target,
+        bonus: targetAc,
       });
     }
     return result;

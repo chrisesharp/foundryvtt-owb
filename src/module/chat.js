@@ -43,7 +43,7 @@ export const addChatMessageButtons = function(msg, html, data) {
     roll.find('button[data-action="apply-damage"]').click((ev) => {
       ev.preventDefault();
       applyChatCardDamage(roll, 1);
-    })
+    });
   }
 }
 
