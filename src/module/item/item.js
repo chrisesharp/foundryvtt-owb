@@ -63,7 +63,6 @@ export class OWBItem extends Item {
 
   rollWeapon(options = {}) {
     let isNPC = this.actor.data.type != "character";
-    const targets = 5;
     const data = this.data.data;
     let type = isNPC ? "attack" : "melee";
     const rollData =
@@ -76,32 +75,36 @@ export class OWBItem extends Item {
       }
     };
 
-    if (data.missile && data.melee && !isNPC) {
+    const button = (type) => {
+      let icon = (type === 'melee') ? '<i class="fas fa-fist-raised"></i>': '<i class="fas fa-bullseye"></i>';
+      return {
+        icon: icon,
+        label: type.charAt(0).toUpperCase() + type.slice(1),
+        callback: () => {
+          this.actor.targetAttack(rollData, type, options);
+        }
+      }
+    }
+
+    if (data.missile && !isNPC) {
+      let btns = {}
+      if (data.melee) {
+        btns['melee'] = button("melee");
+      }
+      btns['short'] = button("short");
+      btns['medium'] = button("medium");
+      btns['long'] = button("long");
+      btns['extreme'] = button("extreme");
+
       // Dialog
       new Dialog({
         title: "Choose Attack Range",
         content: "",
-        buttons: {
-          melee: {
-            icon: '<i class="fas fa-fist-raised"></i>',
-            label: "Melee",
-            callback: () => {
-              this.actor.targetAttack(rollData, "melee", options);
-            },
-          },
-          missile: {
-            icon: '<i class="fas fa-bullseye"></i>',
-            label: "Missile",
-            callback: () => {
-              this.actor.targetAttack(rollData, "missile", options);
-            },
-          },
-        },
-        default: "melee",
+        buttons: btns
       }).render(true);
       return true;
-    } else if (data.missile && !isNPC) {
-      type = "missile";
+    } else if (!data.missile && !isNPC) {
+      type = "melee";
     }
     this.actor.targetAttack(rollData, type, options);
     return true;

@@ -462,13 +462,26 @@ export class OWBActor extends Actor {
       rollParts.push(data.thac0.bba.toString());
     }
 
-    if (options.type == "missile") {
+    if (options.type != "melee") {
+      let range = 0;
+      switch (options.type) {
+        case "medium":
+          range = -2;
+          break;
+        case "long":
+          range = -4;
+          break;
+        case "extreme":
+          range = -6;
+          break;
+      }
       rollParts.push(
         data.scores.dex.mod.toString(),
         data.thac0.mod.missile.toString(),
-        data.thac0.bhb.toString()
+        data.thac0.bhb.toString(),
+        range.toString()
       );
-    } else if (options.type == "melee") {
+    } else {
       rollParts.push(
         data.scores.str.mod.toString(),
         data.thac0.mod.melee.toString(),
