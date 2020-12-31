@@ -214,7 +214,6 @@ export class OWBDice {
     }
 
     templateData.result = OWBDice.digestAttackResult(data, roll);
-
     return new Promise((resolve) => {
       roll.render().then((r) => {
         templateData.rollOWB = r;

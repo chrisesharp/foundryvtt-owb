@@ -81,9 +81,19 @@ export class OWBItem extends Item {
         icon: icon,
         label: type.charAt(0).toUpperCase() + type.slice(1),
         callback: () => {
+          let burst = $("#burst")[0].checked;
+          let suppress = $("#suppress")[0].checked;
+          rollData['burst'] = burst;
+          rollData['suppress'] = suppress;
           this.actor.targetAttack(rollData, type, options);
         }
       }
+    }
+
+    const fire_opt = (type, enabled=false, checked=false) => {
+      const _checked = (checked) ? "checked" : "";
+      const _disabled = (!enabled) ? "disabled" : "";
+      return `<input type='radio' id='${type}' name='fire' value='${type}' ${_checked} ${_disabled}><label for='${type}'>${type}</label>`;
     }
 
     if (data.missile && !isNPC) {
@@ -96,10 +106,23 @@ export class OWBItem extends Item {
       btns['long'] = button("long");
       btns['extreme'] = button("extreme");
 
+      let extra_options = "<label>Fire:</label>" + fire_opt("normal",true, true);
+      if (data.burst) {
+        extra_options += fire_opt("burst",true);
+      } else {
+        extra_options += fire_opt("burst");
+      }
+
+      if (data.suppressive) {
+        extra_options += fire_opt("suppress",true);
+      } else {
+        extra_options += fire_opt("suppress");
+      }
+
       // Dialog
       new Dialog({
         title: "Choose Attack Range",
-        content: "",
+        content: extra_options,
         buttons: btns
       }).render(true);
       return true;

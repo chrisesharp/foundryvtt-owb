@@ -442,6 +442,7 @@ export class OWBActor extends Actor {
   }
 
   rollAttack(attData, options = {}) {
+    const burst = (attData.burst || attData.suppress) ? "+2" : "0"
     const data = this.data.data;
     const rollParts = ["1d20"];
     const dmgParts = [];
@@ -480,7 +481,8 @@ export class OWBActor extends Actor {
         data.scores.dex.mod.toString(),
         data.thac0.mod.missile.toString(),
         data.thac0.bhb.toString(),
-        range.toString()
+        range.toString(),
+        burst,
       );
     } else {
       rollParts.push(
@@ -502,6 +504,8 @@ export class OWBActor extends Actor {
         dmg: dmgParts,
         save: attData.roll.save,
         target: attData.roll.target,
+        suppress: attData.suppress,
+        burst: attData.burst,
       },
     };
     // Roll and return
