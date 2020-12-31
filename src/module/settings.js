@@ -50,7 +50,7 @@ export const registerSettings = function () {
   game.settings.register("owb", "encumbranceOption", {
     name: game.i18n.localize("OWB.Setting.Encumbrance"),
     hint: game.i18n.localize("OWB.Setting.EncumbranceHint"),
-    default: "detailed",
+    default: "complete",
     scope: "world",
     type: String,
     config: true,

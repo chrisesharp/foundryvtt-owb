@@ -89,7 +89,7 @@
         }
       },
       "encumbrance": {
-        "max": 1600
+        "max": 250
       },
       "languages": {
         "value": []
@@ -102,12 +102,18 @@
     },
     "enemy": {
       "templates": ["common"],
+      "config": {
+        "movementAuto": true
+      },
       "details": {
         "biography": "",
         "xp": 0,
         "morale": 0
       },
-      "attacks": ""
+      "attacks": "",
+      "encumbrance": {
+        "max": 250
+      }
     }
   },
   "Item": {

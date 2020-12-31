@@ -544,9 +544,10 @@ export class OWBActor extends Actor {
   }
 
   computeEncumbrance() {
-    if (this.data.type != "character") {
+    if (!["character","enemy"].includes(this.data.type)) {
       return;
     }
+    console.log("computing encumbrance")
     const data = this.data.data;
     let option = game.settings.get("owb", "encumbranceOption");
 
@@ -588,15 +589,15 @@ export class OWBActor extends Actor {
     const data = this.data.data;
     let option = game.settings.get("owb", "encumbranceOption");
     let weight = data.encumbrance.value;
-    let delta = data.encumbrance.max - 1600;
+    let delta = data.encumbrance.max - 250;
     if (["detailed", "complete"].includes(option)) {
       if (weight > data.encumbrance.max) {
-        data.movement.base = 0;
-      } else if (weight > 800 + delta) {
+        data.movement.base = 10;
+      } else if (weight > 150 + delta) {
         data.movement.base = 30;
-      } else if (weight > 600 + delta) {
+      } else if (weight > 100 + delta) {
         data.movement.base = 60;
-      } else if (weight > 400 + delta) {
+      } else if (weight > 25 + delta) {
         data.movement.base = 90;
       } else {
         data.movement.base = 120;
@@ -624,6 +625,9 @@ export class OWBActor extends Actor {
           data.movement.base = 60;
           break;
       }
+    }
+    if (this.data.type === "character") {
+      data.movement.base = Math.min(120, data.movement.base + 30);
     }
   }
 
