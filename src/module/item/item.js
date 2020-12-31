@@ -96,7 +96,7 @@ export class OWBItem extends Item {
       return `<input type='radio' id='${type}' name='fire' value='${type}' ${_checked} ${_disabled}><label for='${type}'>${type}</label>`;
     }
 
-    if (data.missile && !isNPC) {
+    if (data.missile) {
       let btns = {}
       if (data.melee) {
         btns['melee'] = button("melee");

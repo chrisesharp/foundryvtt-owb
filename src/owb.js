@@ -2,6 +2,7 @@
 import { OWBItemSheet } from "./module/item/item-sheet.js";
 import { OWBActorSheetCharacter } from "./module/actor/character-sheet.js";
 import { OWBActorSheetEnemy } from "./module/actor/enemy-sheet.js";
+import { OWBActorSheetVehicle } from "./module/actor/vehicle-sheet.js";
 import { preloadHandlebarsTemplates } from "./module/preloadTemplates.js";
 import { OWBActor } from "./module/actor/entity.js";
 import { OWBItem } from "./module/item/item.js";
@@ -51,6 +52,10 @@ Hooks.once("init", async function () {
   });
   Actors.registerSheet("owb", OWBActorSheetEnemy, {
     types: ["enemy"],
+    makeDefault: true,
+  });
+  Actors.registerSheet("owb", OWBActorSheetVehicle, {
+    types: ["vehicle"],
     makeDefault: true,
   });
   Items.unregisterSheet("core", ItemSheet);

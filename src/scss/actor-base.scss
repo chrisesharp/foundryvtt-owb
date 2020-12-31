@@ -193,9 +193,6 @@
     }
     .inventory {
       overflow: auto;
-      .header-spells {
-        line-height: 30px;
-      }
       .item-titles {
         text-align: center;
         padding: 4px 0;
@@ -356,14 +353,6 @@
         a:hover {
           color: $colorCrimson;
           text-shadow: 0 0 5px $colorFaint, 1px 0 5px $colorFaint, 0 1px 5px $colorFaint, 1px 1px 5px $colorFaint;
-        }
-      }
-      &.spells {
-        .item-titles {
-          line-height: 24px;
-        }
-        .item-controls {
-          flex-basis: 45px;
         }
       }
       &.languages {

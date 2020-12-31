@@ -140,6 +140,7 @@
   "OWB.category.languages": "Languages",
   "OWB.category.description": "Description",
   "OWB.category.equipment": "Equipment",
+  "OWB.category.mods": "Modifications",
 
   "OWB.Setting.Initiative": "Initiative",
   "OWB.Setting.InitiativeHint": "Grouped or individual initiative.",

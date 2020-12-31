@@ -3,6 +3,7 @@ export const preloadHandlebarsTemplates = async function () {
         //Character Sheets
         'systems/owb/templates/actors/character-sheet.html',
         'systems/owb/templates/actors/enemy-sheet.html',
+        'systems/owb/templates/actors/vehicle-sheet.html',
         //Actor partials
         //Sheet tabs
         'systems/owb/templates/actors/partials/character-header.html',
@@ -12,7 +13,10 @@ export const preloadHandlebarsTemplates = async function () {
         'systems/owb/templates/actors/partials/character-notes-tab.html',
 
         'systems/owb/templates/actors/partials/enemy-header.html',
-        'systems/owb/templates/actors/partials/enemy-attributes-tab.html'
+        'systems/owb/templates/actors/partials/enemy-attributes-tab.html',
+
+        'systems/owb/templates/actors/partials/vehicle-header.html',
+        'systems/owb/templates/actors/partials/vehicle-attributes-tab.html'
     ];
     return loadTemplates(templatePaths);
 };

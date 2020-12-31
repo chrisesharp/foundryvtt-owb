@@ -198,7 +198,6 @@ export class OWBActor extends Actor {
       roll: {
         type: "above",
         target: this.data.data.saves[save].value,
-        magic: this.data.type === "character" ? this.data.data.scores.wis.mod : 0,
       },
       details: game.i18n.format("OWB.roll.details.save", { save: label }),
     };
@@ -660,10 +659,13 @@ export class OWBActor extends Actor {
   }
 
   computeModifiers() {
+    const data = this.data.data;
     if (this.data.type != "character") {
+      if (this.data.type === "enemy") {
+        data.thac0.bhb = data.details.rank - 1;
+      }
       return;
     }
-    const data = this.data.data;
 
     const standard = {
       0: -3,

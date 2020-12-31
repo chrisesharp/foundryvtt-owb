@@ -93,10 +93,6 @@ export class OWBCombat {
       controls.eq(1).after(
         `<a class='combatant-control move-combat ${moveActive}'><i class='fas fa-walking'></i></a>`
       );
-      const spellActive = cmbtant.flags.owb && cmbtant.flags.owb.prepareSpell ? "active" : "";
-      controls.eq(1).after(
-        `<a class='combatant-control prepare-spell ${spellActive}'><i class='fas fa-magic'></i></a>`
-      );
     });
     OWBCombat.announceListener(html);
 

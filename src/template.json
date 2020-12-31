@@ -36,6 +36,14 @@
         "initiative": {
           "value": 0,
           "mod": 0
+        },
+        "scores": {
+          "str": {
+            "mod": 0
+          },
+          "dex": {
+            "mod": 0
+          }
         }
       }
     },
@@ -109,6 +117,20 @@
         "biography": "",
         "xp": 0,
         "morale": 0
+      },
+      "attacks": "",
+      "encumbrance": {
+        "max": 250
+      }
+    },
+    "vehicle": {
+      "templates": ["common"],
+      "config": {
+        "movementAuto": false
+      },
+      "details": {
+        "notes": "",
+        "modifications": []
       },
       "attacks": "",
       "encumbrance": {

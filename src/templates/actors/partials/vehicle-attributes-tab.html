@@ -36,25 +36,6 @@
                 </div>
                 {{/if}}
             </li>
-            <li class="attribute attack">
-                <h4 class="attribute-name box-title" title="{{ localize 'OWB.BHB' }}">
-                    <a>{{ localize "OWB.BHB" }}</a>
-                </h4>
-                <div class="attribute-value">
-                    <div class="health-value health-top" title="{{localize 'OWB.BHB'}}">{{data.thac0.bhb}}</div>
-                </div>
-            </li>
-            {{#if data.retainer.enabled}}
-            <li class="attribute">
-                <h4 class="attribute-name box-title" title="{{ localize 'OWB.Loyalty' }}">
-                    {{ localize "OWB.LoyaltyShort" }}
-                </h4>
-                <div class="attribute-value">
-                    <input name="data.retainer.loyalty" type="text" value="{{data.retainer.loyalty}}" placeholder="0"
-                        data-dtype="Number" />
-                </div>
-            </li>
-            {{/if}}
             <li class="attribute">
                 <h4 class="attribute-name box-title" title="{{localize 'OWB.movement.base'}}">
                     {{ localize "OWB.movement.short" }}
@@ -64,13 +45,6 @@
                         data-dtype="Number" />
                 </div>
             </li>
-            <li class="attribute saving-throw" data-save="save">
-                <h4 class="attribute-name box-title">
-                    <a>{{ localize "OWB.saves.save.short" }}</a></h4>
-                <div class="attribute-value">
-                    <input name="data.saves.save.value" type="text" value="{{data.saves.save.value}}"
-                        placeholder="0" data-dtype="Number" />
-            </li>
         </ul>
     </section>
     <section class="flexrow attribute-row">
@@ -78,7 +52,7 @@
         <div class="flex3 panel inventory abilities">
             <div>
                 <li class="item-titles flexrow panel-title">
-                    <div class="item-name">{{localize 'OWB.category.abilities'}} & {{localize 'OWB.category.equipment'}}</div>
+                    <div class="item-name">{{localize 'OWB.category.mods'}} & {{localize 'OWB.category.equipment'}}</div>
                     <div class="item-controls">
                         {{#if owner}}
                         <a class="item-control item-reset" title='{{localize "OWB.items.resetAttacks"}}'><i
@@ -92,13 +66,13 @@
                     {{#each abilities as |item|}}
                     <li class="item-entry">
                         <div class="item flexrow" data-item-id="{{item._id}}">
-                            <div class="item-pattern" title="{{localize 'OWB.items.pattern'}}" style="background:linear-gradient(0.25turn, {{item.data.pattern}}, transparent)"></div>
                             <div class="item-name {{#if item.data.roll}}item-rollable{{/if}} flexrow">
                                 <div class="item-image" style="background-image: url({{item.img}})"></div>
                                 <h4 title="{{item.name}}">
                                     {{item.name~}}
                                 </h4>
                             </div>
+                            <div class="item-pattern" title="{{localize 'OWB.items.pattern'}}" style="background:linear-gradient(0.25turn, {{item.data.pattern}}, transparent)"></div>
                             <div class="item-controls">
                                 {{#if ../owner}}
                                 <a class="item-control item-show" title='{{localize "OWB.Show"}}'><i
@@ -148,16 +122,6 @@
                     {{/each}}
                 </ol>
             </div>
-        </div>
-        {{!-- Saving throws --}}
-        <div class="attribute-group">
-            <ul class="attributes">
-                <li class="attacks-description">
-                    {{#if isNew}}
-                    <button data-action="generate-saves">{{localize "OWB.dialog.generateSaves"}}</button>
-                    {{/if}}
-                </li>
-            </ul>
         </div>
     </section>
 </section>
