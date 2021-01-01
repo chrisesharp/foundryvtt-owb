@@ -65,7 +65,7 @@ export const OWB = {
     suppressive: "OWB.weapons.suppressive.short"
   },
   tag_images: {
-    melee: "/systems/owb/assets/default/ability.png",
+    melee: "/systems/owb/assets/default/melee.png",
     missile: "/systems/owb/assets/default/ability.png",
     twohanded: "/systems/owb/assets/default/ability.png",
     blunt: "/systems/owb/assets/default/ability.png",
