@@ -55,24 +55,16 @@ export const OWB = {
   tags: {
     melee: "OWB.items.Melee",
     missile: "OWB.items.Missile",
-    twohanded: "OWB.items.TwoHanded",
-    blunt: "OWB.items.Blunt",
-    brace: "OWB.items.Brace",
     splash: "OWB.items.Splash",
     reload: "OWB.items.Reload",
-    charge: "OWB.items.Charge",
     burst: "OWB.weapons.burst.short",
     suppressive: "OWB.weapons.suppressive.short"
   },
   tag_images: {
     melee: "/systems/owb/assets/default/melee.png",
     missile: "/systems/owb/assets/default/ability.png",
-    twohanded: "/systems/owb/assets/default/ability.png",
-    blunt: "/systems/owb/assets/default/ability.png",
-    brace: "/systems/owb/assets/default/ability.png",
     splash: "/systems/owb/assets/default/ability.png",
-    reload: "/systems/owb/assets/default/ability.png",
-    charge: "/systems/owb/assets/default/ability.png",
+    reload: "/systems/owb/assets/default/ammunition.png",
     burst: "/systems/owb/assets/default/burst.png",
     suppressive: "/systems/owb/assets/default/suppress.png"
   },

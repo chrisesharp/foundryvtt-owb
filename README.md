@@ -75,3 +75,8 @@ WWII: Operation Whitebox is a trademark of Necrotic Gnome.\
 - Motorcycle by Jason Dilworth.
 - Tank by Claudia Revalina.
 - Tank by Evgeniy Kozachenko.
+- soldier by Simon Child.
+- User by Simon Child.
+- Man by Simon Child.
+- Detective by Hey Rabbit.
+- german shepherd by parkjisun.
