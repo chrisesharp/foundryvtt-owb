@@ -133,8 +133,11 @@
             </a>
           </div>
           <div class="field-short quantity">
-            <input value="{{item.data.quantity.value}}" type="text"
-              placeholder="0" />{{#if item.data.quantity.max}}<span>/{{item.data.quantity.max}}</span>{{/if}}
+            <!-- <input value="{{item.data.quantity.value}}" type="text" placeholder="0" /> -->
+            <h4 title="{{item.data.quantity.value}}">
+              {{item.data.quantity.value}}
+            </h4>
+            {{#if item.data.quantity.max}}<span>/{{item.data.quantity.max}}</span>{{/if}}
           </div>
           <div class="field-short">
             {{#if (eq @root.config.encumbrance "basic")}}_{{else if (eq @root.config.encumbrance "detailed")}}_{{else}}{{item.data.weight}}{{/if}}
