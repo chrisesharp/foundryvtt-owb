@@ -20,6 +20,6 @@
   "gridDistance": 5,
   "gridUnits": "ft",
   "url": "https://github.com/chrisesharp/foundryvtt-owb",
-  "manifest": "https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb/main/src/system.json",
-  "download": ""
+  "manifest": "https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb/master/src/system.json",
+  "download": "https://github.com/chrisesharp/foundryvtt-owb/raw/master/package/owb-v0.1.0.zip"
 }
