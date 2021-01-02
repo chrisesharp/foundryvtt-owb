@@ -448,8 +448,9 @@ export class OWBActor extends Actor {
     let label = game.i18n.format("OWB.roll.attacks", {
       name: this.data.name,
     });
+
     if (!attData.item) {
-      dmgParts.push("1d6");
+      dmgParts.push("1d3");
     } else {
       label = game.i18n.format("OWB.roll.attacksWith", {
         name: attData.item.name,
@@ -483,6 +484,7 @@ export class OWBActor extends Actor {
         range.toString(),
         burst,
       );
+
     } else {
       rollParts.push(
         data.scores.str.mod.toString(),
@@ -494,6 +496,12 @@ export class OWBActor extends Actor {
     if (options.type == "melee") {
       dmgParts.push(data.scores.str.mod);
     }
+
+    if (attData.ammo) {
+      this.decreaseQuantity(attData.ammo, attData.burst, attData.suppress);
+      this.updateEmbeddedEntity("OwnedItem", {...attData.ammo});
+    }
+
     const rollData = {
       actor: this.data,
       item: attData.item,
@@ -517,6 +525,19 @@ export class OWBActor extends Actor {
       flavor: label,
       title: label,
     });
+  }
+
+  decreaseQuantity(item, burst, suppressive) {
+    let qty = item.data.quantity.value;
+    let max = item.data.quantity.max;
+    if (suppressive) {
+      qty = 0;
+    } else if (burst) {
+      qty -= Math.floor(max / 3);
+    } else {
+      qty -= 1;
+    }
+    item.data.quantity.value = Math.max(0, qty);
   }
 
   async applyDamage(amount = 0, multiplier = 1) {

@@ -65,10 +65,28 @@ export class OWBItem extends Item {
     let isNPC = this.actor.data.type != "character";
     const data = this.data.data;
     let type = isNPC ? "attack" : "melee";
+    const hasAmmo = (i) => {
+      return (i.type == "item" &&  
+              i.name.includes("Ammunition") &&
+              i.name.includes(this.name) && 
+              i.data.quantity.value > 0);
+    }
+    let ammo;
+    if (options.type != "melee") {
+      ammo = this.actor.data.items.filter(hasAmmo);
+      if (ammo.length == 0) {
+        ui.notifications.warn(`You have no ammunition for this weapon.`);
+        return;
+      } else {
+        ammo = ammo[0];
+      }
+    }
+
     const rollData =
     {
       item: this.data,
       actor: this.actor.data,
+      ammo: ammo,
       roll: {
         save: this.data.data.save,
         target: null
