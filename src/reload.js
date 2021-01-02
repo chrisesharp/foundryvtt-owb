@@ -8,7 +8,7 @@ function reloadAmmo(token, ammo) {
 
 if (token) {
     const ammo = getAmmo(token);
-    const emptyAmmo = (ammo && ammo.data.quantity.value === 0);
+    const emptyAmmo = (ammo && ammo.data.quantity.value  < ammo.data.quantity.max);
     if (emptyAmmo) {
         reloadAmmo(token, ammo);
         var messageContent = `Reloaded ${ammo.name}`;
