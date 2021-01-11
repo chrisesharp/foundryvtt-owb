@@ -9,6 +9,8 @@ You can find this Foundry VTT game system within Foundry VTT in the system brows
 
 ## License
 
+![OWBCL](/system/owb/assets/default/OWBCL.webp)
+
 This Foundry VTT system requires Operation Whitebox:WW2 Rules that you can find [here](https://www.drivethrurpg.com/product/196284/OWB001-WWII-Operation-WhiteBox).
 
 This third party product is not affiliated with or approved by Small Niche Games. \
