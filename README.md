@@ -1,6 +1,6 @@
-# WWII: Operation Whitebox for Foundry VTT (Unofficial)
+# (Unofficial) WWII: Operation Whitebox Support for Foundry VTT
 
-An unofficial implementation of WWII: Operation Whitebox for Foundry VTT.
+Unofficial support for  WWII: Operation Whitebox for Foundry VTT.
 
 ## Installation
 
@@ -12,7 +12,9 @@ You can find this Foundry VTT game system within Foundry VTT in the system brows
 This Foundry VTT system requires Operation Whitebox:WW2 Rules that you can find [here](https://www.drivethrurpg.com/product/196284/OWB001-WWII-Operation-WhiteBox).
 
 This third party product is not affiliated with or approved by Small Niche Games. \
-WWII: Operation Whitebox is a trademark of Necrotic Gnome.\
+WWII: Operation WhiteBox™ is a trademark of Peter C. Spahn.\
+Small Niche Games™ is a trademark of Peter C. Spahn
+Used with permission under license.
 
 ## Credits
 
