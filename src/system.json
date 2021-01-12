@@ -1,10 +1,10 @@
 {
   "name": "owb",
-  "title": "WWII: Operation Whitebox",
+  "title": "WWII:OWB",
   "description": "Play WW2 OWB adventures on Foundry VTT",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "minimumCoreVersion": "0.7.5",
-  "compatibleCoreVersion": "0.7.8",
+  "compatibleCoreVersion": "0.7.9",
   "templateVersion": 2,
   "author": "chrisesharp",
   "esmodules": ["owb.js"],
