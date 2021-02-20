@@ -498,8 +498,21 @@ export class OWBActor extends Actor {
     }
 
     if (attData.ammo) {
-      this.decreaseQuantity(attData.ammo, attData.burst, attData.suppress);
-      this.updateEmbeddedEntity("OwnedItem", {...attData.ammo});
+      if (attData.ammo.data.quantity.value > 0) {
+        this.decreaseQuantity(attData.ammo, attData.burst, attData.suppress);
+        this.updateEmbeddedEntity("OwnedItem", {...attData.ammo});
+      } else {
+        const messageContent = `<b>OUT OF AMMO!</b><p>You need to reload with another <b>${attData.ammo.name}</b></p>`;
+        // label = game.i18n.format("OWB.roll.attacksWith", {
+        //   name: attData.item.name,
+        // });
+        const chatData = {
+            user: game.user._id,
+            speaker: ChatMessage.getSpeaker({ actor: this }),
+            content: messageContent
+        };
+        return ChatMessage.create(chatData);
+      }
     }
 
     const rollData = {
@@ -567,7 +580,6 @@ export class OWBActor extends Actor {
     if (!["character","enemy"].includes(this.data.type)) {
       return;
     }
-    console.log("computing encumbrance")
     const data = this.data.data;
     let option = game.settings.get("owb", "encumbranceOption");
 

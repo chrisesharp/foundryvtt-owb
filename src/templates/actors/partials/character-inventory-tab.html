@@ -108,7 +108,7 @@
       {{/each}}
     </ol>
   </div>
-  <div class="">
+  <div>
     {{!-- Misc items --}}
     <li class="item-titles flexrow">
       <div class="item-caret"><i class="fas fa-caret-down"></i></div>
@@ -132,11 +132,8 @@
               </h4>
             </a>
           </div>
-          <div class="field-short quantity">
-            <!-- <input value="{{item.data.quantity.value}}" type="text" placeholder="0" /> -->
-            <h4 title="{{item.data.quantity.value}}">
-              {{item.data.quantity.value}}
-            </h4>
+          <div class="field-short">
+            {{item.data.quantity.value}}
             {{#if item.data.quantity.max}}<span>/{{item.data.quantity.max}}</span>{{/if}}
           </div>
           <div class="field-short">

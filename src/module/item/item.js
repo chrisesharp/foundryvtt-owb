@@ -49,7 +49,7 @@ export class OWBItem extends Item {
     const props = [];
     const labels = this.labels;
 
-    if (this.data.type == "weapon") {
+    if (this.data.type == "weapon" || this.data.type == "item") {
       data.tags.forEach(t => props.push(t.value));
     }
     if (data.hasOwnProperty("equipped")) {
@@ -62,17 +62,16 @@ export class OWBItem extends Item {
   }
 
   rollWeapon(options = {}) {
-    let isNPC = this.actor.data.type != "character";
+    const isNPC = this.actor.data.type != "character";
     const data = this.data.data;
-    let type = isNPC ? "attack" : "melee";
+    const type = isNPC ? "attack" : "melee";
     const hasAmmo = (i) => {
       return (i.type == "item" &&  
-              i.name.includes("Ammunition") &&
-              i.name.includes(this.name) && 
-              i.data.quantity.value > 0);
+              (i.data.tags.find(t => t.title.toLowerCase() === "ammunition") !== undefined) &&
+              (i.data.tags.find(t => t.title.toLowerCase() === this.name.toLowerCase()) !== undefined));
     }
     let ammo;
-    if (options.type != "melee") {
+    if (options.type !== "melee") {
       ammo = this.actor.data.items.filter(hasAmmo);
       if (ammo.length == 0) {
         ui.notifications.warn(`You have no ammunition for this weapon.`);
@@ -213,7 +212,11 @@ export class OWBItem extends Item {
       case "armor":
         return `${formatTag(CONFIG.OWB.armor[data.type], "fa-tshirt")}`;
       case "item":
-        return "";
+        let iTags = "";
+        data.tags.forEach((t) => {
+          iTags += formatTag(t.value);
+        });
+        return iTags;
       case "ability":
         let roll = "";
         roll += data.roll ? data.roll : "";

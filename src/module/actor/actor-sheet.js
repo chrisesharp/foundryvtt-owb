@@ -92,7 +92,7 @@ export class OWBActorSheet extends ActorSheet {
       item.show();
     });
 
-    html.find(".saving-throw .attribute-name a").click((ev) => {
+    html.find(".saving-throw .attribute-name a").click((event) => {
       let actorObject = this.actor;
       let element = event.currentTarget;
       let save = element.parentElement.parentElement.dataset.save;
@@ -132,7 +132,7 @@ export class OWBActorSheet extends ActorSheet {
       });
     });
     
-    html.find(".hit-dice .attribute-name a").click((ev) => {
+    html.find(".hit-dice .attribute-name a").click((event) => {
       let actorObject = this.actor;
       actorObject.rollHitDice({ event: event });
     });
