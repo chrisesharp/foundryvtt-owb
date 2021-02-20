@@ -65,19 +65,23 @@ export class OWBItem extends Item {
     const isNPC = this.actor.data.type != "character";
     const data = this.data.data;
     const type = isNPC ? "attack" : "melee";
+    let calibre;
     const hasAmmo = (i) => {
       return (i.type == "item" &&  
-              (i.data.tags.find(t => t.title.toLowerCase() === "ammunition") !== undefined) &&
-              (i.data.tags.find(t => t.title.toLowerCase() === this.name.toLowerCase()) !== undefined));
+              (i.data.tags.find(t => t.title === "cal" && t.value === calibre) !== undefined)
+              );
     }
     let ammo;
     if (options.type !== "melee") {
+      calibre = this.data.data.tags.filter(i => i.title === "cal");
+      calibre = calibre.length > 0 ? calibre[0].value : 0;
       ammo = this.actor.data.items.filter(hasAmmo);
       if (ammo.length == 0) {
         ui.notifications.warn(`You have no ammunition for this weapon.`);
         return;
       } else {
         ammo = ammo[0];
+        ammo.calibre = calibre;
       }
     }
 

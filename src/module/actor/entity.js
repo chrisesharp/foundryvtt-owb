@@ -441,7 +441,7 @@ export class OWBActor extends Actor {
   }
 
   rollAttack(attData, options = {}) {
-    const burst = (attData.burst || attData.suppress) ? "+2" : "0"
+    const burst = (attData.burst || attData.suppress) ? "+2" : "0";
     const data = this.data.data;
     const rollParts = ["1d20"];
     const dmgParts = [];
@@ -502,7 +502,7 @@ export class OWBActor extends Actor {
         this.decreaseQuantity(attData.ammo, attData.burst, attData.suppress);
         this.updateEmbeddedEntity("OwnedItem", {...attData.ammo});
       } else {
-        const messageContent = `<b>OUT OF AMMO!</b><p>You need to reload with another <b>${attData.ammo.name}</b></p>`;
+        const messageContent = `<b>OUT OF AMMO!</b><p>You need to reload with more <b>${attData.ammo.calibre}</b> rounds</p>`;
         // label = game.i18n.format("OWB.roll.attacksWith", {
         //   name: attData.item.name,
         // });
