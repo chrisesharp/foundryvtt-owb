@@ -67,13 +67,13 @@ export class OWBItem extends Item {
     const type = isNPC ? "attack" : "melee";
     let calibre;
     const hasAmmo = (i) => {
-      return (i.type == "item" &&  
+      return (i.type == "item" &&  i.data.tags &&
               (i.data.tags.find(t => t.title === "cal" && t.value === calibre) !== undefined)
               );
     }
     let ammo;
     if (options.type !== "melee") {
-      calibre = this.data.data.tags.filter(i => i.title === "cal");
+      calibre = data.tags.filter(i => i.title === "cal");
       calibre = calibre.length > 0 ? calibre[0].value : 0;
       ammo = this.actor.data.items.filter(hasAmmo);
       if (ammo.length == 0) {
