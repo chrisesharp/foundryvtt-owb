@@ -26,6 +26,5 @@
     "sass": "^1.25.0",
     "typescript": "^3.7.5",
     "yargs": "^15.1.0"
-  },
-  "dependencies": {}
+  }
 }

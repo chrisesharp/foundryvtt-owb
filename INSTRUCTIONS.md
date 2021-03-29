@@ -15,11 +15,11 @@ To indicate that a weapon is a missile weapon, enable the **bullseye** icon.
 
 ### Tags
 
-When you are creating a missle weapon, add the following tags:
+**N.B.** When you are creating a missle weapon, add the following tags:
 
 | Quality | Tag | Required |
 | --------|-----|----------|
-| Calibre (e.g. 9mm) | "9mm(cal)" | Yes|
+| Calibre (e.g. 9mm) | "9mm(cal)" | YES|
 | Burst fire   | "Burst" | No |
 | Suppressive fire| "Suppress" | No|
 
