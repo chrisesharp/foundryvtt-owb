@@ -7,6 +7,18 @@
   min-width: 450px;
   min-height: 550px;
 
+  
+  .window-content {
+    // padding: 0px;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    background-image: url("/systems/owb/assets/folder-page.png");
+  }
+
+  .sheet-frame {
+    padding: 10px;
+  }
   /* ----------------------------------------- */
   /*  Sheet Header                             */
   /* ----------------------------------------- */
@@ -143,17 +155,6 @@
     .saving-throw {
       .attribute-value.flat {
         line-height: 30px;
-      }
-    }
-    .exploration {
-      .attribute {
-        margin: 4px;
-        .attribute-name {
-          text-align: left;
-          flex: 1 0 60px;
-          line-height: 25px;
-          font-size: 12px;
-        }
       }
     }
   }
