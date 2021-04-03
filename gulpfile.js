@@ -5,6 +5,10 @@ const chalk = require("chalk");
 const archiver = require("archiver");
 const stringify = require("json-stringify-pretty-compact");
 const typescript = require("typescript");
+const through2 = require("through2");
+const yaml = require("js-yaml");
+const Datastore = require("nedb");
+const mergeStream = require("merge-stream");
 
 const ts = require("gulp-typescript");
 const less = require("gulp-less");
@@ -162,26 +166,75 @@ function buildSASS() {
     .pipe(gulp.dest("dist"));
 }
 
+/* ----------------------------------------- */
+/*  Compile Compendia
+/* ----------------------------------------- */
+
+async function compilePacks() {
+  const PACK_SRC = "src/packs";
+  const BUILD_DIR = "build";
+  // determine the source folders to process
+  const folders = fs.readdirSync(PACK_SRC).filter((file) => {
+    return fs.statSync(path.join(PACK_SRC, file)).isDirectory();
+  });
+
+  // process each folder into a compendium db
+  const packs = folders.map((folder) => {
+    let filename = path.resolve(__dirname, BUILD_DIR, "packs", `${folder}.db`);
+    if (fs.existsSync(filename)) { fs.unlinkSync(filename);}
+    const db = new Datastore({ filename: filename, autoload: true });
+    const globs = [path.join(PACK_SRC, folder, "*.json"), path.join(PACK_SRC, folder, "*.yml")];
+    return gulp.src(globs)
+    .pipe(
+      through2.obj((file, enc, cb) => {
+        // console.log("here in ",folder, " with file ", path.basename(file.path))
+        let json = {};
+        if (path.extname(file.path) === ".json") {
+          let orig_json = JSON.parse(file.contents.toString());
+          json.name = orig_json.name;
+          json.type = orig_json.type;
+          json.img = orig_json.img;
+          json.data = orig_json.data;
+          json.content = orig_json.content;
+        } else {
+          json = yaml.loadAll(file.contents.toString());
+        }
+        // console.log(`..adding ${json.name} to ${folder} pack`);
+        db.insert(json);
+        cb();
+      })
+    );
+  });
+  return mergeStream.call(null, packs);
+}
+
 /**
  * Copy static files
  */
 async function copyFiles() {
-  const statics = [
+  const src_statics = [
     "lang",
     "fonts",
     "assets",
     "templates",
     "module",
-    "packs",
     "owb.js",
     "module.json",
     "system.json",
     "template.json"
   ];
+  const build_content = [
+    "packs"
+  ]
   try {
-    for (const file of statics) {
+    for (const file of src_statics) {
       if (fs.existsSync(path.join("src", file))) {
         await fs.copy(path.join("src", file), path.join("dist", file));
+      }
+    }
+    for (const file of build_content) {
+      if (fs.existsSync(path.join("build", file))) {
+        await fs.copy(path.join("build", file), path.join("dist", file));
       }
     }
     return Promise.resolve();
@@ -311,7 +364,7 @@ async function linkUserData() {
 }
 
 /*********************/
-/*		PACKAGE		 */
+/*		PACKAGE	       */
 /*********************/
 
 /**
@@ -356,10 +409,6 @@ async function packageBuild() {
     Promise.reject(err);
   }
 }
-
-/*********************/
-/*		PACKAGE		 */
-/*********************/
 
 /**
  * Update version and URLs in the manifest JSON
@@ -429,7 +478,7 @@ function updateManifest(cb) {
 
     /* Update URLs */
 
-    const result = `${rawURL}/v${manifest.file.version}/package/${manifest.file.name}-v${manifest.file.version}.zip`;
+    const result = `${rawURL}/master/package/${manifest.file.name}-v${manifest.file.version}.zip`;
 
     manifest.file.url = repoURL;
     manifest.file.manifest = `${rawURL}/master/${manifestRoot}/${manifest.name}`;
@@ -451,7 +500,7 @@ function updateManifest(cb) {
 }
 
 function gitAdd() {
-  return gulp.src("package").pipe(git.add({ args: "--no-all" }));
+  return gulp.src("package").pipe(git.add());
 }
 
 function gitCommit() {
@@ -476,17 +525,19 @@ function gitTag() {
 
 const execGit = gulp.series(gitAdd, gitCommit, gitTag);
 
-const execBuild = gulp.parallel(buildTS, buildLess, buildSASS, copyFiles);
+const execBuild = gulp.parallel(buildTS, buildLess, buildSASS, compilePacks);
 
-exports.build = gulp.series(clean, execBuild);
+exports.build = gulp.series(clean, execBuild, copyFiles);
 exports.watch = buildWatch;
 exports.clean = clean;
 exports.link = linkUserData;
 exports.package = packageBuild;
+exports.compendia = compilePacks;
 exports.publish = gulp.series(
   clean,
   updateManifest,
   execBuild,
+  copyFiles,
   packageBuild,
   execGit
 );

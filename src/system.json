@@ -16,6 +16,14 @@
       "package": "owb",
       "path": "packs/macros.db",
       "entity": "Macro"
+    },
+    {
+      "name": "tables",
+      "label": "Tables",
+      "package": "owb",
+      "path": "packs/tables.db",
+      "entity": "RollTable",
+      "module": "owb-content"
     }
   ],
   "languages": [
