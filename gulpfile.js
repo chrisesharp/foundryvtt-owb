@@ -180,6 +180,24 @@ async function compilePacks() {
 
   // process each folder into a compendium db
   const packs = folders.map((folder) => {
+    const removeProp = (obj, propToDelete) => {
+      for (var property in obj) {
+         if (typeof obj[property] == "object") {
+            let objectToCheck = obj[property];
+            delete obj[property]
+            if (property !== propToDelete) {
+              let newJsonData= removeProp(objectToCheck, propToDelete);
+              obj[property]= newJsonData
+            }
+         } else {
+             if (property === propToDelete) {
+               delete obj[property];
+             }
+           }
+       }
+       return obj
+    }
+
     let filename = path.resolve(__dirname, BUILD_DIR, "packs", `${folder}.db`);
     if (fs.existsSync(filename)) { fs.unlinkSync(filename);}
     const db = new Datastore({ filename: filename, autoload: true });
@@ -191,11 +209,9 @@ async function compilePacks() {
         let json = {};
         if (path.extname(file.path) === ".json") {
           let orig_json = JSON.parse(file.contents.toString());
-          json.name = orig_json.name;
-          json.type = orig_json.type;
-          json.img = orig_json.img;
-          json.data = orig_json.data;
-          json.content = orig_json.content;
+          json = removeProp(orig_json, "_id");
+          json = removeProp(json, "sort");
+          json = removeProp(json, "flags");
         } else {
           json = yaml.loadAll(file.contents.toString());
         }
