@@ -76,25 +76,28 @@ export class OWBItem extends Item {
       calibre = data.tags.filter(i => i.title === "cal");
       calibre = calibre.length > 0 ? calibre[0].value : 0;
       ammo = this.actor.data.items.filter(hasAmmo);
-      if (ammo.length == 0) {
-        ui.notifications.warn(`You have no ammunition for this weapon.`);
-        return;
-      } else {
-        ammo = ammo[0];
-        ammo.calibre = calibre;
+      if (calibre) {
+        if (ammo.length == 0) {
+          ui.notifications.warn(`You have no ammunition for this weapon.`);
+          return;
+        } else {
+          ammo = ammo[0];
+          ammo.calibre = calibre;
+        }
       }
     }
 
-    const rollData =
-    {
+    const rollData = {
       item: this.data,
       actor: this.actor.data,
-      ammo: ammo,
       roll: {
         save: this.data.data.save,
         target: null
       }
     };
+    if (calibre) {
+      rollData.ammo = ammo;
+    }
 
     const button = (type) => {
       let icon = (type === 'melee') ? '<i class="fas fa-fist-raised"></i>': '<i class="fas fa-bullseye"></i>';
