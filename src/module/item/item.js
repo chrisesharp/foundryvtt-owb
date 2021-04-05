@@ -192,7 +192,6 @@ export class OWBItem extends Item {
   getTags() {
     let formatTag = (tag, icon) => {
       if (!tag) return "";
-      tag = tag.trim();
       let fa = "";
       if (icon) {
         fa = `<i class="fas ${icon}"></i> `;
