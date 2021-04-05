@@ -11,7 +11,8 @@
         <ul class="attributes">
             <li class="attribute ability-score" data-score="str">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.str.long' }}">
-                    <a>{{ localize "OWB.scores.str.short" }}</a></h4>
+                    <a>{{ localize "OWB.scores.str.short" }}</a>
+                </h4>
                 <div class="attribute-value">
                     <input name="data.scores.str.value" type="text" value="{{data.scores.str.value}}" placeholder="0"
                         data-dtype="Number" />
@@ -19,7 +20,8 @@
             </li>
             <li class="attribute ability-score" data-score="int">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.int.long' }}">
-                    <a>{{ localize "OWB.scores.int.short" }}</a></h4>
+                    <a>{{ localize "OWB.scores.int.short" }}</a>
+                </h4>
                 <div class="attribute-value">
                     <input name="data.scores.int.value" type="text" value="{{data.scores.int.value}}" placeholder="0"
                         data-dtype="Number" />
@@ -27,7 +29,8 @@
             </li>
             <li class="attribute ability-score" data-score="wis">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.wis.long' }}">
-                    <a>{{ localize "OWB.scores.wis.short" }}</a></h4>
+                    <a>{{ localize "OWB.scores.wis.short" }}</a>
+                </h4>
                 <div class="attribute-value">
                     <input name="data.scores.wis.value" type="text" value="{{data.scores.wis.value}}" placeholder="0"
                         data-dtype="Number" />
@@ -35,7 +38,8 @@
             </li>
             <li class="attribute ability-score" data-score="con">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.con.long' }}">
-                    <a>{{ localize "OWB.scores.con.short" }}</a></h4>
+                    <a>{{ localize "OWB.scores.con.short" }}</a>
+                </h4>
                 <div class="attribute-value">
                     <input name="data.scores.con.value" type="text" value="{{data.scores.con.value}}" placeholder="0"
                         data-dtype="Number" />
@@ -43,7 +47,8 @@
             </li>
             <li class="attribute ability-score" data-score="dex">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.dex.long' }}">
-                    <a>{{ localize "OWB.scores.dex.short" }}</a></h4>
+                    <a>{{ localize "OWB.scores.dex.short" }}</a>
+                </h4>
                 <div class="attribute-value">
                     <input name="data.scores.dex.value" type="text" value="{{data.scores.dex.value}}" placeholder="0"
                         data-dtype="Number" />
@@ -51,7 +56,8 @@
             </li>
             <li class="attribute ability-score" data-score="cha">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.cha.long' }}">
-                    <a>{{ localize "OWB.scores.cha.short" }}</a></h4>
+                    <a>{{ localize "OWB.scores.cha.short" }}</a>
+                </h4>
                 <div class="attribute-value">
                     <input name="data.scores.cha.value" type="text" value="{{data.scores.cha.value}}" placeholder="0"
                         data-dtype="Number" />
@@ -123,7 +129,8 @@
                 {{#if config.initiative}}
                 <li class="attribute">
                     <h4 class="attribute-name box-title" title="{{ localize 'OWB.Initiative' }}">
-                        {{ localize "OWB.InitiativeShort" }}</h4>
+                        {{ localize "OWB.InitiativeShort" }}
+                    </h4>
                     <div class="attribute-value"
                         title="{{localize 'OWB.scores.dex.long'}}({{data.scores.dex.init}}) + {{localize 'OWB.Modifier'}}({{data.initiative.mod}})">
                         {{add data.scores.dex.init data.initiative.mod}}
@@ -136,7 +143,8 @@
             <ul class="attributes flexrow">
                 <li class="attribute attribute-secondaries attack" data-attack="melee">
                     <h4 class="attribute-name box-title" title="{{localize 'OWB.Melee'}}">
-                        <a>{{localize 'OWB.MeleeShort'}}</a></h4>
+                        <a>{{localize 'OWB.MeleeShort'}}</a>
+                    </h4>
                     <div class="flexrow">
                         <div class="attribute-value"
                             title="{{localize 'OWB.scores.str.long'}}({{data.scores.str.mod}}) + {{localize 'OWB.Modifier'}}({{data.thac0.mod.melee}})">
@@ -158,7 +166,8 @@
                 {{/if}}
                 <li class="attribute attribute-secondaries attack" data-attack="missile">
                     <h4 class="attribute-name box-title" title="{{localize 'OWB.Missile'}}">
-                        <a>{{localize 'OWB.MissileShort'}}</a></h4>
+                        <a>{{localize 'OWB.MissileShort'}}</a>
+                    </h4>
                     <div class="flexrow">
                         <div class="attribute-value"
                             title="{{localize 'OWB.scores.dex.long'}}({{data.scores.dex.mod}}) + {{localize 'OWB.Modifier'}}({{data.thac0.mod.missile}})">
@@ -172,7 +181,8 @@
             <ul class="attributes flexrow">
                 <li class="attribute attribute-secondaries">
                     <h4 class="attribute-name box-title" title="{{localize 'OWB.movement.overland.long'}}">
-                        {{localize 'OWB.movement.overland.short'}}</h4>
+                        {{localize 'OWB.movement.overland.short'}}
+                    </h4>
                     <div class="flexrow">
                         <div class="attribute-value">
                             {{divide data.movement.base 5}}
@@ -181,7 +191,8 @@
                 </li>
                 <li class="attribute">
                     <h4 class="attribute-name box-title" title="{{ localize 'OWB.movement.exploration.long' }}">
-                        {{ localize "OWB.movement.exploration.short" }}</h4>
+                        {{ localize "OWB.movement.exploration.short" }}
+                    </h4>
                     <div class="attribute-value flexrow">
                         <input name="data.movement.base" type="text" value="{{data.movement.base}}" placeholder="0"
                             data-dtype="Number" {{#if data.config.movementAuto}}disabled{{/if}} />
@@ -189,7 +200,8 @@
                 </li>
                 <li class="attribute attribute-secondaries">
                     <h4 class="attribute-name box-title" title="{{localize 'OWB.movement.encounter.long'}}">
-                        {{localize 'OWB.movement.encounter.short'}}</h4>
+                        {{localize 'OWB.movement.encounter.short'}}
+                    </h4>
                     <div class="flexrow">
                         <div class="attribute-value">
                             {{divide data.movement.base 3}}
@@ -204,7 +216,8 @@
         <ul class="attributes">
             <li class="attribute saving-throw" data-save="save">
                 <h4 class="attribute-name box-title">
-                    <a>{{ localize "OWB.saves.save.long" }}</a></h4>
+                    <a>{{ localize "OWB.saves.save.long" }}</a>
+                </h4>
                 <div class="attribute-value">
                     <input name="data.saves.save.value" type="text" value="{{data.saves.save.value}}" placeholder="0"
                         data-dtype="Number" />

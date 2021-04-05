@@ -34,14 +34,55 @@
 
 .owb.dialog.party-xp {
   .actors {
-    height: 270px;
-    padding: 0;
+    max-height: 250px;
+    padding: 0 4px 0;
     overflow-y: auto;
+    input {
+      flex: 0 60px;
+    }
+    label {
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .share-tag {
+      flex: 0 35px;
+      text-align: center;
+      border: 1px solid $colorFaint;
+      background: $colorOlive;
+      font-size: 10px;
+      color: whitesmoke;
+      border-radius: 3px;
+      box-shadow: 0 0 1px $colorFaint;
+      padding: 1px 4px;
+    }
   }
   .form-group {
     button {
       line-height: 18px;
       flex-grow: 0;
+    }
+  }
+}
+
+.ose.dialog.party-select {
+  .actor-list {
+    padding: 0 4px 0;
+    max-height: 250px;
+    overflow: auto;
+    .actor {
+      label {
+        height: 28px;
+        overflow: hidden;
+      }
+      .form-fields {
+        flex: 0 20px;
+      }
+      &.disposition-1 label {
+        font-weight: 600;
+      }
+      &.disposition--1 label {
+        font-style: italic;
+      }
     }
   }
 }
@@ -87,6 +128,7 @@
       font-size: 12px;
       text-align: center;
       .fields .field-row {
+        white-space: nowrap;
         &:nth-child(odd) {
           background-color: rgba(0, 0, 0, 0.1);
         }
@@ -128,8 +170,10 @@
     }
   }
   .field-name {
+    overflow: hidden;
+    font-weight: 600;
     text-align: left;
-    text-indent: 10px;
+    text-indent: 5px;
   }
 }
 
@@ -161,6 +205,7 @@
       flex: 0 0 30px;
       font-size: 26px;
       line-height: 25px;
+      height: 25px;
       color: white;
       margin: 0 2px 5px 8px;
       border-radius: 8px;

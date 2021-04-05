@@ -32,7 +32,8 @@ export class OWBDice {
     } else if (data.roll.type == "table") {
       // Reaction
       let table = data.roll.table;
-      let output = "";
+      // let output = "";
+      let output = Object.values(table)[0];
       for (let i = 0; i <= roll.total; i++) {
         if (table[i]) {
           output = table[i];
@@ -50,6 +51,7 @@ export class OWBDice {
     flavor = null,
     speaker = null,
     form = null,
+    chatMessage = true
   } = {}) {
     const template = "systems/owb/templates/chat/roll-result.html";
 
@@ -76,7 +78,7 @@ export class OWBDice {
     rollMode = form ? form.rollMode.value : rollMode;
 
     // Force blind roll (ability formulas)
-    if (data.roll.blindroll) {
+    if (!form && data.roll.blindroll) {
       rollMode = game.user.isGM ? "selfroll" : "blindroll";
     }
 
@@ -106,12 +108,16 @@ export class OWBDice {
                 chatData.blind
               )
               .then((displayed) => {
-                ChatMessage.create(chatData);
+                if (chatMessage !== false) {
+                  ChatMessage.create(chatData);
+                }
                 resolve(roll);
               });
           } else {
             chatData.sound = CONFIG.sounds.dice;
-            ChatMessage.create(chatData);
+            if (chatMessage !== false) {
+              ChatMessage.create(chatData);
+            }
             resolve(roll);
           }
         });
@@ -137,7 +143,7 @@ export class OWBDice {
     result.victim = data.roll.target ? data.roll.target.data.name : null;
 
     if (game.settings.get("owb", "ascendingAC")) {
-      if (roll.total < targetAac) {
+      if (roll.results[0] != 1 & (roll.total < targetAac || roll.results[0] == 20)) {
         result.details = game.i18n.format(
           "OWB.messages.AttackAscendingFailure",
           {
@@ -269,13 +275,14 @@ export class OWBDice {
     speaker = null,
     flavor = null,
     title = null,
+    chatMessage = true
   } = {}) {
     let rolled = false;
     const template = "systems/owb/templates/chat/roll-dialog.html";
     let dialogData = {
       formula: parts.join(" "),
       data: data,
-      rollMode: game.settings.get("core", "rollMode"),
+      rollMode: data.roll.blindroll ? "blindroll" : game.settings.get("core", "rollMode"),
       rollModes: CONFIG.Dice.rollModes,
     };
 
@@ -285,6 +292,7 @@ export class OWBDice {
       title: title,
       flavor: flavor,
       speaker: speaker,
+      chatMessage: chatMessage
     };
     if (skipDialog) { return OWBDice.sendRoll(rollData); }
 
@@ -329,6 +337,7 @@ export class OWBDice {
     speaker = null,
     flavor = null,
     title = null,
+    chatMessage = true
   } = {}) {
     let rolled = false;
     const template = "systems/owb/templates/chat/roll-dialog.html";
@@ -345,6 +354,7 @@ export class OWBDice {
       title: title,
       flavor: flavor,
       speaker: speaker,
+      chatMessage: chatMessage
     };
     if (skipDialog) {
       return ["melee", "missile", "attack"].includes(data.roll.type)

@@ -59,28 +59,35 @@ export class OWBPartySheet extends FormApplication {
   }
 
   async _selectActors(ev) {
+    const entities = this.object.entities.sort((a, b) => b.data.token.disposition - a.data.token.disposition);
     const template = "/systems/owb/templates/apps/party-select.html";
     const templateData = {
-      actors: this.object.entities
+      actors: entities
     }
     const content = await renderTemplate(template, templateData);
     new Dialog({
-      title: "Select Party Characters",
+      title: game.i18n.localize("OSE.dialog.selectActors"),
       content: content,
       buttons: {
         set: {
           icon: '<i class="fas fa-save"></i>',
           label: game.i18n.localize("OWB.Update"),
-          callback: (html) => {
+          callback: async (html) => {
             let checks = html.find("input[data-action='select-actor']");
-            checks.each(async (_, c) => {
+            // checks.each(async (_, c) => {
+            await Promise.all(checks.map(async (_, c) => {
               let key = c.getAttribute('name');
               await this.object.entities[key].setFlag('owb', 'party', c.checked);
-            });
+            }));
+            this.render(true);
           },
         },
       },
-    }, {height: "auto", width: 220})
+    }, {
+      height: "auto", 
+      width: 260,
+      classes: ["owb","dialog","party-select"]
+    })
     .render(true);
   }
 

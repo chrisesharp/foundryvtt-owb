@@ -1,4 +1,3 @@
-import { OWBActor } from "./entity.js";
 import { OWBActorSheet } from "./actor-sheet.js";
 import { OWBCharacterModifiers } from "../dialog/character-modifiers.js";
 import { OWBCharacterCreator } from "../dialog/character-creation.js";

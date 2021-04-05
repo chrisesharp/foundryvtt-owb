@@ -26,7 +26,7 @@
           <div class="icon-row flexrow">
             {{#each item.data.tags as |tag|}}
               {{#if (getTagIcon tag.value)}}
-                <img title="{{tag.title}}" src="{{getTagIcon tag.value}}" width="24" height="24"/>
+              <img title="{{tag.title}}" src="{{getTagIcon tag.value}}" width="24" height="24"/>
               {{/if}}
             {{/each}}
             {{#each item.data.tags as |tag|}}
@@ -146,6 +146,14 @@
             {{/if}}
           </div>
         </div>
+        {{#if item.data.quantity.max}}
+        {{#if (lte item.data.quantity.max 38)}}
+        <div class="consumable-counter">
+          {{#times item.data.quantity.value}}<div class="full-mark"></div>{{/times}}
+          {{#times (subtract item.data.quantity.max item.data.quantity.value)}}<div class="empty-mark"></div>{{/times}}
+        </div>
+        {{/if}}
+        {{/if}}
       </li>
       {{/each}}
     </ol>
@@ -162,6 +170,6 @@
     <i class="encumbrance-breakpoint encumbrance-50 arrow-down"></i>
     <i class="encumbrance-breakpoint encumbrance-75 arrow-up"></i>
     <i class="encumbrance-breakpoint encumbrance-75 arrow-down"></i>
-    {{/with}}
   </div>
+  {{/with}}
 </section>

@@ -1,4 +1,3 @@
-import { OWBActor } from "./entity.js";
 import { OWBEntityTweaks } from "../dialog/entity-tweaks.js";
 
 export class OWBActorSheet extends ActorSheet {
@@ -118,9 +117,24 @@ export class OWBActorSheet extends ActorSheet {
       }
     });
 
+    html.find(".item-entry .consumable-counter .empty-mark").click(ev => {
+      const el = ev.currentTarget.parentElement.parentElement.children[0];
+      const id = el.dataset.itemId;
+      const item = this.actor.getOwnedItem(id);
+      item.update({"data.quantity.value": item.data.data.quantity.value + 1});
+    });
+
+    html.find(".item-entry .consumable-counter .full-mark").click(ev => {
+      const el = ev.currentTarget.parentElement.parentElement.children[0];
+      const id = el.dataset.itemId;
+      const item = this.actor.getOwnedItem(id);
+      item.update({"data.quantity.value": item.data.data.quantity.value - 1});
+    });
+
+
     html.find(".attack a").click((ev) => {
       let actorObject = this.actor;
-      let element = event.currentTarget;
+      let element = ev.currentTarget;
       let attack = element.parentElement.parentElement.dataset.attack;
       const rollData = {
         actor: this.data,
@@ -177,9 +191,7 @@ export class OWBActorSheet extends ActorSheet {
       let container = editor.closest(".resizable-editor");
       if (container) {
         let heightDelta = this.position.height - this.options.height;
-        editor.style.height = `${
-          heightDelta + parseInt(container.dataset.editorSize)
-          }px`;
+        editor.style.height = `${heightDelta + parseInt(container.dataset.editorSize)}px`;
       }
     });
   }

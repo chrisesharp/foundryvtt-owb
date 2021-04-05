@@ -23,15 +23,23 @@ export const registerHelpers = async function () {
   });
 
   Handlebars.registerHelper("subtract", function (lh, rh) {
-    return parseInt(rh) - parseInt(lh);
+    return parseInt(lh) - parseInt(rh);
   });
 
   Handlebars.registerHelper("divide", function (lh, rh) {
     return Math.floor(parseFloat(lh) / parseFloat(rh));
   });
 
+
   Handlebars.registerHelper("mult", function (lh, rh) {
-    return parseFloat(lh) * parseFloat(rh);
+    return Math.round(100 * parseFloat(lh) * parseFloat(rh)) / 100;
+  });
+
+  Handlebars.registerHelper('times', function (n, block) {
+    var accum = '';
+    for (let i = 0; i < n; ++i)
+      accum += block.fn(i);
+    return accum;
   });
 
   Handlebars.registerHelper("roundWeight", function (weight) {

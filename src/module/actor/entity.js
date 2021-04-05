@@ -23,7 +23,7 @@ export class OWBActor extends Actor {
     } else {
       data.initiative.value = 0;
     }
-    data.movement.encounter = data.movement.base / 3;
+    data.movement.encounter = Math.floor(data.movement.base / 3);
   }
   /* -------------------------------------------- */
   /*  Socket Listeners and Handlers
@@ -172,8 +172,8 @@ export class OWBActor extends Actor {
       details: game.i18n.format("OWB.roll.details.save", { save: label }),
     };
 
-    // let skip = options.event && options.event.ctrlKey;
-    let skip = true;
+    let skip = options?.event?.ctrlKey || options.fastForward;
+    // let skip = true;
 
     const rollMethod = this.data.type == "character" ? OWBDice.RollSave : OWBDice.Roll;
 
@@ -186,6 +186,7 @@ export class OWBActor extends Actor {
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: game.i18n.format("OWB.roll.language", { lang: label }),
       title: game.i18n.format("OWB.roll.language", { lang: label }),
+      chatMessage: options.chatMessage
     });
   }
 
@@ -202,7 +203,7 @@ export class OWBActor extends Actor {
       details: game.i18n.format("OWB.roll.details.save", { save: label }),
     };
 
-    let skip = options.event && options.event.ctrlKey;
+    let skip = options?.event?.ctrlKey || options.fastForward;
 
     const rollMethod = this.data.type == "character" ? OWBDice.RollSave : OWBDice.Roll;
 
@@ -238,6 +239,7 @@ export class OWBActor extends Actor {
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: game.i18n.localize("OWB.roll.morale"),
       title: game.i18n.localize("OWB.roll.morale"),
+      chatMessage: options.chatMessage
     });
   }
 
@@ -262,6 +264,7 @@ export class OWBActor extends Actor {
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: label,
       title: label,
+      chatMessage: options.chatMessage
     });
   }
 
@@ -292,7 +295,7 @@ export class OWBActor extends Actor {
       },
     };
 
-    let skip = options.event && options.event.ctrlKey;
+    let skip = options?.event?.ctrlKey || options.fastForward;
 
     // Roll and return
     return OWBDice.Roll({
@@ -602,11 +605,7 @@ export class OWBActor extends Actor {
     if (option === "detailed" && hasItems) totalWeight += 80;
 
     data.encumbrance = {
-      pct: Math.clamped(
-        (100 * parseFloat(totalWeight)) / data.encumbrance.max,
-        0,
-        100
-      ),
+      pct: Math.clamped((100 * parseFloat(totalWeight)) / data.encumbrance.max, 0,100),
       max: data.encumbrance.max,
       encumbered: totalWeight > data.encumbrance.max,
       value: totalWeight,
