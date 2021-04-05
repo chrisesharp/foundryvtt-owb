@@ -9,6 +9,10 @@ You can find this Foundry VTT game system within Foundry VTT in the system brows
 
 You should also install [the OWB Content Module](https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb-content/master/src/module.json) for the classes, abilities, and sample weapons, vehicles, NPCs and vehicles.
 
+## Usage
+
+If you want to create your own content (which you, of course, will do) then follow the guidelines [HERE](INSTRUCTIONS.md)
+
 ## License
 
 ![OWBCL](src/assets/OWBCL.webp)
