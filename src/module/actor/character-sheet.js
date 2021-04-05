@@ -153,7 +153,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
-    html.find(".ability-score .attribute-name a").click((ev) => {
+    html.find(".ability-score .attribute-name a").click((event) => {
       let actorObject = this.actor;
       let element = event.currentTarget;
       let score = element.parentElement.parentElement.dataset.score;
@@ -167,14 +167,14 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
       }
     });
 
-    html.find(".exploration .attribute-name a").click((ev) => {
+    html.find(".exploration .attribute-name a").click((event) => {
       let actorObject = this.actor;
       let element = event.currentTarget;
       let expl = element.parentElement.parentElement.dataset.exploration;
       actorObject.rollExploration(expl, { event: event });
     });
 
-    html.find(".inventory .item-titles .item-caret").click((ev) => {
+    html.find(".inventory .item-titles .item-caret").click((event) => {
       let items = $(event.currentTarget.parentElement.parentElement).children(
         ".item-list"
       );
