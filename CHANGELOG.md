@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.1.0] - 6-12-2020
+## [0.1.0] - 5/4/21
 
 ### Added
 
-- initial commit
+- initial version
 
 ### Changed
 
