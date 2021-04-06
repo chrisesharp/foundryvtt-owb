@@ -5,7 +5,7 @@ Unofficial support for  WWII: Operation Whitebox for Foundry VTT.
 ## Installation
 
 You can find this Foundry VTT game system within Foundry VTT in the system browser. You could also download the latest archive in the package folder, or use the manifest link below.\
-[https://raw.github.com/chrissharp/foundryvtt-owb/main/src/system.json](https://raw.github.com/chrissharp/foundryvtt-owb/main/src/system.json)
+[https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb/master/src/system.json](https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb/master/src/system.json)
 
 You should also install [the OWB Content Module](https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb-content/master/src/module.json) for the classes, abilities, and sample weapons, vehicles, NPCs and vehicles.
 
@@ -21,7 +21,7 @@ This Foundry VTT system requires Operation Whitebox:WW2 Rules that you can find 
 
 This third party product is not affiliated with, but is approved by, Small Niche Games. \
 WWII: Operation WhiteBox™ is a trademark of Peter C. Spahn.\
-Small Niche Games™ is a trademark of Peter C. Spahn
+Small Niche Games™ is a trademark of Peter C. Spahn.
 Used with permission under license.
 
 ## Credits
