@@ -185,7 +185,7 @@ export class OWBCombat {
       } else {
         index++;
       }
-      let id = $(ev.currentTarget).clowbst(".combatant")[0].dataset.combatantId;
+      let id = $(ev.currentTarget).closest(".combatant")[0].dataset.combatantId;
       game.combat.updateCombatant({
         _id: id,
         flags: { owb: { group: colors[index] } },
