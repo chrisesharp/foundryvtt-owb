@@ -6,7 +6,7 @@ export const registerSettings = function () {
     default: "group",
     scope: "world",
     type: String,
-    config: true,
+    config: false,
     choices: {
       individual: "OWB.Setting.InitiativeIndividual",
       group: "OWB.Setting.InitiativeGroup",
@@ -17,10 +17,10 @@ export const registerSettings = function () {
   game.settings.register("owb", "rerollInitiative", {
     name: game.i18n.localize("OWB.Setting.RerollInitiative"),
     hint: game.i18n.localize("OWB.Setting.RerollInitiativeHint"),
-    default: "reset",
+    default: "keep",
     scope: "world",
     type: String,
-    config: true,
+    config: false,
     choices: {
       keep: "OWB.Setting.InitiativeKeep",
       reset: "OWB.Setting.InitiativeReset",
@@ -44,7 +44,7 @@ export const registerSettings = function () {
     default: false,
     scope: "world",
     type: Boolean,
-    config: true,
+    config: false,
   });
 
   game.settings.register("owb", "encumbranceOption", {
@@ -53,7 +53,7 @@ export const registerSettings = function () {
     default: "complete",
     scope: "world",
     type: String,
-    config: true,
+    config: false,
     choices: {
       disabled: "OWB.Setting.EncumbranceDisabled",
       basic: "OWB.Setting.EncumbranceBasic",
