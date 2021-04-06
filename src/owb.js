@@ -103,7 +103,7 @@ Hooks.on("renderSidebarTab", async (object, html) => {
     // User guide
     let docs = html.find("button[data-action='docs']");
     const styling = "border:none;margin-right:2px;vertical-align:middle;margin-bottom:5px";
-    $(`<button data-action="userguide"><img src='/systems/owb/assets/default/ability.png' width='16' height='16' style='${styling}'/>Old School Guide</button>`).insertAfter(docs);
+    $(`<button data-action="userguide"><img src='/systems/owb/assets/default/ability.png' width='16' height='16' style='${styling}'/>WWII:OWB Guide</button>`).insertAfter(docs);
     html.find('button[data-action="userguide"]').click(ev => {
       new FrameViewer('https://chrisesharp.github.io/foundryvtt-owb', {resizable: true}).render(true);
     });
