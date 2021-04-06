@@ -63,7 +63,7 @@ export class OWBItem extends Item {
   rollWeapon(options = {}) {
     const isNPC = this.actor.data.type != "character";
     const data = this.data.data;
-    const type = isNPC ? "attack" : "melee";
+    let type = isNPC ? "attack" : "melee";
     let calibre;
     const hasAmmo = (i) => {
       return (i.type == "item" &&  i.data.tags &&
