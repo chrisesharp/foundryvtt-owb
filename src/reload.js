@@ -10,7 +10,7 @@ function getAmmo(token, calibre) {
     return [];
 }
 
-function reloadAmmo(token, weapon_id) {
+async function reloadAmmo(token, weapon_id) {
     const weapon = token.actor.data.items.find(f => f._id === weapon_id);
     let calibre = weapon.data.tags.filter(i => i.title === "cal");
     calibre = calibre.length > 0 ? calibre[0].value : 0;
@@ -18,7 +18,7 @@ function reloadAmmo(token, weapon_id) {
     let messageContent;
     if (ammo) {
         ammo.data.quantity.value = Math.max(0,ammo.data.quantity.max);
-        token.actor.updateEmbeddedEntity("OwnedItem", {...ammo});
+        await token.actor.updateEmbeddedEntity("OwnedItem", {...ammo});
         messageContent = `Reloaded ${weapon.name} with ${ammo.name}`;
     } else {
         messageContent = `You don't have any ammo for a ${weapon.name}`;
