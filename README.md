@@ -11,7 +11,7 @@ You should also install [the OWB Content Module](https://raw.githubusercontent.c
 
 ## Usage
 
-If you want to create your own content (which you, of course, will do) then follow the guidelines [HERE](INSTRUCTIONS.md)
+The documentation is available within Foundry under the configuration tab, and also [HERE](./docs/)
 
 ## License
 
