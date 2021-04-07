@@ -124,7 +124,8 @@
     font-size: 1.5em; /* currently ems cause chrome bug misinterpreting rems on body element */
     line-height: 1.6;
     font-weight: 400;
-    font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif; */
+    font-family: 'Special Elite', cursive;
     color: #222; }
   
   
@@ -158,9 +159,9 @@
   /* Links
   –––––––––––––––––––––––––––––––––––––––––––––––––– */
   a {
-    color: #1EAEDB; }
+    color: #3d7668; }
   a:hover {
-    color: #0FA0CE; }
+    color: #6fd0b8; }
   
   
   /* Buttons

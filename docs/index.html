@@ -14,11 +14,8 @@
 
     <!-- FONT
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <link
-      href="//fonts.googleapis.com/css?family=Raleway:400,300,600"
-      rel="stylesheet"
-      type="text/css"
-      />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
 
     <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -28,16 +25,22 @@
 
     <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <link rel="icon" type="image/png" href="images/favicon.png" />
+    <!-- <link rel="icon" type="image/png" href="images/favicon.png" /> -->
+    <!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <!-- <script id="twitter-wjs" src="http://platform.twitter.com/widgets.js"></script> -->
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/site.js"></script>
   </head>
-  <body>
+  <body class="has-docked-nav">
     <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <section class="header">
-      <h2>WWII:OWB</h2>
-      <p>Unofficial system for Foundry VTT</p>
-    </section>
     <div class="container">
+      <section class="header">
+        <h2>WWII:OWB</h2>
+        <p>Unofficial system for Foundry VTT</p>
+      </section>
+      <div class="navbar-spacer"></div>
       <nav class="navbar">
         <div class="container">
           <ul class="navbar-list">
@@ -48,10 +51,48 @@
               <a class="navbar-link" href="#install">Install</a>
             </li>
             <li class="navbar-item">
-              <a class="navbar-link" href="#characters">Characters</a>
+              <a class="navbar-link" href="#settings">Settings</a>
+            </li>
+            <li class="navbar-item">
+              <a class="navbar-link" href="#" data-popover="#charNavPop">Characters</a>
+              <div id="charNavPop" class="popover">
+                <ul class="popover-list">
+                  <li class="popover-item">
+                    <a class="popover-link" href="#tweaks">Tweaks</a>
+                  </li>
+                  <li class="popover-item">
+                    <a class="popover-link" href="#header">Header</a>
+                  </li>
+                  <li class="popover-item">
+                    <a class="popover-link" href="#attributes">Attributes</a>
+                  </li>
+                  <li class="popover-item">
+                    <a class="popover-link" href="#abilities">Abilities</a>
+                  </li>
+                  <li class="popover-item">
+                    <a class="popover-link" href="#inventory">Inventory</a>
+                  </li>
+                  <li class="popover-item">
+                    <a class="popover-link" href="#notes">Notes</a>
+                  </li>
+                </ul>
+              </div>
             </li>
             <li class="navbar-item">
               <a class="navbar-link" href="#enemies">Enemies &amp; Vehicles</a>
+            </li>
+            <li class="navbar-item">
+              <a class="navbar-link" data-popover="#weaponNavPop" href="#">Weapons</a>
+              <div id="weaponNavPop" class="popover">
+                <ul class="popover-list">
+                  <li class="popover-item">
+                    <a class="popover-link" href="#weapons">Sheet</a>
+                  </li>
+                  <li class="popover-item">
+                    <a class="popover-link" href="#tags">Tags</a>
+                  </li>
+                </ul>
+              </div>
             </li>
             <li class="navbar-item">
               <a class="navbar-link" href="#initiative">Initiative</a>
@@ -59,10 +100,11 @@
           </ul>
         </div>
       </nav>
-      <div id="intro" class="row">
-        <div class="column" style="margin-top: 10%;">
+      <div class="docs-section">
+        <h2 id="intro" class="docs-header">Introduction</h2>
+        <div>
           <p>
-            This is an unofficial, third-party implementation of the excellent WWII:Operation Whitebox™ rules by Small Niche Games™ and is copyright of Peter J. Spahn.
+            This is an unofficial, third-party implementation of the excellent <strong>WWII:Operation Whitebox™</strong> rules by <strong>Small Niche Games™</strong> and is copyright of Peter J. Spahn.
           </p>
           <p>
             Pete has been tremendously supportive of this effort, and I would like to acknowledge my grateful thanks to him.
@@ -73,7 +115,7 @@
              <a href="https://www.drivethrurpg.com/product/251318/OWB001-WWII-Operation-WhiteBox-FREE">PDF version.</a> 
           </p>
           <p>
-            Combined with the OGL content pack for WWII:OWB, it has enough content for you to create exciting WW2 scenarios. 
+            Combined with the <a href="https://foundryvtt.com/packages/owb-content">OGL content pack for WWII:OWB</a>, it has enough content for you to create exciting WW2 scenarios. 
             I would recommend you purchase some of the 
             <a href="https://www.drivethrurpg.com/browse/pub/3356/Small-Niche-Games/subcategory/5676_26684/WWII-Operation-WhiteBox">excellent scenario packs</a>
             from Small Niche Games&trade;</p>
@@ -90,189 +132,214 @@
           </p>
         </div>
       </div>
-      <div id="install" class="row">
-        <h4>Installation</h4>
+      <div class="docs-section">
+        <h2 id="install" class="docs-header">Installation</h2>
         <p>
           You'll need a Foundry VTT License or GM access to a Foundry VTT
           server.
         </p>
-        <p>
-          <ol>
-             <li>
-              Launch Foundry VTT.
-             </li>
-             <li>
-               Go to the <em>Game Systems</em> tab, then click <em>Install System</em>.
-             </li>
-             <li>
-               Find <code>'WWII:OWB'</code> and click <em>Install</em>.
-             </li>
-             <li>
-               Go to the <em>Add-on Modules</em> tab, then click <em>Install Module</em>.
-             </li>
-             <li>
-               Find <code>'WWII:OWB OGL Content'</code> and click <em>Install</em>.
-             </li>
-             <li>
-               <em>Create World</em> using the <em>WWII:OWB</em> system.
-             </li>
-          </ol>
-        </p>
-        <h4>Setup</h4>
+        <div class="row">
+          <div class="one column"></div>
+          <div class="ten columns">
+            <ol>
+              <li>
+                Launch Foundry VTT.
+              </li>
+              <li>
+                Go to the <em>Game Systems</em> tab, then click <em>Install System</em>.
+              </li>
+              <li>
+                Find <code>'WWII:OWB'</code> and click <em>Install</em>.
+              </li>
+              <li>
+                Go to the <em>Add-on Modules</em> tab, then click <em>Install Module</em>.
+              </li>
+              <li>
+                Find <code>'WWII:OWB OGL Content'</code> and click <em>Install</em>.
+              </li>
+              <li>
+                <em>Create World</em> using the <em>WWII:OWB</em> system.
+              </li>
+            </ol>
+            </div>
+        </div>
+      </div>
+      <div class="docs-section">
+        <h2 id="settings" class="docs-header">Settings</h2>
         <p>The System settings are to control system-wide behaviours, and you 
           can access them under the <em>Configure Settings</em> dialog from the 
           Foundry VTT sidebar.
         </p>
-        <p style="text-align: center;">
-          <img src="./images/settings.png" />
-        </p>
-        <p>
+        <div class="row">
+          <p style="text-align: center;">
+            <img src="./images/settings.png" />
+          </p>
+        </div>
+        <div class="row">
           There is only  one setting available right now to customize your experience with WWII:OWB.
-          <ul>
-            <li><strong>Ascending Armor Class</strong>: The WWII:OWB
-              default option is to use the original descending Armor Class and
-              the 'To Hit AC 0' attack statistic alias THAC0.
-              If this input is checked, the system will use Ascending Armor Class instead.
-            </li>
-          </ul>
-        </p>
+          <div class="one column"></div>
+          <div class="ten column">
+            <ul>
+              <li><strong>Ascending Armor Class</strong>
+                <ul>
+                The WWII:OWB
+                default option is to use the original descending Armor Class and
+                the 'To Hit AC 0' attack statistic alias THAC0.
+                If this input is checked, the system will use Ascending Armor Class instead.
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div id="characters" class="docs-section">
-        <h4>Characters</h4>
-        <h6 class="docs-header" id="tweaks">Tweaks</h6>
+      <div class="docs-section">
+        <h2 id="characters" class="docs-header">Characters</h2>
+        <hr>
+        <h4 id="tweaks" class="docs-header">Tweaks</h4>
+        <p>You customize characters through this menu accessible from the
+          header of the character sheet.
+        </p>
         <div class="row">
           <div class="six columns">
-            <p>You customize characters through this menu accessible from the
-              header of the character sheet.</p>
-            <p>
-              <ul>
-                <li><strong>Recruit</strong>: Adds the Loyalty rating
-                  attribute, replaces the Title field in the header by a Wage
-                  input.</li>
-                <li><strong>Initiative Bonus</strong>: Will add this value to
-                  initiative in addition to the Dexterity modifier.</li>
-                <li><strong>Next Level</strong>: The threshold at which the
-                  level field in the Header section of the character sheet will
-                  animate.</li>
-              </div>
-              <div class="three columns">
-                <img src="./images/tweaks.png" width="300" />
-              </div>
-            </div>
-            <div class="row">
-              <ul>
-                <li><strong>Bonus experience</strong>: This will add to the
-                  experience dealt from the Party Sheet, set manually based
-                  on any bonus your character might acquire from their class.
-                </li>
-                <li><strong>Experience share:</strong>: The share of the party
-                  XP you will get from the experience dealt.</li>
-                <li><strong>Melee Bonus</strong>: A bonus to the Attack roll
-                  only for melee weapons.</li>
-                <li><strong>Missile Bonus</strong>: A bonus to the Attack roll
-                  only for missile weapons.</li>
-                <li><strong>Armor Class</strong>: This value will be added
-                  (ascending) or subtracted (default) to the Armor class value
-                  that initially depends on the armor you wear and your
-                  Dexterity modifier.</li>
-                <li><strong>Encumbrance</strong> (GM Only): The maximum value at
-                  which you can't move anymore. If you have an encumbrance of
-                  1800 it will delay any movement penalty by 200 (1800-1600).</li>
-                <li><strong>Calculate movement</strong> (GM Only): if you have a
-                  tricky case where movement should be manually set, you can
-                  uncheck this.</li>
-              </ul>
-            </div>
-            <h6 class="docs-header">Header</h6>
-            <p style="text-align: center;">
-              <img src="./images/header.png" />
-            </p>
-            <p>The top of the character sheet header contains text fields 
-              you can edit directly. Currently there is no automation of
-              the content here.
-            </p>
-            <p>The greyed text on top of the experience field is the XP prime
-              requisites bonus that can be set in the Tweaks dialog (see above). 
-              It is used when experience is dealt automatically via the party sheet.</p>
-            <p> The Level field will flash as soon when the character has enough
-              experience to be promoted up a rank. This experience threshold is 
-              also set in the Tweaks dialog.
-            </p>
-            <h6 class="docs-header">Attributes</h6>
-            <p>The default tab covers the basic attributes of the character.</p>
-            <p style="text-align: center;">
-              <img src="./images/attributes.png" />
-            </p>
-            <p>The six base attributes are in a column on the left.</p>
-            <p>Rolls can be made by clicking on the attribute name, after
-              clicking you will see a dialog where you can input modifiers.</p>
-            <p>The book icon above the attributes will show the modifiers for
-              each attribute.</p>
-            <p>
-              In the 'bucket' shape next to the attributes, you will see
-              the character <em>hit points</em> - current (top) and max (lower) values. 
-              The 'bucket' will empty as you lose hit points.
-            </p>
-            <p>
-              In the 'target' to the right is  <em>armor class</em>.
-              The top value is the AC and the lower value is the 'unarmored' armor class. 
-              It's calculated depending on the <em>clothing</em> you have equipped. 
-              You can add an armor bonus in the Tweaks dialog.
-            </p>
-            <p>
-              The third box on the right is the <em>Base Hit Bonus</em> automatically
-              calculated by the character <em>rank</em> (level).
-            </p>
-            <p>On the second row there is a Hit Dice field you can roll.</p>
-            <p>The third row details the Attack statistics. It will change if
-              you have the Ascending AC setting enabled. On the left the Melee attack
-              modifier that is influenced by strength and on the right the
-              Missile modifier influenced by Dexterity.
-              Both field names are clickable and will roll attacks but usually you
-              would attack using the appropriate weapon in your inventory (see below).
-            </p>
-            <p style="text-align: center;">
-              <img src="./images/attack-roll.png" />
-            </p>
-            <p>
-              The last row shows the three movement stats, they are calculated 
-              depending on the weight you are carrying and the encumbrance options 
-              (See the <a href="#inventory">inventory</a> section).
-              You can disable this behavior through the <a href="#tweaks">Tweaks</a>
-              dialog.
-            </p>
-            <p>
-              Finally there is the <em>Universal Saving Throw</em> value.
-              This can be rolled when clicked.
-            </p>
-            <p style="text-align: center;">
-              <img src="./images/save-roll.png" />
-            </p>
-            <h4 class="docs-header">Abilities</h4>
-            <p style="text-align: center;">
-              <img src="./images/abilities.png" />
-            </p>
-            <p>
-              The first row contains a rollable entry for finding <em>Hidden Things</em>.
-            </p>
-            <p>
-              In the abilities section you can create anything that needs a
-              description. These are typically class abilities.
-              You can create a new ability by clicking the plus button or by
-              dragging one from the item sidebar or a compendium.
-              You can open the abilities with the pen icon, show it in the chat
-              with the eye icon, and delete it with the trash icon.
-            </p>
-            <p style="text-align: center;">
-              <img src="./images/ability.png" />
-            </p>
-            <p>
+            <ul>
+              <li><strong>Recruit</strong>: Adds the Loyalty rating
+                attribute, replaces the Title field in the header by a Wage
+                input.</li>
+              <li><strong>Initiative Bonus</strong>: Will add this value to
+                initiative in addition to the Dexterity modifier.</li>
+              <li><strong>Next Level</strong>: The threshold at which the
+                level field in the Header section of the character sheet will
+                animate.</li>
+              <li><strong>Bonus experience</strong>: This will add to the
+                experience dealt from the Party Sheet, set manually based
+                on any bonus your character might acquire from their class.
+              </li>
+            </ul>
+          </div>
+          <div class="four columns">
+            <img src="./images/tweaks.png" width="300" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="one column"></div>
+          <div class="eleven columns">
+            <ul>
+              <li><strong>Experience share</strong>: The share of the party
+                XP you will get from the experience dealt.</li>
+              <li><strong>Melee Bonus</strong>: A bonus to the Attack roll
+                only for melee weapons.</li>
+              <li><strong>Missile Bonus</strong>: A bonus to the Attack roll
+                only for missile weapons.</li>
+              <li><strong>Armor Class</strong>: This value will be added
+                (ascending) or subtracted (default) to the Armor class value
+                that initially depends on the armor you wear and your
+                Dexterity modifier.</li>
+              <li><strong>Encumbrance</strong> (GM Only): The maximum value at
+                which you can't move anymore. If you have an encumbrance of
+                1800 it will delay any movement penalty by 200 (1800-1600).</li>
+              <li><strong>Calculate movement</strong> (GM Only): if you have a
+                tricky case where movement should be manually set, you can
+                uncheck this.</li>
+            </ul>
+          </div>
+        </div>
+        <hr>
+        <h4 class="docs-header" id="header">Header</h4>
+        <div style="text-align: center;">
+          <img src="./images/header.png" />
+        </div>
+        <div>
+          <p>The top of the character sheet header contains text fields 
+            you can edit directly. Currently there is no automation of
+            the content here.
+          </p>
+          <p>The greyed text on top of the experience field is the XP prime
+            requisites bonus that can be set in the Tweaks dialog (see above). 
+            It is used when experience is dealt automatically via the party sheet.
+          </p>
+          <p> The <strong>Rank</strong> field will flash as soon when the character 
+            has enough experience to be promoted up a rank. 
+            This experience threshold is also set in the <a href="#tweaks">Tweaks dialog</a>.
+          </p>
+          <hr>
+          <h4 class="docs-header" id="attributes">Attributes</h4>
+          <p>The default tab covers the basic attributes of the character.</p>
+          <p style="text-align: center;">
+            <img src="./images/attributes.png" />
+          </p>
+          <p>The six base attributes are in a column on the left.</p>
+          <p>Rolls can be made by clicking on the attribute name, after
+            clicking you will see a dialog where you can input modifiers.</p>
+          <p>The book icon above the attributes will show the modifiers for
+            each attribute.</p>
+          <p>
+            In the 'bucket' shape next to the attributes, you will see
+            the character <em>hit points</em> - current (top) and max (lower) values. 
+            The 'bucket' will empty as you lose hit points.
+          </p>
+          <p>
+            In the 'target' to the right is  <em>armor class</em>.
+            The top value is the AC and the lower value is the 'unarmored' armor class. 
+            It's calculated depending on the <em>clothing</em> you have equipped. 
+            You can add an armor bonus in the Tweaks dialog.
+          </p>
+          <p>
+            The third box on the right is the <em>Base Hit Bonus</em> automatically
+            calculated by the character <em>rank</em> (level).
+          </p>
+          <p>On the second row there is a Hit Dice field you can roll to generate hit points.</p>
+          <p>The third row details the Attack statistics. It will change if
+            you have the Ascending AC setting enabled. On the left the Melee attack
+            modifier that is influenced by strength and on the right the
+            Missile modifier influenced by Dexterity.
+            Both field names are clickable and will roll attacks but usually you
+            would attack using the appropriate weapon in your inventory (see below).
+          </p>
+          <p style="text-align: center;">
+            <img src="./images/attack-roll.png" />
+          </p>
+          <p>
+            The last row shows the three movement stats, they are calculated 
+            depending on the weight you are carrying and the encumbrance options 
+            (See the <a href="#inventory">inventory</a> section).
+            You can disable this behavior through the <a href="#tweaks">Tweaks</a>
+            dialog.
+          </p>
+          <p>
+            Finally there is the <em>Universal Saving Throw</em> value.
+            This can be rolled when clicked.
+          </p>
+          <p style="text-align: center;">
+            <img src="./images/save-roll.png" />
+          </p>
+        </div>
+        <hr>
+        <h4 class="docs-header" id="abilities">Abilities</h4>
+        <div class="row">
+          <p style="text-align: center;">
+            <img src="./images/abilities.png" />
+          </p>
+          <p>
+            The first row contains a rollable entry for finding <em>Hidden Things</em>.
+          </p>
+          <p>
+            In the abilities section you can create anything that needs a
+            description. These are typically class abilities.
+            You can create a new ability by clicking the plus button or by
+            dragging one from the item sidebar or a compendium.
+            You can open the abilities with the pen icon, show it in the chat
+            with the eye icon, and delete it with the trash icon.
+          </p>
+          <div class="row">
+            <div class="six columns">
+              <p>
               When opened, the ability details can be entered. On the left you
               see you can set the ability requirements, for example 
               <code>Grunt, 3</code> to indicate a 3rd level Grunt ability, 
               or <code>Maquis</code> to indicate a standard Maquis ability.
               You can enter a roll associated with the ability.
-
+              </p>
+              <p>
               For example if Roll is <code>1d100</code>, roll type is 
               <code>&lt;=</code> and target is <code>40</code>. 
               The roll will display success in green as soon as the result
@@ -281,163 +348,248 @@
               on the character sheet to roll directly to the chat.
               You can apply the roll result as damage or healing by right
               clicking on the chat card, this is true for all rolls.
-            </p>
-            <p style="text-align: center;">
+              </p>
+            </div>
+            <div class="six columns">
+              <img src="./images/ability.png" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="six columns">
               <img src="./images/ability-chat.png" />
-            </p>
-            <p>
+            </div>
+            <div class="six columns">
               If you need someone else to roll the ability you can show the
               whole ability to the chat with the eye icon and they can roll from
               there.
               Note that you can slide down the ability description by clicking
               on its name from the character sheet.
-            </p>
-            <h4 class="docs-header">Inventory</h4>
-            <p style="text-align: center;">
-              <img src="./images/inventory.png" />
-            </p>
-            <p>
-              The inventory compiles every item you own, including weapons,
-              ammunition, clothing and other miscellaneous gear. 
-              Weapons are the first section. Clicking on the weapon
-              icon will roll an attack with damage.
-            </p>
-            <p style="text-align: center;">
-              <img src="./images/shooting.png" />
-            </p>
-            <p>
-              If it is a missile weapon, a dialog will pop up to ask
-              you what range you are firing at, and (if possible) whether
-              you are choosing burst or suppressive fire.
-            </p>
-            <p style="text-align: center;">
-              <img src="./images/item-attack.png" />
-            </p>
-            <p>
-              Damage rolled during the attack can be applied to one or several
-              selected tokens if you click on the blood drop icon right to the
-              result. You can apply damage or healing by right clicking on the
-              chat card, this is true for all rolls.
-            </p>
-            <p>
-              Clicking on the name will expand the item description along with
-              relevant tags.
-            </p>
-            <p style="text-align: center;">
-              <img src="./images/item-expanded.png" />
-            </p>
-            <p>
-              Here the item is a <em>.303 calibre</em> rifle, that is capable of 
-              <em>burst</em> damage, has a short range of <em>150'</em>, and 
-              does <em>1d6+1</em> hitpoints of damage.
-            </p>
-            <p>
-              Click on the <em>T-shirt</em> icon to indicate that your character
-              is equipped/carrying that item.
-              Tags that are recognized will be displayed as icons (<code>Burst</code>
-              and <code>Suppress</code>)
-              Other tags will be written as text.
-            </p>
-            <p>
-              When you open the weapon sheet by clicking on the pen icon, you
-              can edit the stats and add new tags.
-              Melee, and Missile tags will check automatically the
-              matching checkbox.
-            </p>
-            <p style="text-align: center;">
-              <img src="./images/weapon.png" />
-            </p>
-            <p>
-              Weapons can have attack bonuses. You can add new weapon tags if
-              you type text in the field below the weapon icon and press ENTER.
-              You can enter multiple tags, separated by commas.
-            </p>
-            <p>
-              For missile weapons that use ammunition, you must set a tag to indicate
-              the calibre. This is done by adding the tag in the form of <em>size(cal)</em>.
-                e.g.
-                <code>9mm(cal)</code>
-            </p>
-            <p style="text-align: center;">
-              <img src="./images/ammunition.png" />
-            </p>
-            <p>
-              Ammunition is shown in the miscellaneous gear section. Clicking on the entry
-              will expand it and show its calibre and description.
-              There is also a set of usage boxes to indicate the number of rounds left.
-            </p>
-            <p>
-              At the bottom is the encumbrance bar. This is automatically calculated. 
-              If you're encumbrance max value is 250 as default,
-              each cursor passed is the threshold you will lose movement.
-            </p>
-            <h4 class="docs-header">Notes</h4>
-            <p style="text-align: center;">
-              <img src="./images/notes.png" />
-            </p>
-            <p>This tab is a free space you can record description and notes.
-              This is enriched so you can use inline rolls, entity links and
-              other fun things.</p>
-            <p>You can add known languages by clicking on the plus next to the
-              language header. The number of language you can speak can be found
-              in the modifier dialog in the attribute tab.</p>
+            </div>
           </div>
-          <div id="enemies" class="docs-section">
-            <h4>Enemies &amp; Vehicles</h4>
-            <h4 class="docs-header">Tweaks</h4>
+        </div>
+        <hr>
+        <h4 class="docs-header" id="inventory">Inventory</h4>
+        <div class="row">
+          <p style="text-align: center;">
+            <img src="./images/inventory.png" />
+          </p>
+          <p>
+            The inventory compiles every item you own, including weapons,
+            ammunition, clothing and other miscellaneous gear.
+          </p>
+          <p>
+            Weapons are the first section. Clicking on the weapon
+            icon will roll an attack with damage.
+          </p>
+          <p style="text-align: center;">
+            <img src="./images/shooting.png" />
+          </p>
+          <p>
+            If it is a missile weapon, a dialog will pop up to ask
+            you what range you are firing at, and (if possible) whether
+            you are choosing burst or suppressive fire.
+          </p>
+          <p style="text-align: center;">
+            <img src="./images/item-attack.png" />
+          </p>
+          <p>
+            Damage rolled during the attack can be applied to one or several
+            selected tokens if you click on the blood drop icon right to the
+            result. You can apply damage or healing by right clicking on the
+            chat card, this is true for all rolls.
+          </p>
+          <p>
+            Clicking on the item name will expand the item description along with
+            relevant tags.
+          </p>
+          <p style="text-align: center;">
+            <img src="./images/item-expanded.png" />
+          </p>
+          <p>
+            Here the item is a <em>.303 calibre</em> rifle, that is capable of 
+            <em>burst</em> damage, has a short range of <em>150'</em>, and 
+            does <em>1d6+1</em> hitpoints of damage.
+          </p>
+          <p>
+            Click on the <em>T-shirt</em> icon to indicate that your character
+            is equipped/carrying that item.
+            Tags that are recognized will be displayed as icons (<code>Burst</code>
+            and <code>Suppress</code>)
+            Other tags will be written as text.
+          </p>
+          <p style="text-align: center;">
+            <img src="./images/ammunition.png" />
+          </p>
+          <p>
+            Ammunition is shown in the miscellaneous gear section. Clicking on the entry
+            will expand it and show its calibre and description.
+            There is also a set of usage boxes to indicate the number of rounds left.
+          </p>
+          <p>
+            At the bottom is the encumbrance bar. This is automatically calculated. 
+            If you're encumbrance max value is 250 as default,
+            each cursor passed is the threshold you will lose movement.
+          </p>
+        </div>
+        <hr>
+        <h4 class="docs-header" id="notes">Notes</h4>
+        <div class="row">
+          <p style="text-align: center;">
+            <img src="./images/notes.png" />
+          </p>
+          <p>This tab is a free space you can record description and notes.
+            This is enriched so you can use inline rolls and entity links.
+          </p>
+          <p>You can add known languages by clicking on the plus next to the
+            language header. The number of language you can speak can be found
+            in the modifier dialog in the attribute tab.
+          </p>
+        </div>
+      </div>
+      <div class="docs-section">
+        <h2 id="enemies" class="docs-header">Enemies &amp; Vehicles</h2>
+        <hr>
+        <h4 class="docs-header">Tweaks</h4>
+        <p>
+          The tweaks menu for enemies is basically the same as for
+          <a href="#tweaks">characters</a>, but without experience bonus support or retainers. 
+        </p>
+        <p>
+          The tweaks menu for vehicles is only an initiative bonus. 
+        </p>
+        <p style="text-align: center;">
+          <img src="./images/enemies.png" />
+        </p>
+        <h4 class="docs-header">Header</h4>
+        <p>The first row below the name are the <em>Hit Points</em>, <em>Hit Dice</em>,
+          <em>Armour Class</em>, <em>Basic Hit Bonus</em>, <em>Movement</em> and 
+          <em>Saving Throw.</em> and, where applicable, are rollable fields. 
+          The <em>Nationality</em> is also rollable below, and rolls a plain 2d6 on the
+          reaction table. The morale is rollable as well.</p>
+        <h4 class="docs-header">Abilities &amp; Equipment</h4>
+        <p>
+          This is a combination of the Abilities and Inventory tabs for characters.
+          For Vehicles it is <em>Modifications &amp; Equipment</em>, but they are
+          basically the same thing.
+        </p>
+        <h4 class="docs-header">Notes</h4>
+        <p>
+          This is an area with the same purpose and function as for characters.
+        </p>
+      </div>
+      <div class="docs-section">
+        <h2 id="weapons" class="docs-header">Weapons</h2>
+        <p>
+          When you open the weapon sheet by clicking on the pen icon in the inventory, 
+          or by creating a new weapon, you can edit the stats and add new tags.
+          Melee, and Missile tags will check automatically the
+          matching checkbox.
+        </p>
+        <div class="row">
+          <div class="six columns">
+            Missile weapons have the following qualities:
+            <ol>
+              <li>Burst fire</li>
+              <li>Suppresive fire</li>
+              <li>Calibre of required ammunition</li>
+              <li>Rate of Fire</li>
+              <li>Range</li>
+              <li>Save for half damage</li>
+            </ol>
             <p>
-              The tweaks menu for enemies is basically the same as for
-              characters, but without experience bonus support or retainers. 
-            </p>
-            <p>
-              The tweaks menu for vehicles is only an initiative bonus. 
-            </p>
-            <p style="text-align: center;">
-              <img src="./images/enemies.png" />
-            </p>
-            <h4 class="docs-header">Header</h4>
-            <p>The first row below the name are the Hit Points, Hit Dice,
-              Armour Class, Basic Hit Bonus, Movement and Saving Throw.
-              and, where applicable, are rollable fields. 
-              The Nationality is also rollable below, and rolls a plain 2d6 on the
-              reaction table. The morale is rollable as well.</p>
-            <h4 class="docs-header">Abilities &amp; Equipment</h4>
-            <p>
-              This is a combination of the Abilities and Inventory tabs for characters.
-              For Vehicles it is <em>Modifications &amp; Equipment</em>, but they are
-              basically the same thing.
-            </p>
-            <h4 class="docs-header">Notes</h4>
-            <p>
-              This is an area with the same purpose and function as for characters.
+              To indicate that a weapon is a missile weapon, enable the bullseye icon. 
+              Otherwise, stick with the fist icon to indicate it is a melee weapon.
             </p>
           </div>
-          <div id="initiative" class="docs-section">
-            <h4>Initiative</h4>
-            <h4 class="docs-header">Grouped initiative</h4>
-            <p style="text-align: center;">
-              <img src="./images/initiative-group.png" />
-            </p>
+          <div class="six columns" style="text-align: center;">
+            <img src="./images/weapon.png" />
+          </div>
+        </div>
+        <p>
+          Weapons can have attack bonuses. You can add new weapon tags if
+          you type text in the field below the weapon icon and press <code>ENTER</code>.
+          You can enter multiple tags, separated by commas.
+        </p>
+        <p>
+          For missile weapons that use ammunition, you must set a tag to indicate
+          the calibre. This is done by adding the tag in the form of <em>size(cal)</em> 
+            e.g.
+            <code>9mm(cal)</code>
+        </p>
+        <hr>
+        <h4 id="tags" class="docs-header">Tags</h4>
+        <p>
+          The following tags have special meaning and mechanics in the game:
+          <table>
+            <thead>
+              <tr>
+                <th>Qualitiy</th>
+                <th>Tag</th>
+                <th>Effect</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Calibre (e.g. 9mm)</td>
+                <td><code>9mm(call)</code></td>
+                <td>If you don't provide a Calibre tag, then the missile weapon does 
+                  not use ammunition i.e. a throwing knife. If you do, you should 
+                  only provide ONE and this will mean the weapon can only be fired 
+                  if the correct ammo for the weapon is also in a positive quantity 
+                  in the actors inventory.</td>
+              </tr>
+              <tr>
+                <td>Burst fire</td>
+                <td><code>Burst</code></td>
+                <td>Reduces ammo by a third and gives +2 to-hit (As per rules p.47)</td>
+              </tr>
+              <tr>
+                <td>Suppressive fire</td>
+                <td><code>Suppress</code></td>
+                <td>Uses all ammo in one round and +2 to-hit. Pins targets. See rules (p.47)</td>
+              </tr>
+            </tbody>
+          </table>
+        </p>
+      </div>
+      <div class="docs-section">
+        <h2 id="initiative" class="docs-header">Initiative</h2>
+        <hr>
+        <h4 class="docs-header">Grouped initiative</h4>
+        <div class="row">
+          <div class="seven columns">
             <p>
-              By default each character or NPC is assigned to a group. If
-              their disposition is hostile in the Token configuration they will
+              By default each character or NPC is assigned to a group based on
+              their Token disposition.
+              If their disposition is hostile in the Token configuration they will
               be in group 'Red', Neutral is 'Yellow', Friendly is 'Green'. 
-              But the GM can change the group you belong by clicking on the flag
-              to allow for more than two factions.
-              I suggest you set characters default Token disposition to Friendly
-              and Enemies to Hostile.
+            </p>
+            <p> 
+              However, GM can change the group an actor belongs to by clicking on 
+              the flag to allow for more than two factions.
+            </p>
+            <p>  
+              I suggest you set <em>Characters</em> default Token disposition to 
+              <code>Friendly</code>, <em>Enemies</em> to <code>Hostile</code>, and
+              other NPCs, such as civilians, to <code>Neutral</code>.
             </p>
             <p>
               When you are happy about the groups, you can begin the combat by
               clicking below the combat tracker. You can reroll the initiative
-              manually with the dice above the tracker. 
+              manually with the dice above the tracker.
+            </p>
+            <p> 
               If you reassign a character to a different faction you can 
               set their initiative to the group value by right clicking and 
               select 'reroll'.
             </p>
           </div>
+          <div class="five columns">
+            <img src="./images/initiative-group.png" />
+          </div>
         </div>
       </div>
+    </div>
       <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     </body>
