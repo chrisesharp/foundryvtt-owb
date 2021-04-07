@@ -11,7 +11,7 @@ You should also install [the OWB Content Module](https://raw.githubusercontent.c
 
 ## Usage
 
-The documentation is available within Foundry under the configuration tab, and also [HERE](./docs/)
+The documentation is available within Foundry under the configuration tab, and also [HERE](https://chrisesharp.github.io/foundryvtt-owb/))
 
 ## License
 
