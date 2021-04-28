@@ -79,6 +79,7 @@
     {{!-- Resource Tracking --}}
     <div class="resources">
         <div class="flexrow">
+            {{!-- Hit Points --}}
             <div class="health">
                 <input class="health-value health-top" name="data.hp.value" type="text" value="{{data.hp.value}}"
                     data-dtype="Number" placeholder="0" title="{{localize 'OWB.Health'}}" />
@@ -87,6 +88,7 @@
                 <div class="health-empty" style="height:{{counter false data.hp.value data.hp.max}}%"></div>
                 <div class="health-full" style="height:{{counter true data.hp.value data.hp.max}}%"></div>
             </div>
+            {{!-- AC --}}
             <div class="health armor-class">
                 {{#if config.ascendingAC}}
                 <div class="health-value health-top" title="{{localize 'OWB.ArmorClass'}}">{{data.aac.value}}</div>
@@ -102,20 +104,9 @@
                             class="fas fa-shield-alt"></i></div>{{/if}}
                 {{/if}}
             </div>
-            <div class="flexrow">
-                <ul class="attributes flexrow">
-                    <li class="attribute hit-dice">
-                        <h4 class="attribute-name box-title" title="{{ localize 'OWB.BHB' }}">
-                            <a>{{ localize "OWB.BHB" }}</a>
-                        </h4>
-                        <div class="attribute-value">
-                            <div class="health-value health-top" title="{{localize 'OWB.BHB'}}">{{data.thac0.bhb}}</div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
         </div>
         <div class="flexrow">
+            {{!-- Hit Dice --}}
             <ul class="attributes flexrow">
                 <li class="attribute hit-dice">
                     <h4 class="attribute-name box-title" title="{{ localize 'OWB.HitDice' }}">
@@ -126,22 +117,29 @@
                             data-dtype="String" />
                     </div>
                 </li>
-                {{#if config.initiative}}
-                <li class="attribute">
-                    <h4 class="attribute-name box-title" title="{{ localize 'OWB.Initiative' }}">
-                        {{ localize "OWB.InitiativeShort" }}
+                {{!-- Base Hit Bonus --}}
+                <li class="attribute hit-dice">
+                    <h4 class="attribute-name box-title" title="{{ localize 'OWB.BHB' }}">
+                        <a>{{ localize "OWB.BHB" }}</a>
                     </h4>
-                    <div class="attribute-value"
-                        title="{{localize 'OWB.scores.dex.long'}}({{data.scores.dex.init}}) + {{localize 'OWB.Modifier'}}({{data.initiative.mod}})">
-                        {{add data.scores.dex.init data.initiative.mod}}
+                    <div class="attribute-value">
+                        <div class="health-value health-top" title="{{localize 'OWB.BHB'}}">{{data.thac0.bhb}}</div>
                     </div>
                 </li>
-                {{/if}}
+                {{!-- Saving Throw --}}
+                <li class="attribute saving-throw" data-save="save">
+                    <h4 class="attribute-name box-title">
+                        <a>{{ localize "OWB.saves.save.short" }}</a>
+                    </h4>
+                    <div class="attribute-value">
+                        <input name="data.saves.save.value" type="text" value="{{data.saves.save.value}}" placeholder="0"
+                            data-dtype="Number" />
+                </li>
             </ul>
         </div>
         <div class="flexrow">
             <ul class="attributes flexrow">
-                <li class="attribute attribute-secondaries attack" data-attack="melee">
+                <li class="attribute attack" data-attack="melee">
                     <h4 class="attribute-name box-title" title="{{localize 'OWB.Melee'}}">
                         <a>{{localize 'OWB.MeleeShort'}}</a>
                     </h4>
@@ -164,7 +162,7 @@
                     </div>
                 </li>
                 {{/if}}
-                <li class="attribute attribute-secondaries attack" data-attack="missile">
+                <li class="attribute attack" data-attack="missile">
                     <h4 class="attribute-name box-title" title="{{localize 'OWB.Missile'}}">
                         <a>{{localize 'OWB.MissileShort'}}</a>
                     </h4>
@@ -175,53 +173,16 @@
                         </div>
                     </div>
                 </li>
-            </ul>
-        </div>
-        <div class="flexrow">
-            <ul class="attributes flexrow">
-                <li class="attribute attribute-secondaries">
-                    <h4 class="attribute-name box-title" title="{{localize 'OWB.movement.overland.long'}}">
-                        {{localize 'OWB.movement.overland.short'}}
-                    </h4>
-                    <div class="flexrow">
-                        <div class="attribute-value">
-                            {{divide data.movement.base 5}}
-                        </div>
-                    </div>
-                </li>
                 <li class="attribute">
-                    <h4 class="attribute-name box-title" title="{{ localize 'OWB.movement.exploration.long' }}">
-                        {{ localize "OWB.movement.exploration.short" }}
+                    <h4 class="attribute-name box-title" title="{{ localize 'OWB.movement.base' }}">
+                        {{ localize "OWB.movement.short" }}
                     </h4>
                     <div class="attribute-value flexrow">
                         <input name="data.movement.base" type="text" value="{{data.movement.base}}" placeholder="0"
                             data-dtype="Number" {{#if data.config.movementAuto}}disabled{{/if}} />
                     </div>
                 </li>
-                <li class="attribute attribute-secondaries">
-                    <h4 class="attribute-name box-title" title="{{localize 'OWB.movement.encounter.long'}}">
-                        {{localize 'OWB.movement.encounter.short'}}
-                    </h4>
-                    <div class="flexrow">
-                        <div class="attribute-value">
-                            {{divide data.movement.base 3}}
-                        </div>
-                    </div>
-                </li>
             </ul>
         </div>
-    </div>
-    {{!-- Saving throws --}}
-    <div class="attribute-group">
-        <ul class="attributes">
-            <li class="attribute saving-throw" data-save="save">
-                <h4 class="attribute-name box-title">
-                    <a>{{ localize "OWB.saves.save.long" }}</a>
-                </h4>
-                <div class="attribute-value">
-                    <input name="data.saves.save.value" type="text" value="{{data.saves.save.value}}" placeholder="0"
-                        data-dtype="Number" />
-            </li>
-        </ul>
     </div>
 </section>
