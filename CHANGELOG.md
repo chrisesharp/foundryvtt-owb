@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.3] - 28/4/21
+
+### Added
+
+### Changed
+
+- Redesigned Attributes layout and removed the multiple versions of movement
+- Removed min-height sizes on tabs to prevent scrollbar getting triggered unnecessarily.
+
 ## [1.0.2] - 17/4/21
 
 ### Added
