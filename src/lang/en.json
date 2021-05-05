@@ -101,6 +101,10 @@
   "OWB.movement.exploration.short": "Ex",
   "OWB.movement.exploration.long": "Exploration Movement Rate",
 
+  "OWB.speeds.careful": "Careful",
+  "OWB.speeds.normal": "Normal",
+  "OWB.speeds.running": "Running",
+
   "OWB.ArmorClassBase": "Base Armor Class",
   "OWB.ArmorClass": "Armor Class",
   "OWB.ArmorClassShort": "AC",

@@ -7,7 +7,11 @@ Unofficial support for  WWII: Operation Whitebox for Foundry VTT.
 You can find this Foundry VTT game system within Foundry VTT in the system browser. You could also download the latest archive in the package folder, or use the manifest link below.\
 [https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb/master/src/system.json](https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb/master/src/system.json)
 
-You should also install [the OWB Content Module](https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb-content/master/src/module.json) for the classes, abilities, and sample weapons, vehicles, NPCs and vehicles.
+You should also install the [OWB Content Module](https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb-content/master/src/module.json) for the classes, abilities, and sample weapons, vehicles, NPCs and vehicles.
+
+### Recommended Optional Modules
+
+- [Drag Ruler Module](https://foundryvtt.com/packages/drag-ruler) for automatic visualization of movement ranges when you drag a token.
 
 ## Usage
 

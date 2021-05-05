@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.4] - 5/5/21
+
+### Added
+
+- Added integration support for the [Drag Ruler Module](https://foundryvtt.com/packages/drag-ruler)
+
+### Changed
+
+### Removed
+
 ## [1.0.3] - 28/4/21
 
 ### Added

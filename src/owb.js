@@ -127,3 +127,28 @@ Hooks.on("getChatLogEntryContext", chat.addChatMessageContextOptions);
 Hooks.on("renderChatMessage", chat.addChatMessageButtons);
 Hooks.on("renderRollTableConfig", treasure.augmentTable);
 Hooks.on("updateActor", party.update);
+
+Hooks.once("dragRuler.ready", (SpeedProvider) => {
+  class OWBSpeedProvider extends SpeedProvider {
+      get colors() {
+          return [
+              {id: "careful", default: 0x00FF00, name: "OWB.speeds.careful"},
+              {id: "normal", default: 0xFFFF00, name: "OWB.speeds.normal"},
+              {id: "running", default: 0xFF8000, name: "OWB.speeds.running"}
+          ];
+      }
+
+      getRanges(token) {
+          const baseSpeed = token.actor.data.data.movement.base;
+
+          const ranges = [
+            {range: baseSpeed / 2, color: "careful"},
+            {range: baseSpeed, color: "normal"},
+            {range: baseSpeed * 2, color: "running"}
+          ];
+          return ranges;
+      }
+  }
+
+  dragRuler.registerSystem("owb", OWBSpeedProvider)
+})
