@@ -133,14 +133,12 @@ export class OWBActor extends Actor {
     if (game.user.targets.size > 0) {
       for (let t of game.user.targets.values()) {
         speakerRank = t.actor.data.data.details.rank;
-        console.log(t.actor.data.data.languages)
         let speakerLangs = t.actor.data.data.languages.value.filter((el) => el.name === language.name);
         if (speakerLangs.length > 0) {
           speakerFluency = speakerLangs[0].data.data.fluency
         }
       }
     }
-    console.log("SpeakerFluency:",speakerFluency)
     if (language.fluency === "F") {
       switch (speakerFluency) {
           case "F":
