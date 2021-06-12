@@ -46,8 +46,8 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
    */
   getData() {
     const data = super.getData();
-    this._prepareItems(data);
-    return data;
+    return this._prepareItems(data);
+    // return data;
   }
 
 
@@ -85,33 +85,21 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
   }
 
   async _pushLang(header) {
-    const data = this.actor.data.data;
     const type = header.dataset.type;
-    const table = header.dataset.array;
-    let update = duplicate(data[table]);
     this._chooseLang().then((dialogInput) => {
       const name = CONFIG.OWB.languages[dialogInput.choice].name;
       const fluency = dialogInput.fluency;
       const img = CONFIG.OWB.languages[dialogInput.choice].img;
-      if (update.value) {
-        update.value.push({name:name, fluency:fluency});
-      } else {
-        update = { value: [{name:name, fluency:fluency}] };
-      }
-      let newData = {};
-      newData[table] = update;
       const itemData = {
         name: name,
         type: type,
         img:img,
-        data: duplicate(header.dataset),
+        data: {}
       };
-      delete itemData.data["type"];
       itemData.data["name"] = name;
       itemData.data["fluency"] = fluency;
       itemData.data["save"] = "save";
-      this.actor.update({ data: newData });
-      return this.actor.createEmbeddedDocument("Item",itemData);
+      return this.actor.createEmbeddedDocuments("Item",[itemData]);
     });
   }
 
@@ -202,7 +190,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     // Delete Inventory Item
     html.find(".item-delete").click((ev) => {
       const li = $(ev.currentTarget).parents(".item");
-      this.actor.deleteEmbeddedDocuments([li.data("itemId")]);
+      this.actor.deleteEmbeddedDocuments("Item",[li.data("itemId")]);
       li.slideUp(200, () => this.render(false));
     });
 
@@ -232,7 +220,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
         data: duplicate(header.dataset),
       };
       delete itemData.data["type"];
-      return this.actor.createEmbeddedDocument("Item",itemData);
+      return this.actor.createEmbeddedDocuments("Item",[itemData]);
     });
 
     //Toggle Equipment

@@ -9,6 +9,7 @@ export class OWBActor extends Actor {
     super.prepareData();
     const data = this.data.data;
 
+    if (this.data.type === "character") this.prepareCharacterData(this.data.data);
     // Compute modifiers from actor scores
     this.computeModifiers();
     this.computeAC();
@@ -24,6 +25,30 @@ export class OWBActor extends Actor {
       data.initiative.value = 0;
     }
     data.movement.encounter = Math.floor(data.movement.base / 3);
+  }
+
+  prepareCharacterData(data) {
+    let [items, weapons, armors, abilities, languages] = this.data.items.reduce(
+      (arr, item) => {
+        // Classify items into types
+        if (item.type === "item") arr[0].push(item);
+        else if (item.type === "weapon") arr[1].push(item);
+        else if (item.type === "armor") arr[2].push(item);
+        else if (item.type === "ability") arr[3].push(item);
+        else if (item.type === "language") arr[4].push(item);
+        return arr;
+      },
+      [[], [], [], [], []]
+    );
+
+    // Assign and return
+    data.owned = {
+      items: items,
+      weapons: weapons,
+      armors: armors,
+    };
+    data.abilities = abilities;
+    data.languages.value = languages;
   }
   /* -------------------------------------------- */
   /*  Socket Listeners and Handlers
@@ -108,12 +133,14 @@ export class OWBActor extends Actor {
     if (game.user.targets.size > 0) {
       for (let t of game.user.targets.values()) {
         speakerRank = t.actor.data.data.details.rank;
+        console.log(t.actor.data.data.languages)
         let speakerLangs = t.actor.data.data.languages.value.filter((el) => el.name === language.name);
         if (speakerLangs.length > 0) {
-          speakerFluency = speakerLangs[0].fluency
+          speakerFluency = speakerLangs[0].data.data.fluency
         }
       }
     }
+    console.log("SpeakerFluency:",speakerFluency)
     if (language.fluency === "F") {
       switch (speakerFluency) {
           case "F":
@@ -501,8 +528,6 @@ export class OWBActor extends Actor {
     }
 
     if (attData.ammo) {
-      console.log(attData)
-      console.log(this)
       if (attData.ammo.data.data.quantity.value > 0) {
         // TODO check here
         this.decreaseQuantity(attData.ammo, attData.burst, attData.suppress);
@@ -590,30 +615,37 @@ export class OWBActor extends Actor {
     }
     const data = this.data.data;
     let option = game.settings.get("owb", "encumbranceOption");
-
+    const items = [...this.data.items.values()];
     // Compute encumbrance
-    let totalWeight = 0;
-    let hasItems = false;
-    Object.values(this.data.items).forEach((item) => {
-      if (item.type == "item" && !item.data.treasure) {
-        hasItems = true;
-      }
-      if (
-        item.type == "item" &&
-        (["complete", "disabled"].includes(option) || item.data.treasure)
-      ) {
-        totalWeight += item.data.quantity.value * item.data.weight;
-      } else if (option != "basic" && ["weapon", "armor"].includes(item.type)) {
-        totalWeight += item.data.weight;
-      }
+    const hasItems = items.every((item) => {
+      return item.type != "item";
     });
-    if (option === "detailed" && hasItems) totalWeight += 80;
+
+    let totalWeight = items.reduce((acc, item) => {
+      if (
+        item.type === "item" &&
+        (["complete", "disabled"].includes(option))
+      ) {
+        return acc + item.data.data.quantity.value * item.data.data.weight;
+      }
+      if (["weapon", "armor"].includes(item.type)) {
+        return acc + item.data.data.weight;
+      }
+      return acc;
+    }, 0);
+
+    const max = data.encumbrance.max;
+
+    let steps = ["complete"].includes(option)
+      ? [(100 * 400) / max, (100 * 600) / max, (100 * 800) / max]
+      : [];
 
     data.encumbrance = {
-      pct: Math.clamped((100 * parseFloat(totalWeight)) / data.encumbrance.max, 0,100),
-      max: data.encumbrance.max,
+      pct: Math.clamped((100 * parseFloat(totalWeight)) / max, 0, 100),
+      max: max,
       encumbered: totalWeight > data.encumbrance.max,
       value: totalWeight,
+      steps: steps,
     };
 
     if (data.config.movementAuto && option != "disabled") {
@@ -626,7 +658,7 @@ export class OWBActor extends Actor {
     let option = game.settings.get("owb", "encumbranceOption");
     let weight = data.encumbrance.value;
     let delta = data.encumbrance.max - 250;
-    if (["detailed", "complete"].includes(option)) {
+    if (["complete"].includes(option)) {
       if (weight > data.encumbrance.max) {
         data.movement.base = 10;
       } else if (weight > 150 + delta) {
@@ -637,29 +669,6 @@ export class OWBActor extends Actor {
         data.movement.base = 90;
       } else {
         data.movement.base = 120;
-      }
-    } else if (option == "basic") {
-      const armors = this.data.items.filter((i) => i.type == "armor");
-      let heaviest = 0;
-      armors.forEach((a) => {
-        if (a.data.equipped) {
-          if (a.data.type == "light" && heaviest == 0) {
-            heaviest = 1;
-          } else if (a.data.type == "heavy") {
-            heaviest = 2;
-          }
-        }
-      });
-      switch (heaviest) {
-        case 0:
-          data.movement.base = 120;
-          break;
-        case 1:
-          data.movement.base = 90;
-          break;
-        case 2:
-          data.movement.base = 60;
-          break;
       }
     }
     if (this.data.type === "character") {
@@ -679,14 +688,12 @@ export class OWBActor extends Actor {
     const data = this.data.data;
     data.aac.base = baseAac + data.scores.dex.mod;
     data.ac.base = baseAc - data.scores.dex.mod;
-    const armors = this.data.items.filter((i) => i.type == "armor");
+    const armors = this.data.items.filter((i) => i.type === "armor");
     armors.forEach((a) => {
-      if (a.data.equipped && a.data.type != "shield") {
-        baseAc -= a.data.ac.value;
-        baseAac += a.data.aac.value;
-      } else if (a.data.equipped && a.data.type == "shield") {
-        AcShield -= a.data.ac.value;
-        AacShield += a.data.aac.value;
+      const armorData = a.data.data;
+      if (armorData.equipped) {
+        baseAc -= armorData.ac.value;
+        baseAac += armorData.aac.value;
       }
     });
     data.aac.value = baseAac + data.scores.dex.mod + AacShield + data.aac.mod;

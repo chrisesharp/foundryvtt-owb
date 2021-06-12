@@ -142,7 +142,7 @@ export class OWBCharacterCreator extends FormApplication {
         }
       }
     };
-    this.object.createEmbeddedDocument("Item",itemData);
+    this.object.createEmbeddedDocuments("Item",[itemData]);
   }
   /**
    * This method is called upon form submission after form data is validated

@@ -144,7 +144,7 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
     // Delete Inventory Item
     html.find(".item-delete").click((ev) => {
       const li = $(ev.currentTarget).parents(".item");
-      this.actor.deleteEmbeddedDocuments([li.data("itemId")]);
+      this.actor.deleteEmbeddedDocuments("Item",[li.data("itemId")]);
       li.slideUp(200, () => this.render(false));
     });
 
@@ -169,12 +169,12 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
         const choices = header.dataset.choices.split(",");
         this._chooseItemType(choices).then((dialogInput) => {
           const itemData = createItem(dialogInput.type, dialogInput.name);
-          this.actor.createEmbeddedDocument("Item",itemData, {});
+          this.actor.createEmbeddedDocuments("Item",[itemData], {});
         });
         return;
       }
       const itemData = createItem(type);
-      return this.actor.createEmbeddedDocument("Item",itemData, {});
+      return this.actor.createEmbeddedDocuments("Item",[itemData], {});
     });
 
     html.find(".item-reset").click((ev) => {

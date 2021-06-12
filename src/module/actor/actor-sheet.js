@@ -50,6 +50,7 @@ export class OWBActorSheet extends ActorSheet {
     };
     data.abilities = abilities;
     data.languages = languages;
+    return data;
   }
 
   activateEditor(target, editorOptions, initialContent) {

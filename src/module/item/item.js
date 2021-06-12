@@ -11,6 +11,7 @@ export class OWBItem extends Item {
    * Augment the basic Item data model with additional dynamic data.
    */
   prepareData() {
+    super.prepareData();
     // Set default image
     let img = CONST.DEFAULT_TOKEN;
     switch (this.data.type) {
@@ -31,7 +32,7 @@ export class OWBItem extends Item {
         break;
     }
     if (!this.data.img) this.data.img = img;
-    super.prepareData();
+    
   }
 
   static chatListeners(html) {
