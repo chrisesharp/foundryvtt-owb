@@ -110,10 +110,10 @@ Hooks.on("renderSidebarTab", async (object, html) => {
   }
 });
 
-Hooks.on("preCreateCombatant", (combat, data, options, id) => {
+Hooks.on("preCreateCombatant", (combatant, data, options, id) => {
   let init = game.settings.get("owb", "initiative");
   if (init == "group") {
-    OWBCombat.addCombatant(combat, data, options, id);
+    OWBCombat.addCombatant(combatant, data, options, id);
   }
 });
 
