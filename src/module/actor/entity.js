@@ -558,8 +558,7 @@ export class OWBActor extends Actor {
       qty -= 1;
     }
     qty = Math.max(0, qty);
-    // item.data.data.quantity.value = Math.max(0, qty);
-    item.update({"data.quantity":qty});
+    item.update({data: {quantity: {value: qty}}});
   }
 
   async applyDamage(amount = 0, multiplier = 1) {
