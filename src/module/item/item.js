@@ -66,15 +66,15 @@ export class OWBItem extends Item {
     let type = isNPC ? "attack" : "melee";
     let calibre;
     const hasAmmo = (i) => {
-      return (i.type == "item" &&  i.data.tags &&
-              (i.data.tags.find(t => t.title === "cal" && t.value === calibre) !== undefined)
+      return (i.data.type == "item" &&  i.data.data.tags &&
+              (i.data.data.tags.find(t => t.title === "cal" && t.value === calibre) !== undefined)
               );
     }
     let ammo;
     if (options.type !== "melee") {
       calibre = data.tags.filter(i => i.title === "cal");
       calibre = calibre.length > 0 ? calibre[0].value : 0;
-      ammo = this.actor.data.items.filter(hasAmmo);
+      ammo = this.actor.data.items.contents.filter(hasAmmo);
       if (calibre) {
         if (ammo.length == 0) {
           ui.notifications.warn(`You have no ammunition for this weapon.`);
@@ -321,8 +321,8 @@ export class OWBItem extends Item {
     const token = this.actor.token;
     const templateData = {
       actor: this.actor,
-      tokenId: token ? `${token.scene._id}.${token.id}` : null,
-      item: this.data,
+      tokenId: token ? `${token.scene.id}.${token.id}` : null,
+      item: foundry.utils.duplicate(this.data),
       data: this.getChatData(),
       labels: this.labels,
       isHealing: this.isHealing,
@@ -337,11 +337,11 @@ export class OWBItem extends Item {
 
     // Basic chat message data
     const chatData = {
-      user: game.user._id,
+      user: game.user.id,
       type: CONST.CHAT_MESSAGE_TYPES.OTHER,
       content: html,
       speaker: {
-        actor: this.actor._id,
+        actor: this.actor.id,
         token: this.actor.token,
         alias: this.actor.name,
       },
@@ -351,7 +351,7 @@ export class OWBItem extends Item {
     let rollMode = game.settings.get("core", "rollMode");
     if (["gmroll", "blindroll"].includes(rollMode))
       chatData["whisper"] = ChatMessage.getWhisperRecipients("GM");
-    if (rollMode === "selfroll") chatData["whisper"] = [game.user._id];
+    if (rollMode === "selfroll") chatData["whisper"] = [game.user.id];
     if (rollMode === "blindroll") chatData["blind"] = true;
 
     // Create the chat message
@@ -395,7 +395,7 @@ export class OWBItem extends Item {
     if (!actor) return;
 
     // Get the Item
-    const item = actor.getOwnedItem(card.dataset.itemId);
+    const item = actor.items.get(card.dataset.itemId);
     if (!item) {
       return ui.notifications.error(
         `The requested item ${card.dataset.itemId} no longer exists on Actor ${actor.name}`
@@ -435,7 +435,7 @@ export class OWBItem extends Item {
       const [sceneId, tokenId] = tokenKey.split(".");
       const scene = game.scenes.get(sceneId);
       if (!scene) return null;
-      const tokenData = scene.getEmbeddedEntity("Token", tokenId);
+      const tokenData = scene.getEmbeddedDocument("Token", tokenId);
       if (!tokenData) return null;
       const token = new Token(tokenData);
       return token.actor;

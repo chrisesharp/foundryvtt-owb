@@ -41,8 +41,8 @@ Hooks.once("init", async function () {
   // Register custom system settings
   registerSettings();
 
-  CONFIG.Actor.entityClass = OWBActor;
-  CONFIG.Item.entityClass = OWBItem;
+  CONFIG.Actor.documentClass = OWBActor;
+  CONFIG.Item.documentClass = OWBItem;
 
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);

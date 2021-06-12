@@ -501,17 +501,19 @@ export class OWBActor extends Actor {
     }
 
     if (attData.ammo) {
-      if (attData.ammo.data.quantity.value > 0) {
+      console.log(attData)
+      console.log(this)
+      if (attData.ammo.data.data.quantity.value > 0) {
         // TODO check here
         this.decreaseQuantity(attData.ammo, attData.burst, attData.suppress);
-        await this.updateEmbeddedEntity("OwnedItem", {...attData.ammo});
+        // await this.update({"data.ammo": attData.ammo});
       } else {
         const messageContent = `<b>OUT OF AMMO!</b><p>You need to reload with more <b>${attData.ammo.calibre}</b> rounds</p>`;
         // label = game.i18n.format("OWB.roll.attacksWith", {
         //   name: attData.item.name,
         // });
         const chatData = {
-            user: game.user._id,
+            user: game.user.id,
             speaker: ChatMessage.getSpeaker({ actor: this }),
             content: messageContent
         };
@@ -546,8 +548,8 @@ export class OWBActor extends Actor {
   }
 
   decreaseQuantity(item, burst, suppressive) {
-    let qty = item.data.quantity.value;
-    let max = item.data.quantity.max;
+    let qty = item.data.data.quantity.value;
+    let max = item.data.data.quantity.max;
     if (suppressive) {
       qty = 0;
     } else if (burst) {
@@ -555,7 +557,9 @@ export class OWBActor extends Actor {
     } else {
       qty -= 1;
     }
-    item.data.quantity.value = Math.max(0, qty);
+    qty = Math.max(0, qty);
+    // item.data.data.quantity.value = Math.max(0, qty);
+    item.update({"data.quantity":qty});
   }
 
   async applyDamage(amount = 0, multiplier = 1) {

@@ -1,4 +1,4 @@
-<div class="owb chat-card item-card" data-actor-id="{{data.actor._id}}" data-item-id="{{data.item._id}}"
+<div class="owb chat-card item-card" data-actor-id="{{data.actor.id}}" data-item-id="{{data.item.id}}"
     {{#if tokenId}}data-token-id="{{tokenId}}" {{/if}}>
     <div class="owb chat-block">
         <div class="flexrow chat-header">
@@ -13,7 +13,7 @@
                 {{/if}}
                 <div class="chat-img" style="background-image:url('{{data.item.img}}')"></div>
             {{else}}
-            <div class="chat-img" style="background-image:url('{{data.actor.img}}')"></div>
+            <div class="chat-img" style="background-image:url('{{data.img}}')"></div>
             {{/if}}
         </div>
         {{#if result.victim}}

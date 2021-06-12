@@ -17,7 +17,7 @@ export async function createOWBMacro(data, slot) {
   
     // Create the macro command
     const command = `game.owb.rollItemMacro("${item.name}");`;
-    let macro = game.macros.entities.find(m => (m.name === item.name) && (m.command === command));
+    let macro = game.macros.contents.find(m => (m.name === item.name) && (m.command === command));
     if ( !macro ) {
       macro = await Macro.create({
         name: item.name,
@@ -48,7 +48,7 @@ export async function createOWBMacro(data, slot) {
     // Get matching items
     const items = actor ? actor.items.filter(i => i.name === itemName) : [];
     if ( items.length > 1 ) {
-      ui.notifications.warn(`Your controlled Actor ${actor.name} has more than one Item with name ${itemName}. The first matched item will be chosen.`);
+      ui.notifications.warn(`Your controlled Actor ${name} has more than one Item with name ${itemName}. The first matched item will be chosen.`);
     } else if ( items.length === 0 ) {
       return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);
     }

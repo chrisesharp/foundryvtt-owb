@@ -3,7 +3,7 @@ import { OWBPartyXP } from "./party-xp.js";
 export class OWBPartySheet extends FormApplication {
   
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["owb", "dialog", "party-sheet"],
       template: "systems/owb/templates/apps/party-sheet.html",
       width: 280,
@@ -59,7 +59,7 @@ export class OWBPartySheet extends FormApplication {
   }
 
   async _selectActors(ev) {
-    const entities = this.object.entities.sort((a, b) => b.data.token.disposition - a.data.token.disposition);
+    const entities = this.object.contents.sort((a, b) => b.data.token.disposition - a.data.token.disposition);
     const template = "/systems/owb/templates/apps/party-select.html";
     const templateData = {
       actors: entities
@@ -77,7 +77,7 @@ export class OWBPartySheet extends FormApplication {
             // checks.each(async (_, c) => {
             await Promise.all(checks.map(async (_, c) => {
               let key = c.getAttribute('name');
-              await this.object.entities[key].setFlag('owb', 'party', c.checked);
+              await this.object.contents[key].setFlag('owb', 'party', c.checked);
             }));
             this.render(true);
           },

@@ -7,25 +7,20 @@ export class OWBActorSheet extends ActorSheet {
   /* -------------------------------------------- */
 
   getData() {
-    const data = super.getData();
+    // const data = super.getData();
+    const data = foundry.utils.deepClone(super.getData().data);
+    data.owner = this.actor.isOwner;
+    data.editable = this.actor.sheet.isEditable;
 
     data.config = CONFIG.OWB;
     // Settings
     data.config.ascendingAC = game.settings.get("owb", "ascendingAC");
     data.config.encumbrance = game.settings.get("owb", "encumbranceOption");
 
-    // Prepare owned items
-    this._prepareItems(data);
-
+    data.isNew = this.actor.isNew();
+    // // Prepare owned items
+    // this._prepareItems(data);
     return data;
-  }
-
-  activateEditor(target, editorOptions, initialContent) {
-    // remove some controls to the editor as the space is lacking
-    if (target == "data.details.description") {
-      editorOptions.toolbar = "styleselect bullist hr table removeFormat save";
-    }
-    super.activateEditor(target, editorOptions, initialContent);
   }
 
   /**
@@ -34,7 +29,7 @@ export class OWBActorSheet extends ActorSheet {
    */
   _prepareItems(data) {
     // Partition items by category
-    let [items, weapons, armors, abilities, languages] = data.items.reduce(
+    let [items, weapons, armors, abilities, languages] = this.actor.data.items.reduce(
       (arr, item) => {
         // Classify items into types
         if (item.type === "item") arr[0].push(item);
@@ -57,10 +52,18 @@ export class OWBActorSheet extends ActorSheet {
     data.languages = languages;
   }
 
+  activateEditor(target, editorOptions, initialContent) {
+    // remove some controls to the editor as the space is lacking
+    if (target == "data.details.description") {
+      editorOptions.toolbar = "styleselect bullist hr table removeFormat save";
+    }
+    super.activateEditor(target, editorOptions, initialContent);
+  }
+
   _onItemSummary(event) {
     event.preventDefault();
     let li = $(event.currentTarget).parents(".item"),
-      item = this.actor.getOwnedItem(li.data("item-id")),
+      item = this.actor.items.get(li.data("item-id")),
       description = TextEditor.enrichHTML(item.data.data.description);
     // Toggle summary
     if (li.hasClass("expanded")) {
@@ -87,7 +90,7 @@ export class OWBActorSheet extends ActorSheet {
 
     html.find(".item .item-controls .item-show").click(async (ev) => {
       const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.getOwnedItem(li.data("itemId"));
+      const item = this.actor.items.get(li.data("itemId"));
       item.show();
     });
 
@@ -100,7 +103,7 @@ export class OWBActorSheet extends ActorSheet {
 
     html.find(".item .item-rollable .item-image").click(async (ev) => {
       const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.getOwnedItem(li.data("itemId"));
+      const item = this.actor.items.get(li.data("itemId"));
       if (item.type == "weapon") {
         if (this.actor.data.type === "enemy") {
           item.update({
@@ -120,14 +123,14 @@ export class OWBActorSheet extends ActorSheet {
     html.find(".item-entry .consumable-counter .empty-mark").click(ev => {
       const el = ev.currentTarget.parentElement.parentElement.children[0];
       const id = el.dataset.itemId;
-      const item = this.actor.getOwnedItem(id);
+      const item = this.actor.items.get(id);
       item.update({"data.quantity.value": item.data.data.quantity.value + 1});
     });
 
     html.find(".item-entry .consumable-counter .full-mark").click(ev => {
       const el = ev.currentTarget.parentElement.parentElement.children[0];
       const id = el.dataset.itemId;
-      const item = this.actor.getOwnedItem(id);
+      const item = this.actor.items.get(id);
       item.update({"data.quantity.value": item.data.data.quantity.value - 1});
     });
 

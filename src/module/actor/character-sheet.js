@@ -17,7 +17,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
    * @returns {Object}
    */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["owb", "sheet", "actor", "character"],
       template: "systems/owb/templates/actors/character-sheet.html",
       width: 450,
@@ -46,12 +46,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
    */
   getData() {
     const data = super.getData();
-
-    data.config.ascendingAC = game.settings.get("owb", "ascendingAC");
-    data.config.initiative = game.settings.get("owb", "initiative") != "group";
-    data.config.encumbrance = game.settings.get("owb", "encumbranceOption");
-
-    data.isNew = this.actor.isNew();
+    this._prepareItems(data);
     return data;
   }
 
@@ -89,7 +84,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     });
   }
 
-  _pushLang(header) {
+  async _pushLang(header) {
     const data = this.actor.data.data;
     const type = header.dataset.type;
     const table = header.dataset.array;
@@ -116,7 +111,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
       itemData.data["fluency"] = fluency;
       itemData.data["save"] = "save";
       this.actor.update({ data: newData });
-      return this.actor.createOwnedItem(itemData);
+      return this.actor.createEmbeddedDocument("Item",itemData);
     });
   }
 
@@ -133,7 +128,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
   async _onQtChange(event) {
     event.preventDefault();
     const itemId = event.currentTarget.closest(".item").dataset.itemId;
-    const item = this.actor.getOwnedItem(itemId);
+    const item = this.actor.items.get(itemId);
     return item.update({ "data.quantity.value": parseInt(event.target.value) });
   }
 
@@ -200,14 +195,14 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     // Update Inventory Item
     html.find(".item-edit").click((ev) => {
       const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.getOwnedItem(li.data("itemId"));
+      const item = this.actor.items.get(li.data("itemId"));
       item.sheet.render(true);
     });
 
     // Delete Inventory Item
     html.find(".item-delete").click((ev) => {
       const li = $(ev.currentTarget).parents(".item");
-      this.actor.deleteOwnedItem(li.data("itemId"));
+      this.actor.deleteEmbeddedDocuments([li.data("itemId")]);
       li.slideUp(200, () => this.render(false));
     });
 
@@ -237,15 +232,14 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
         data: duplicate(header.dataset),
       };
       delete itemData.data["type"];
-      return this.actor.createOwnedItem(itemData);
+      return this.actor.createEmbeddedDocument("Item",itemData);
     });
 
     //Toggle Equipment
     html.find(".item-toggle").click(async (ev) => {
       const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.getOwnedItem(li.data("itemId"));
-      await this.actor.updateOwnedItem({
-        _id: li.data("itemId"),
+      const item = this.actor.items.get(li.data("itemId"));
+      await item.update({
         data: {
           equipped: !item.data.data.equipped,
         },

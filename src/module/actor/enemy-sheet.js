@@ -14,7 +14,7 @@ export class OWBActorSheetEnemy extends OWBActorSheet {
    * @returns {Object}
    */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["owb", "sheet", "enemy", "actor"],
       template: "systems/owb/templates/actors/enemy-sheet.html",
       width: 450,
@@ -133,7 +133,7 @@ export class OWBActorSheetEnemy extends OWBActorSheet {
   async _resetCounters(event) {
     const weapons = this.actor.data.items.filter(i => i.type === 'weapon');
     for (let wp of weapons) {
-      const item = this.actor.getOwnedItem(wp._id);
+      const item = this.actor.items.get(wp.id);
       await item.update({
         data: {
           counter: {
@@ -147,7 +147,7 @@ export class OWBActorSheetEnemy extends OWBActorSheet {
   async _onCountChange(event) {
     event.preventDefault();
     const itemId = event.currentTarget.closest(".item").dataset.itemId;
-    const item = this.actor.getOwnedItem(itemId);
+    const item = this.actor.items.get(itemId);
     if (event.target.dataset.field == "value") {
       return item.update({
         "data.counter.value": parseInt(event.target.value),
@@ -182,14 +182,14 @@ export class OWBActorSheetEnemy extends OWBActorSheet {
     // Update Inventory Item
     html.find(".item-edit").click((ev) => {
       const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.getOwnedItem(li.data("itemId"));
+      const item = this.actor.items.get(li.data("itemId"));
       item.sheet.render(true);
     });
 
     // Delete Inventory Item
     html.find(".item-delete").click((ev) => {
       const li = $(ev.currentTarget).parents(".item");
-      this.actor.deleteOwnedItem(li.data("itemId"));
+      this.actor.deleteEmbeddedDocuments([li.data("itemId")]);
       li.slideUp(200, () => this.render(false));
     });
 
@@ -214,12 +214,12 @@ export class OWBActorSheetEnemy extends OWBActorSheet {
         const choices = header.dataset.choices.split(",");
         this._chooseItemType(choices).then((dialogInput) => {
           const itemData = createItem(dialogInput.type, dialogInput.name);
-          this.actor.createOwnedItem(itemData, {});
+          this.actor.createEmbeddedDocument("Item",itemData, {});
         });
         return;
       }
       const itemData = createItem(type);
-      return this.actor.createOwnedItem(itemData, {});
+      return this.actor.createEmbeddedDocument("Item",itemData, {});
     });
 
     html.find(".item-reset").click((ev) => {
@@ -238,7 +238,7 @@ export class OWBActorSheetEnemy extends OWBActorSheet {
 
     html.find(".item-pattern").click(ev => {
       const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.getOwnedItem(li.data("itemId"));
+      const item = this.actor.items.get(li.data("itemId"));
       let currentColor = item.data.data.pattern;
       let colors = Object.keys(CONFIG.OWB.colors);
       let index = colors.indexOf(currentColor);
