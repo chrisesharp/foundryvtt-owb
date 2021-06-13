@@ -3,12 +3,12 @@
   "title": "WWII:OWB",
   "description": "Play WW2 adventures compatible with WWII:Operation Whitebox™ on Foundry VTT",
   "version": "1.0.5",
-  "minimumCoreVersion": "0.7.5",
-  "compatibleCoreVersion": "0.7.9",
+  "minimumCoreVersion": "0.8.6",
+  "compatibleCoreVersion": "0.8.6",
   "templateVersion": 2,
   "author": "chrisesharp",
-  "esmodules": ["owb.js"],
-  "styles": ["owb.css"],
+  "esmodules": ["module/owb.js"],
+  "styles": ["css/owb.css"],
   "packs": [
     {
       "name": "macros",
