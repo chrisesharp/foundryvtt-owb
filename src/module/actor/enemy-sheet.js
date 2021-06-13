@@ -1,4 +1,3 @@
-import { OWBActor } from "./entity.js";
 import { OWBActorSheet } from "./actor-sheet.js";
 
 /**
@@ -71,34 +70,32 @@ export class OWBActorSheetEnemy extends OWBActorSheet {
    */
   getData() {
     const data = super.getData();
-
-    // Settings
     data.config.morale = game.settings.get("owb", "morale");
     data.isNew = this.actor.isNew();
-    return data;
+    return this._prepareItems(data);;
   }
 
 
-  async _onDrop(event) {
-    super._onDrop(event);
-    let data;
-    try {
-      data = JSON.parse(event.dataTransfer.getData('text/plain'));
-      if (data.type !== "RollTable") return;
-    } catch (err) {
-      return false;
-    }
+  // async _onDrop(event) {
+  //   super._onDrop(event);
+  //   let data;
+  //   try {
+  //     data = JSON.parse(event.dataTransfer.getData('text/plain'));
+  //     if (data.type !== "RollTable") return;
+  //   } catch (err) {
+  //     return false;
+  //   }
 
-    let link = "";
-    if (data.pack) {
-      let tableData = game.packs.get(data.pack).index.filter(el => el._id === data.id);
-      link = `@Compendium[${data.pack}.${data.id}]{${tableData[0].name}}`;
-    } else {
-      link = `@RollTable[${data.id}]`;
-    }
-  }
+  //   let link = "";
+  //   if (data.pack) {
+  //     let tableData = game.packs.get(data.pack).index.filter(el => el._id === data.id);
+  //     link = `@Compendium[${data.pack}.${data.id}]{${tableData[0].name}}`;
+  //   } else {
+  //     link = `@RollTable[${data.id}]`;
+  //   }
+  // }
 
-  async _chooseItemType(choices = ["weapon", "armor", "shield", "gear"]) {
+  async _chooseItemType(choices = ["weapon", "armor", "gear"]) {
     let templateData = { types: choices },
       dlg = await renderTemplate(
         "systems/owb/templates/items/entity-create.html",
@@ -137,7 +134,7 @@ export class OWBActorSheetEnemy extends OWBActorSheet {
       await item.update({
         data: {
           counter: {
-            value: parseInt(wp.data.counter.max),
+            value: parseInt(wp.data.data.counter.max),
           },
         },
       });

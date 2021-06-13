@@ -106,7 +106,7 @@ export class OWBActorSheet extends ActorSheet {
       const li = $(ev.currentTarget).parents(".item");
       const item = this.actor.items.get(li.data("itemId"));
       if (item.type == "weapon") {
-        if (this.actor.data.type === "enemy") {
+        if (this.actor.data.type === "enemy" || this.actor.data.type === "vehicle") {
           item.update({
             data: { counter: { value: item.data.data.counter.value - 1 } },
           });
