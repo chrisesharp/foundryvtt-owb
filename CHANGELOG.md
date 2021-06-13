@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.7] - 13/6/21
+
+### Added
+
+### Changed
+
+- Upgraded to support 0.8.x
+
+### Removed
+
 ## [1.0.4] - 5/5/21
 
 ### Added
