@@ -1,8 +1,8 @@
 function getAmmo(token, calibre) {
     if (token && calibre) {
       const hasAmmo = (i) => {
-        return (i.type == "item" &&  i.data.tags &&
-                (i.data.tags.find(t => t.title === "cal" && t.value === calibre) !== undefined)
+        return (i.type == "item" &&  i.data.data.tags &&
+                (i.data.data.tags.find(t => t.title === "cal" && t.value === calibre) !== undefined)
                 );
       }
       return token.actor.data.items.find(f => hasAmmo(f));
@@ -12,19 +12,19 @@ function getAmmo(token, calibre) {
 
 async function reloadAmmo(token, weapon_id) {
     const weapon = token.actor.data.items.find(f => f.id === weapon_id);
-    let calibre = weapon.data.tags.filter(i => i.title === "cal");
+    let calibre = weapon.data.data.tags.filter(i => i.title === "cal");
     calibre = calibre.length > 0 ? calibre[0].value : 0;
     const ammo = getAmmo(token, calibre);
     let messageContent;
     if (ammo) {
-        ammo.data.quantity.value = Math.max(0,ammo.data.quantity.max);
-        await token.actor.updateEmbeddedDocument("Item", {...ammo});
+        const qty = Math.max(0,ammo.data.data.quantity.max);
+        await ammo.update({data:{quantity:{value:qty}}});
         messageContent = `Reloaded ${weapon.name} with ${ammo.name}`;
     } else {
         messageContent = `You don't have any ammo for a ${weapon.name}`;
     }
     const chatData = {
-        user: game.user.id,
+        user: game.user._id,
         speaker: ChatMessage.getSpeaker(),
         content: messageContent
     };
