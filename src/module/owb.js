@@ -10,7 +10,6 @@ import { OWB } from "./config.js";
 import { registerSettings } from "./settings.js";
 import { registerHelpers } from "./helpers.js";
 import * as chat from "./chat.js";
-import * as treasure from "./treasure.js";
 import * as macros from "./macros.js";
 import * as party from "./party.js";
 import { OWBCombat } from "./combat.js";
@@ -125,7 +124,6 @@ Hooks.on("getCombatTrackerEntryContext", OWBCombat.addContextEntry);
 Hooks.on("renderChatLog", (app, html, data) => OWBItem.chatListeners(html));
 Hooks.on("getChatLogEntryContext", chat.addChatMessageContextOptions);
 Hooks.on("renderChatMessage", chat.addChatMessageButtons);
-Hooks.on("renderRollTableConfig", treasure.augmentTable);
 Hooks.on("updateActor", party.update);
 
 Hooks.once("dragRuler.ready", (SpeedProvider) => {

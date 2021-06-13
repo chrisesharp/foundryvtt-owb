@@ -1,9 +1,12 @@
-@import "actor-base";
-@import "apps";
-@import "character";
-@import "core";
 @import "fonts";
-@import "item";
-@import "enemy";
-@import "vehicle";
 @import "variables";
+
+.owb {
+    @import "actor-base";
+    @import "apps";
+    @import "character";
+    @import "core";
+    @import "item";
+    @import "enemy";
+    @import "vehicle";
+}
