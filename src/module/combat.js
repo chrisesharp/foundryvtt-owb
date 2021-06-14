@@ -9,7 +9,7 @@ export class OWBCombat {
 
     // Roll init
     Object.keys(groups).forEach( (group) => {
-      let roll =  new Roll("1d6").roll();
+      let roll =  new Roll("1d6").evaluate({async:false});
       roll.toMessage({
         flavor: game.i18n.format('OWB.roll.initiative', { group: CONFIG["OWB"].colors[group] }),
       });
