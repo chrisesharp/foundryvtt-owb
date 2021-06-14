@@ -71,7 +71,7 @@ export class OWBDice {
       parts.push(form.bonus.value);
     }
 
-    const roll = new Roll(parts.join("+"), data).roll();
+    const roll = new Roll(parts.join("+"), data).evaluate({async:false});
 
     // Convert the roll to a chat message and return the roll
     let rollMode = game.settings.get("core", "rollMode");
@@ -199,8 +199,8 @@ export class OWBDice {
     // Optionally include a situational bonus
     if (form !== null && form.bonus.value) parts.push(form.bonus.value);
 
-    const roll = new Roll(parts.join("+"), data).roll();
-    const dmgRoll = new Roll(data.roll.dmg.join("+"), data).roll();
+    const roll = new Roll(parts.join("+"), data).evaluate({async:false});
+    const dmgRoll = new Roll(data.roll.dmg.join("+"), data).evaluate({async:false});
 
     // Convert the roll to a chat message and return the roll
     let rollMode = game.settings.get("core", "rollMode");
