@@ -4,10 +4,6 @@ import { OWBActorSheet } from "./actor-sheet.js";
  * Extend the basic ActorSheet with some very simple modifications
  */
 export class OWBActorSheetVehicle extends OWBActorSheet {
-  constructor(...args) {
-    super(...args);
-  }
-  
   /**
    * Extend and override the default options used by the 5e Actor Sheet
    * @returns {Object}
@@ -35,36 +31,14 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
    */
   getData() {
     const data = super.getData();
+    data.config.morale = game.settings.get("owb", "morale");
     data.isNew = this.actor.isNew();
     return this._prepareItems(data);;
   }
 
-
-  // async _onDrop(event) {
-  //   super._onDrop(event);
-  //   let data;
-  //   try {
-  //     data = JSON.parse(event.dataTransfer.getData('text/plain'));
-  //     if (data.type !== "RollTable") return;
-  //   } catch (err) {
-  //     return false;
-  //   }
-
-  //   let link = "";
-  //   if (data.pack) {
-  //     let tableData = game.packs.get(data.pack).index.filter(el => el._id === data.id);
-  //     link = `@Compendium[${data.pack}.${data.id}]{${tableData[0].name}}`;
-  //   } else {
-  //     link = `@RollTable[${data.id}]`;
-  //   }
-  // }
-
   async _chooseItemType(choices = ["weapon", "armor", "gear"]) {
-    let templateData = { types: choices },
-      dlg = await renderTemplate(
-        "systems/owb/templates/items/entity-create.html",
-        templateData
-      );
+    const templateData = { types: choices };
+    const dlg = await renderTemplate("systems/owb/templates/items/entity-create.html", templateData);
     //Create Dialog window
     return new Promise((resolve) => {
       new Dialog({
@@ -109,14 +83,10 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
     event.preventDefault();
     const itemId = event.currentTarget.closest(".item").dataset.itemId;
     const item = this.actor.items.get(itemId);
-    if (event.target.dataset.field == "value") {
-      return item.update({
-        "data.counter.value": parseInt(event.target.value),
-      });
+    if (event.target.dataset.field === "value") {
+      return item.update({"data.counter.value": parseInt(event.target.value)});
     } else if (event.target.dataset.field == "max") {
-      return item.update({
-        "data.counter.max": parseInt(event.target.value),
-      });
+      return item.update({"data.counter.max": parseInt(event.target.value)});
     }
   }
 
@@ -177,12 +147,11 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
       this._resetCounters(ev);
     });
 
-    html
-      .find(".counter input")
-      .click((ev) => ev.target.select())
-      .change(this._onCountChange.bind(this));
+    html.find(".counter input")
+        .click((ev) => ev.target.select())
+        .change(this._onCountChange.bind(this));
 
-    html.find(".hp-roll").click((ev) => {
+    html.find(".hp-roll").click((event) => {
       let actorObject = this.actor;
       actorObject.rollHP({ event: event });
     });
@@ -190,17 +159,10 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
     html.find(".item-pattern").click(ev => {
       const li = $(ev.currentTarget).parents(".item");
       const item = this.actor.items.get(li.data("itemId"));
-      let currentColor = item.data.data.pattern;
-      let colors = Object.keys(CONFIG.OWB.colors);
-      let index = colors.indexOf(currentColor);
-      if (index + 1 == colors.length) {
-        index = 0;
-      } else {
-        index++;
-      }
-      item.update({
-        "data.pattern": colors[index]
-      })
+      const currentColor = item.data.data.pattern;
+      const colors = Object.keys(CONFIG.OWB.colors);
+      const index = (colors.indexOf(currentColor) + 1) % colors.length;
+      item.update({"data.pattern": colors[index]})
     });
   }
 }

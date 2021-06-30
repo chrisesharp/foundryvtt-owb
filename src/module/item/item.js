@@ -64,17 +64,18 @@ export class OWBItem extends Item {
   rollWeapon(options = {}) {
     const isNPC = this.actor.data.type != "character";
     const data = this.data.data;
-    let type = isNPC ? "attack" : "melee";
+    const type = isNPC ? "attack" : "melee";
+    
     let calibre;
-    const hasAmmo = (i) => {
-      return (i.data.type == "item" &&  i.data.data.tags &&
-              (i.data.data.tags.find(t => t.title === "cal" && t.value === calibre) !== undefined)
-              );
-    }
     let ammo;
     if (options.type !== "melee") {
       calibre = data.tags.filter(i => i.title === "cal");
       calibre = calibre.length > 0 ? calibre[0].value : 0;
+      const hasAmmo = (i) => {
+        return (i.data.type == "item" &&  i.data.data.tags &&
+                (i.data.data.tags.find(t => t.title === "cal" && t.value === calibre) !== undefined)
+                );
+      }
       ammo = this.actor.data.items.contents.filter(hasAmmo);
       if (calibre) {
         if (ammo.length == 0) {
@@ -209,10 +210,7 @@ export class OWBItem extends Item {
           wTags += formatTag(t.value);
         });
         if (data.missile) {
-          wTags += formatTag(
-            data.range.short + "/" + data.range.medium + "/" + data.range.long + "/" + data.range.extreme,
-            "fa-bullseye"
-          );
+          wTags += formatTag(`${data.range.short}/${data.range.medium}/${data.range.long}/${data.range.extreme}`, "fa-bullseye");
           wTags += formatTag(CONFIG.OWB.saves_short[data.save], "fa-skull");
         }
         return wTags;
@@ -241,13 +239,10 @@ export class OWBItem extends Item {
 
   pushTag(values) {
     const data = this.data.data;
-    let update = [];
-    if (data.tags) {
-      update = duplicate(data.tags);
-    }
+    let update = (data.tags) ? duplicate(data.tags) : [];
     let newData = {};
     var regExp = /\(([^)]+)\)/;
-    if (update) {
+    if (update.length) {
       values.forEach((val) => {
         // Catch infos in brackets
         var matches = regExp.exec(val);
@@ -349,7 +344,7 @@ export class OWBItem extends Item {
     };
 
     // Toggle default roll mode
-    let rollMode = game.settings.get("core", "rollMode");
+    const rollMode = game.settings.get("core", "rollMode");
     if (["gmroll", "blindroll"].includes(rollMode))
       chatData["whisper"] = ChatMessage.getWhisperRecipients("GM");
     if (rollMode === "selfroll") chatData["whisper"] = [game.user.id];
@@ -369,7 +364,7 @@ export class OWBItem extends Item {
     const header = event.currentTarget;
     const card = header.closest(".chat-card");
     const content = card.querySelector(".card-content");
-    if (content.style.display == "none") {
+    if (content.style.display === "none") {
       $(content).slideDown(200);
     } else {
       $(content).slideUp(200);
@@ -388,7 +383,7 @@ export class OWBItem extends Item {
     const action = button.dataset.action;
 
     // Validate permission to proceed with the roll
-    const isTargetted = action === "save";
+    const isTargetted = (action === "save");
     if (!(isTargetted || game.user.isGM || message.isAuthor)) return;
 
     // Get the Actor from a synthetic Token

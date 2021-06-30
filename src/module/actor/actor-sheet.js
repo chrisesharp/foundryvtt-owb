@@ -55,7 +55,7 @@ export class OWBActorSheet extends ActorSheet {
 
   activateEditor(target, editorOptions, initialContent) {
     // remove some controls to the editor as the space is lacking
-    if (target == "data.details.description") {
+    if (target === "data.details.description") {
       editorOptions.toolbar = "styleselect bullist hr table removeFormat save";
     }
     super.activateEditor(target, editorOptions, initialContent);
@@ -63,9 +63,9 @@ export class OWBActorSheet extends ActorSheet {
 
   _onItemSummary(event) {
     event.preventDefault();
-    let li = $(event.currentTarget).parents(".item"),
-      item = this.actor.items.get(li.data("item-id")),
-      description = TextEditor.enrichHTML(item.data.data.description);
+    const li = $(event.currentTarget).parents(".item");
+    const item = this.actor.items.get(li.data("item-id"));
+    const description = TextEditor.enrichHTML(item.data.data.description);
     // Toggle summary
     if (li.hasClass("expanded")) {
       let summary = li.parents(".item-entry").children(".item-summary");
@@ -85,9 +85,8 @@ export class OWBActorSheet extends ActorSheet {
     super.activateListeners(html);
     
     // Item summaries
-    html
-      .find(".item .item-name h4")
-      .click((event) => this._onItemSummary(event));
+    html.find(".item .item-name h4")
+        .click((event) => this._onItemSummary(event));
 
     html.find(".item .item-controls .item-show").click(async (ev) => {
       const li = $(ev.currentTarget).parents(".item");
@@ -96,9 +95,9 @@ export class OWBActorSheet extends ActorSheet {
     });
 
     html.find(".saving-throw .attribute-name a").click((event) => {
-      let actorObject = this.actor;
-      let element = event.currentTarget;
-      let save = element.parentElement.parentElement.dataset.save;
+      const actorObject = this.actor;
+      const element = event.currentTarget;
+      const save = element.parentElement.parentElement.dataset.save;
       actorObject.rollSave(save, { event: event });
     });
 
@@ -137,9 +136,9 @@ export class OWBActorSheet extends ActorSheet {
 
 
     html.find(".attack a").click((ev) => {
-      let actorObject = this.actor;
-      let element = ev.currentTarget;
-      let attack = element.parentElement.parentElement.dataset.attack;
+      const actorObject = this.actor;
+      const element = ev.currentTarget;
+      const attack = element.parentElement.parentElement.dataset.attack;
       const rollData = {
         actor: this.data,
         roll: {},
@@ -151,7 +150,7 @@ export class OWBActorSheet extends ActorSheet {
     });
     
     html.find(".hit-dice .attribute-name a").click((event) => {
-      let actorObject = this.actor;
+      const actorObject = this.actor;
       actorObject.rollHitDice({ event: event });
     });
 
@@ -165,7 +164,7 @@ export class OWBActorSheet extends ActorSheet {
     this.form = html[0];
 
     // Resize resizable classes
-    let resizable = html.find(".resizable");
+    const resizable = html.find(".resizable");
     if (resizable.length == 0) {
       return;
     }
@@ -179,8 +178,8 @@ export class OWBActorSheet extends ActorSheet {
   async _onResize(event) {
     super._onResize(event);
 
-    let html = $(this.form);
-    let resizable = html.find(".resizable");
+    const html = $(this.form);
+    const resizable = html.find(".resizable");
     if (resizable.length == 0) {
       return;
     }
@@ -190,7 +189,7 @@ export class OWBActorSheet extends ActorSheet {
       el.style.height = `${heightDelta + parseInt(el.dataset.baseSize)}px`;
     });
     // Resize editors
-    let editors = html.find(".editor");
+    const editors = html.find(".editor");
     editors.each((id, editor) => {
       let container = editor.closest(".resizable-editor");
       if (container) {

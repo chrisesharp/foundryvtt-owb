@@ -5,8 +5,7 @@ export class OWBEntityTweaks extends FormApplication {
   static get defaultOptions() {
     const options = super.defaultOptions;
     options.id = 'sheet-tweaks';
-    options.template =
-      'systems/owb/templates/actors/dialogs/tweaks-dialog.html';
+    options.template = 'systems/owb/templates/actors/dialogs/tweaks-dialog.html';
     options.width = 380;
     return options;
   }
@@ -29,9 +28,7 @@ export class OWBEntityTweaks extends FormApplication {
    */
   getData() {
     let data = this.object.data;
-    if (this.object.data.type === 'character') {
-      data.isCharacter = true;
-    }
+    data.isCharacter = (this.object.data.type === 'character');
     data.user = game.user;
     data.config = CONFIG.OWB;
     return data;

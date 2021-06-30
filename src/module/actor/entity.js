@@ -57,12 +57,8 @@ export class OWBActor extends Actor {
     if (this.data.type != "character") {
       return;
     }
-    let modified = Math.floor(
-      value + (this.data.data.details.xp.bonus * value) / 100
-    );
-    return this.update({
-      "data.details.xp.value": modified + this.data.data.details.xp.value,
-    }).then(() => {
+    let modified = Math.floor(value + (this.data.data.details.xp.bonus * value) / 100);
+    return this.update({"data.details.xp.value": modified + this.data.data.details.xp.value}).then(() => {
       const speaker = ChatMessage.getSpeaker({ actor: this });
       ChatMessage.create({
         content: game.i18n.format("OWB.messages.GetExperience", {
@@ -113,7 +109,7 @@ export class OWBActor extends Actor {
   /* -------------------------------------------- */
 
   rollHP(options = {}) {
-    let roll = new Roll(this.data.data.hp.hd).roll();
+    const roll = new Roll(this.data.data.hp.hd).roll();
     return this.update({
       data: {
         hp: {
@@ -246,7 +242,6 @@ export class OWBActor extends Actor {
 
   rollMorale(options = {}) {
     const rollParts = ["2d6"];
-
     const data = {
       actor: this.data,
       roll: {
@@ -295,7 +290,6 @@ export class OWBActor extends Actor {
 
   rollReaction(options = {}) {
     const rollParts = ["2d6"];
-
     const data = {
       actor: this.data,
       roll: {
@@ -473,20 +467,16 @@ export class OWBActor extends Actor {
     const data = this.data.data;
     const rollParts = ["1d20"];
     const dmgParts = [];
-    let label = game.i18n.format("OWB.roll.attacks", {
-      name: this.data.name,
-    });
+    let label = game.i18n.format("OWB.roll.attacks", {name: this.data.name});
 
     if (!attData.item) {
       dmgParts.push("1d3");
     } else {
-      label = game.i18n.format("OWB.roll.attacksWith", {
-        name: attData.item.name,
-      });
+      label = game.i18n.format("OWB.roll.attacksWith", {name: attData.item.name});
       dmgParts.push(attData.item.data.damage);
     }
 
-    let ascending = game.settings.get("owb", "ascendingAC");
+    const ascending = game.settings.get("owb", "ascendingAC");
     if (ascending) {
       rollParts.push(data.thac0.bba.toString());
     }
@@ -527,14 +517,9 @@ export class OWBActor extends Actor {
 
     if (attData.ammo) {
       if (attData.ammo.data.data.quantity.value > 0) {
-        // TODO check here
         this.decreaseQuantity(attData.ammo, attData.burst, attData.suppress);
-        // await this.update({"data.ammo": attData.ammo});
       } else {
         const messageContent = `<b>OUT OF AMMO!</b><p>You need to reload with more <b>${attData.ammo.calibre}</b> rounds</p>`;
-        // label = game.i18n.format("OWB.roll.attacksWith", {
-        //   name: attData.item.name,
-        // });
         const chatData = {
             user: game.user.id,
             speaker: ChatMessage.getSpeaker({ actor: this }),
@@ -571,8 +556,9 @@ export class OWBActor extends Actor {
   }
 
   decreaseQuantity(item, burst, suppressive) {
+    const max = item.data.data.quantity.max;
     let qty = item.data.data.quantity.value;
-    let max = item.data.data.quantity.max;
+
     if (suppressive) {
       qty = 0;
     } else if (burst) {
@@ -592,9 +578,7 @@ export class OWBActor extends Actor {
     const dh = Math.clamped(hp.value - amount, 0, hp.max);
 
     // Update the Actor
-    return this.update({
-      "data.hp.value": dh,
-    });
+    return this.update({"data.hp.value": dh});
   }
 
   static _valueFromTable(table, val) {
@@ -634,9 +618,7 @@ export class OWBActor extends Actor {
 
     const max = data.encumbrance.max;
 
-    let steps = ["complete"].includes(option)
-      ? [(100 * 400) / max, (100 * 600) / max, (100 * 800) / max]
-      : [];
+    let steps = ["complete"].includes(option) ? [(100 * 400) / max, (100 * 600) / max, (100 * 800) / max] : [];
 
     data.encumbrance = {
       pct: Math.clamped((100 * parseFloat(totalWeight)) / max, 0, 100),
@@ -653,9 +635,9 @@ export class OWBActor extends Actor {
 
   _calculateMovement() {
     const data = this.data.data;
-    let option = game.settings.get("owb", "encumbranceOption");
-    let weight = data.encumbrance.value;
-    let delta = data.encumbrance.max - 250;
+    const option = game.settings.get("owb", "encumbranceOption");
+    const weight = data.encumbrance.value;
+    const delta = data.encumbrance.max - 250;
     if (["complete"].includes(option)) {
       if (weight > data.encumbrance.max) {
         data.movement.base = 10;
@@ -719,30 +701,12 @@ export class OWBActor extends Actor {
       16: 2,
       18: 3,
     };
-    data.scores.str.mod = OWBActor._valueFromTable(
-      standard,
-      data.scores.str.value
-    );
-    data.scores.int.mod = OWBActor._valueFromTable(
-      standard,
-      data.scores.int.value
-    );
-    data.scores.dex.mod = OWBActor._valueFromTable(
-      standard,
-      data.scores.dex.value
-    );
-    data.scores.cha.mod = OWBActor._valueFromTable(
-      standard,
-      data.scores.cha.value
-    );
-    data.scores.wis.mod = OWBActor._valueFromTable(
-      standard,
-      data.scores.wis.value
-    );
-    data.scores.con.mod = OWBActor._valueFromTable(
-      standard,
-      data.scores.con.value
-    );
+    data.scores.str.mod = OWBActor._valueFromTable(standard, data.scores.str.value);
+    data.scores.int.mod = OWBActor._valueFromTable(standard, data.scores.int.value);
+    data.scores.dex.mod = OWBActor._valueFromTable(standard, data.scores.dex.value);
+    data.scores.cha.mod = OWBActor._valueFromTable(standard, data.scores.cha.value);
+    data.scores.wis.mod = OWBActor._valueFromTable(standard, data.scores.wis.value);
+    data.scores.con.mod = OWBActor._valueFromTable(standard, data.scores.con.value);
 
     // TODO: Proper computation of BHB 
     data.thac0.bhb = data.details.rank - 1;
@@ -757,14 +721,8 @@ export class OWBActor extends Actor {
       16: 1,
       18: 2,
     };
-    data.scores.dex.init = OWBActor._valueFromTable(
-      capped,
-      data.scores.dex.value
-    );
-    data.scores.cha.npc = OWBActor._valueFromTable(
-      capped,
-      data.scores.cha.value
-    );
+    data.scores.dex.init = OWBActor._valueFromTable(capped, data.scores.dex.value);
+    data.scores.cha.npc = OWBActor._valueFromTable(capped, data.scores.cha.value);
     data.scores.cha.loyalty = data.scores.cha.mod + 7;
 
     const fluent = {
@@ -773,10 +731,7 @@ export class OWBActor extends Actor {
       17: 2,
       18: 3,
     };
-    data.languages.fluent = OWBActor._valueFromTable(
-      fluent,
-      data.scores.int.value
-    );
+    data.languages.fluent = OWBActor._valueFromTable(fluent, data.scores.int.value);
 
     const basic = {
       0: 0,
@@ -784,9 +739,6 @@ export class OWBActor extends Actor {
       17: 4,
       18: 6,
     };
-    data.languages.basic = OWBActor._valueFromTable(
-      basic,
-      data.scores.int.value
-    );
+    data.languages.basic = OWBActor._valueFromTable(basic, data.scores.int.value);
   }
 }

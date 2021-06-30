@@ -8,7 +8,7 @@
  * @return {Array}              The extended options Array including new context choices
  */
 export const addChatMessageContextOptions = function(html, options) {
-  let canApply = li => canvas.tokens.controlled.length && li.find(".dice-roll").length;
+  const canApply = li => canvas.tokens.controlled.length && li.find(".dice-roll").length;
   options.push(
     {
       name: game.i18n.localize("OWB.messages.applyDamage"),
@@ -30,15 +30,14 @@ export const addChatMessageContextOptions = function(html, options) {
 
 export const addChatMessageButtons = function(msg, html, data) {
   // Hide blind rolls
-  let blindable = html.find('.blindable');
+  const blindable = html.find('.blindable');
   if (msg.data.blind && !game.user.isGM && blindable && blindable.data('blind') === true) {
     blindable.replaceWith("<div class='dice-roll'><div class='dice-result'><div class='dice-formula'>???</div></div></div>");
   }
   // Buttons
-  let roll = html.find('.damage-roll');
+  const roll = html.find('.damage-roll');
   if (roll.length > 0) {
-    let total = roll.find('.dice-total');
-    let value = total.text();
+    const total = roll.find('.dice-total');
     roll.append($(`<div class="dice-damage"><button type="button" data-action="apply-damage"><i class="fas fa-tint"></i></button></div>`))
     roll.find('button[data-action="apply-damage"]').click((ev) => {
       ev.preventDefault();

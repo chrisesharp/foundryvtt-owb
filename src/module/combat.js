@@ -3,16 +3,14 @@ export class OWBCombat {
     // Check groups
     const groups = {};
     combat.data.combatants.forEach((cbt) => {
-      let group = cbt.getFlag("owb","group");
+      const group = cbt.getFlag("owb","group");
       groups[group] = { present: true };
     });
 
     // Roll init
     Object.keys(groups).forEach( (group) => {
-      let roll =  new Roll("1d6").evaluate({async:false});
-      roll.toMessage({
-        flavor: game.i18n.format('OWB.roll.initiative', { group: CONFIG["OWB"].colors[group] }),
-      });
+      const roll =  new Roll("1d6").evaluate({async:false});
+      roll.toMessage({flavor: game.i18n.format('OWB.roll.initiative', { group: CONFIG["OWB"].colors[group] })});
       groups[group].initiative = roll.total;
     });
 
@@ -26,7 +24,7 @@ export class OWBCombat {
   }
 
   static async resetInitiative(combat, data) {
-    let reroll = game.settings.get("owb", "rerollInitiative");
+    const reroll = game.settings.get("owb", "rerollInitiative");
     if (!["reset", "reroll"].includes(reroll)) {
       return;
     }
@@ -34,8 +32,8 @@ export class OWBCombat {
   }
 
   static async individualInitiative(combat, data) {
-    let updates = [];
-    let messages = [];
+    const updates = [];
+    const messages = [];
     combat.data.combatants.forEach((c, i) => {
       // This comes from foundry.js, had to remove the update turns thing
       // Roll initiative
@@ -73,14 +71,8 @@ export class OWBCombat {
 
   static format(object, html, user) {
     html.find(".initiative").each((_, span) => {
-      span.innerHTML =
-        span.innerHTML == "-789.00"
-          ? '<i class="fas fa-weight-hanging"></i>'
-          : span.innerHTML;
-      span.innerHTML =
-        span.innerHTML == "-790.00"
-          ? '<i class="fas fa-dizzy"></i>'
-          : span.innerHTML;
+      span.innerHTML = (span.innerHTML == "-789.00") ? '<i class="fas fa-weight-hanging"></i>' : span.innerHTML;
+      span.innerHTML =  (span.innerHTML == "-790.00") ? '<i class="fas fa-dizzy"></i>' : span.innerHTML;
     });
     
     html.find(".combatant").each((_, ct) => {
@@ -88,25 +80,17 @@ export class OWBCombat {
       const controls = $(ct).find(".combatant-controls .combatant-control");
       const cmbtant = object.viewed.combatants.get(ct.dataset.combatantId);
       const moveActive = cmbtant.getFlag("owb", "moveInCombat") ? "active" : "";
-      controls.eq(1).after(
-        `<a class='combatant-control move-combat ${moveActive}'><i class='fas fa-walking'></i></a>`
-      );
+      controls.eq(1).after(`<a class='combatant-control move-combat ${moveActive}'><i class='fas fa-walking'></i></a>`);
     });
     OWBCombat.announceListener(html);
 
-    let init = game.settings.get("owb", "initiative") === "group";
-    if (!init) {
-      return;
-    }
+    const init = game.settings.get("owb", "initiative") === "group";
+    if (!init) return;
 
     html.find('.combat-control[data-control="rollNPC"]').remove();
     html.find('.combat-control[data-control="rollAll"]').remove();
-    let trash = html.find(
-      '.encounters .combat-control[data-control="endCombat"]'
-    );
-    $(
-      '<a class="combat-control" data-control="reroll"><i class="fas fa-dice"></i></a>'
-    ).insertBefore(trash);
+    const trash = html.find('.encounters .combat-control[data-control="endCombat"]');
+    $('<a class="combat-control" data-control="reroll"><i class="fas fa-dice"></i></a>').insertBefore(trash);
 
     html.find(".combatant").each((_, ct) => {
       // Can't roll individual inits
@@ -114,32 +98,29 @@ export class OWBCombat {
 
       // Get group color
       const cmbtant = object.viewed.combatants.get(ct.dataset.combatantId);
-      let color = cmbtant.getFlag("owb","group");
+      const color = cmbtant.getFlag("owb","group");
 
       // Append colored flag
-      let controls = $(ct).find(".combatant-controls");
-      controls.prepend(
-        `<a class='combatant-control flag' style='color:${color}' title="${CONFIG.OWB.colors[color]}"><i class='fas fa-flag'></i></a>`
-      );
+      const controls = $(ct).find(".combatant-controls");
+      controls.prepend(`<a class='combatant-control flag' style='color:${color}' title="${CONFIG.OWB.colors[color]}"><i class='fas fa-flag'></i></a>`);
     });
     OWBCombat.addListeners(html);
   }
 
   static updateCombatant(combatant, data) {
-    let init = game.settings.get("owb", "initiative");
+    const init = game.settings.get("owb", "initiative");
     // Why do you reroll ?
-    if (data.initiative && init == "group") {
-      let groupInit = data.initiative;
+    if (data.initiative && init === "group") {
+      const groupInit = data.initiative;
       // Check if there are any members of the group with init
       game.combat.data.combatants.forEach((ct) => {
         if (
           ct.initiative &&
           ct.initiative != "-789.00" &&
           ct.id != data._id &&
-          ct.getFlag("owb","group") == combatant.getFlag("owb","group")
+          ct.getFlag("owb","group") === combatant.getFlag("owb","group")
         ) {
           groupInit = ct.initiative;
-          // Set init
           data.initiative = parseInt(groupInit);
         }
       });
@@ -149,10 +130,9 @@ export class OWBCombat {
   static announceListener(html) {
     html.find(".combatant-control.move-combat").click((ev) => {
       ev.preventDefault();
-      // Toggle spell announcement
-      let id = $(ev.currentTarget).closest(".combatant")[0].dataset.combatantId;
-      let isActive = ev.currentTarget.classList.contains('active');
-      let cbnt = game.combat.data.combatants.get(id);
+      const id = $(ev.currentTarget).closest(".combatant")[0].dataset.combatantId;
+      const isActive = ev.currentTarget.classList.contains('active');
+      const cbnt = game.combat.data.combatants.get(id);
       cbnt.update({
         id: id,
         flags: { owb: { moveInCombat: !isActive } },
@@ -166,16 +146,11 @@ export class OWBCombat {
       if (!game.user.isGM) {
         return;
       }
-      let currentColor = ev.currentTarget.style.color;
-      let colors = Object.keys(CONFIG.OWB.colors);
-      let index = colors.indexOf(currentColor);
-      if (index + 1 == colors.length) {
-        index = 0;
-      } else {
-        index++;
-      }
-      let id = $(ev.currentTarget).closest(".combatant")[0].dataset.combatantId;
-      let cbnt = game.combat.data.combatant.get(id);
+      const currentColor = ev.currentTarget.style.color;
+      const colors = Object.keys(CONFIG.OWB.colors);
+      const index = (colors.indexOf(currentColor) + 1) % colors.length;
+      const id = $(ev.currentTarget).closest(".combatant")[0].dataset.combatantId;
+      const cbnt = game.combat.data.combatants.get(id);
       cbnt.update({
         id: id,
         flags: { owb: { group: colors[index] } },
@@ -183,10 +158,8 @@ export class OWBCombat {
     });
 
     html.find('.combat-control[data-control="reroll"]').click((ev) => {
-      if (!game.combat) {
-        return;
-      }
-      let data = {};
+      if (!game.combat) return;
+      const data = {};
       OWBCombat.rollInitiative(game.combat, data);
     });
   }
@@ -229,11 +202,9 @@ export class OWBCombat {
   }
 
   static async preUpdateCombat(combat, data, diff, id) {
-    let init = game.settings.get("owb", "initiative");
-    let reroll = game.settings.get("owb", "rerollInitiative");
-    if (!data.round) {
-      return;
-    }
+    const init = game.settings.get("owb", "initiative");
+    const reroll = game.settings.get("owb", "rerollInitiative");
+    if (!data.round) return;
     if (data.round !== 1) {
       if (reroll === "reset") {
         OWBCombat.resetInitiative(combat, data, diff, id);

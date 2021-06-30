@@ -7,39 +7,32 @@ export class OWBDice {
       total: roll.total,
     };
 
-    let die = roll.terms[0].total;
-    if (data.roll.type == "above") {
-      // SAVING THROWS
-      if (roll.total >= result.target) {
-        result.isSuccess = true;
-      } else {
-        result.isFailure = true;
-      }
-    } else if (data.roll.type == "below") {
-      // MORALE, EXPLORATION
-      if (roll.total <= result.target) {
-        result.isSuccess = true;
-      } else {
-        result.isFailure = true;
-      }
-    } else if (data.roll.type == "check") {
-      // SCORE CHECKS (1s and 20s)
-      if (die == 1 || (roll.total <= result.target && die < 20)) {
-        result.isSuccess = true;
-      } else {
-        result.isFailure = true;
-      }
-    } else if (data.roll.type == "table") {
-      // Reaction
-      let table = data.roll.table;
-      // let output = "";
-      let output = Object.values(table)[0];
-      for (let i = 0; i <= roll.total; i++) {
-        if (table[i]) {
-          output = table[i];
+    const die = roll.terms[0].total;
+
+    switch (data.roll.type) {
+      case "above":
+        // SAVING THROWS
+        result.isFailure = !(result.isSuccess = (roll.total >= result.target));
+        break;
+      case "below":
+        // MORALE, EXPLORATION
+        result.isFailure = !(result.isSuccess = (roll.total <= result.target));
+        break;
+      case "check":
+        // SCORE CHECKS (1s and 20s)
+        result.isFailure = !(result.isSuccess = (die === 1 || (roll.total <= result.target && die < 20)));
+        break;
+      case "table":
+        // Reaction
+        const table = data.roll.table;
+        let output = Object.values(table)[0];
+        for (let i = 0; i <= roll.total; i++) {
+          if (table[i]) {
+            output = table[i];
+          }
         }
-      }
-      result.details = output;
+        result.details = output;
+        break;
     }
     return result;
   }
@@ -134,42 +127,26 @@ export class OWBDice {
     };
     result.target = data.roll.thac0;
 
-    const targetAc = data.roll.target
-      ? data.roll.target.actor.data.data.ac.value
-      : 9;
-    const targetAac = data.roll.target
-      ? data.roll.target.actor.data.data.aac.value
-      : 0;
+    const targetAc = data.roll.target ? data.roll.target.actor.data.data.ac.value : 9;
+    const targetAac = data.roll.target ? data.roll.target.actor.data.data.aac.value : 0;
     result.victim = data.roll.target ? data.roll.target.data.name : null;
 
     if (game.settings.get("owb", "ascendingAC")) {
       if (roll.results[0] != 1 & (roll.total < targetAac || roll.results[0] == 20)) {
-        result.details = game.i18n.format(
-          "OWB.messages.AttackAscendingFailure",
-          {
-            bonus: result.target,
-          }
-        );
+        result.details = game.i18n.format( "OWB.messages.AttackAscendingFailure", { bonus: result.target});
         return result;
       }
-      result.details = game.i18n.format("OWB.messages.AttackAscendingSuccess", {
-        result: roll.total,
-      });
+      result.details = game.i18n.format("OWB.messages.AttackAscendingSuccess", {result: roll.total});
       result.isSuccess = true;
     } else {
       // B/X Historic THAC0 Calculation
       if (result.target - roll.total > targetAc) {
-        result.details = game.i18n.format("OWB.messages.AttackFailure", {
-          bonus: result.target - targetAc,
-        });
+        result.details = game.i18n.format("OWB.messages.AttackFailure", {bonus: result.target - targetAc});
         return result;
       }
       result.isSuccess = true;
       let value = Math.clamped(result.target - roll.total, -3, 9);
-      result.details = game.i18n.format("OWB.messages.AttackSuccess", {
-        result: value,
-        bonus: result.target - targetAc,
-      });
+      result.details = game.i18n.format("OWB.messages.AttackSuccess", {result: value,bonus: result.target - targetAc});
     }
     return result;
   }

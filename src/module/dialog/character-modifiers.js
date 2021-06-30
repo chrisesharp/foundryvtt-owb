@@ -6,8 +6,7 @@ export class OWBCharacterModifiers extends FormApplication {
     const options = super.defaultOptions;
     options.classes = ["owb", "dialog", "modifiers"],
     options.id = 'sheet-modifiers';
-    options.template =
-      'systems/owb/templates/actors/dialogs/modifiers-dialog.html';
+    options.template = 'systems/owb/templates/actors/dialogs/modifiers-dialog.html';
     options.width = 240;
     return options;
   }

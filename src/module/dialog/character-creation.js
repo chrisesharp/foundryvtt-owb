@@ -6,8 +6,7 @@ export class OWBCharacterCreator extends FormApplication {
     const options = super.defaultOptions;
     options.classes = ["owb", "dialog", "creator"],
       options.id = 'character-creator';
-    options.template =
-      'systems/owb/templates/actors/dialogs/character-creation.html';
+    options.template = 'systems/owb/templates/actors/dialogs/character-creation.html';
     options.width = 235;
     return options;
   }
@@ -52,20 +51,20 @@ export class OWBCharacterCreator extends FormApplication {
   /* -------------------------------------------- */
 
   doStats(ev) {
-    let list = $(ev.currentTarget).closest('.attribute-list');
-    let values = [];
+    const list = $(ev.currentTarget).closest('.attribute-list');
+    const values = [];
     list.find('.score-value').each((i, s) => {
       if (s.value != 0) {
         values.push(parseInt(s.value));
       }
     })
 
-    let n = values.length;
-    let sum = values.reduce((a, b) => a + b);
-    let mean = parseFloat(sum) / n;
-    let std = Math.sqrt(values.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
+    const n = values.length;
+    const sum = values.reduce((a, b) => a + b);
+    const mean = parseFloat(sum) / n;
+    const std = Math.sqrt(values.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
 
-    let stats = list.siblings('.roll-stats');
+    const stats = list.siblings('.roll-stats');
     stats.find('.sum').text(sum);
     stats.find('.avg').text(Math.round(10 * sum / n) / 10);
     stats.find('.std').text(Math.round(100 * std) / 100);
@@ -108,15 +107,15 @@ export class OWBCharacterCreator extends FormApplication {
   activateListeners(html) {
     super.activateListeners(html);
     html.find('a.score-roll').click((ev) => {
-      let el = ev.currentTarget.parentElement.parentElement;
-      let score = el.dataset.score;
+      const el = ev.currentTarget.parentElement.parentElement;
+      const score = el.dataset.score;
       this.rollScore(score, { event: ev }).then(r => {
         $(el).find('input').val(r.total).trigger('change');
       });
     });
 
     html.find('a.gold-roll').click((ev) => {
-      let el = ev.currentTarget.parentElement.parentElement.parentElement;
+      const el = ev.currentTarget.parentElement.parentElement.parentElement;
       this.rollScore("gold", { event: ev }).then(r => {
         $(el).find('.gold-value').val(r.total);
       });
@@ -130,7 +129,7 @@ export class OWBCharacterCreator extends FormApplication {
   async _onSubmit(event, { updateData = null, preventClose = false, preventRender = false } = {}) {
     super._onSubmit(event, { updateData: updateData, preventClose: preventClose, preventRender: preventRender });
     // Generate gold
-    let gold = event.target.elements.namedItem('gold').value;
+    const gold = event.target.elements.namedItem('gold').value;
     const itemData = {
       name: "money",
       type: "item",

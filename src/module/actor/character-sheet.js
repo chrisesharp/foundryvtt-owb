@@ -136,12 +136,12 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     super.activateListeners(html);
 
     html.find(".ability-score .attribute-name a").click((event) => {
-      let actorObject = this.actor;
-      let element = event.currentTarget;
-      let score = element.parentElement.parentElement.dataset.score;
-      let stat = element.parentElement.parentElement.dataset.stat;
+      const actorObject = this.actor;
+      const element = event.currentTarget;
+      const score = element.parentElement.parentElement.dataset.score;
+      const stat = element.parentElement.parentElement.dataset.stat;
       if (!score) {
-        if (stat == "lr") {
+        if (stat === "lr") {
           actorObject.rollLoyalty(score, { event: event });
         }
       } else {
@@ -150,23 +150,21 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     });
 
     html.find(".exploration .attribute-name a").click((event) => {
-      let actorObject = this.actor;
-      let element = event.currentTarget;
-      let expl = element.parentElement.parentElement.dataset.exploration;
+      const actorObject = this.actor;
+      const element = event.currentTarget;
+      const expl = element.parentElement.parentElement.dataset.exploration;
       actorObject.rollExploration(expl, { event: event });
     });
 
     html.find(".inventory .item-titles .item-caret").click((event) => {
-      let items = $(event.currentTarget.parentElement.parentElement).children(
-        ".item-list"
-      );
+      const items = $(event.currentTarget.parentElement.parentElement).children(".item-list");
       if (items.css("display") == "none") {
-        let el = $(event.currentTarget).find(".fas.fa-caret-right");
+        const el = $(event.currentTarget).find(".fas.fa-caret-right");
         el.removeClass("fa-caret-right");
         el.addClass("fa-caret-down");
         items.slideDown(200);
       } else {
-        let el = $(event.currentTarget).find(".fas.fa-caret-down");
+        const el = $(event.currentTarget).find(".fas.fa-caret-down");
         el.removeClass("fa-caret-down");
         el.addClass("fa-caret-right");
         items.slideUp(200);
@@ -234,10 +232,9 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
       });
     });
 
-    html
-      .find(".quantity input")
-      .click((ev) => ev.target.select())
-      .change(this._onQtChange.bind(this));
+    html.find(".quantity input")
+        .click((ev) => ev.target.select())
+        .change(this._onQtChange.bind(this));
 
     html.find("a[data-action='generate-scores']").click((ev) => {
       this.generateScores(ev);

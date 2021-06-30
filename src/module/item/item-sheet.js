@@ -2,15 +2,6 @@
  * Extend the basic ItemSheet with some very simple modifications
  */
 export class OWBItemSheet extends ItemSheet {
-  constructor(...args) {
-    super(...args);
-
-    /**
-     * Keep track of the currently active sheet tab
-     * @type {string}
-     */
-  }
-
   /**
    * Extend and override the default options used by the Simple Item Sheet
    * @returns {Object}
