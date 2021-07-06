@@ -32,7 +32,7 @@
   }
 }
 
-.owb.dialog.party-xp {
+&.owb.dialog.party-xp {
   .actors {
     max-height: 250px;
     padding: 0 4px 0;
@@ -64,7 +64,7 @@
   }
 }
 
-.ose.dialog.party-select {
+&.owb.dialog.party-select {
   .actor-list {
     padding: 0 4px 0;
     max-height: 250px;
@@ -87,7 +87,7 @@
   }
 }
 
-.owb.dialog.party-sheet {
+&.owb.dialog.party-sheet {
   min-width: 250px;
   min-height: 250px;
   .window-content {
@@ -134,7 +134,8 @@
         }
       }
       .field-img {
-        flex: 0 0 50px;
+        flex: 0 0 45px;
+        background-size: cover;
         position: relative;
         &:hover {
           .img-btns button {
@@ -142,9 +143,12 @@
           }
         }
         img {
+          flex: 0 0 45px;
           border: none;
           width: 45px;
           height: 45px;
+          object-fit: cover;
+          object-position: 50% 0;
         }
         .img-btns {
           position: absolute;
@@ -188,7 +192,7 @@
   }
 }
 
-.owb.dialog.modifiers {
+&.owb.dialog.modifiers {
   .attribute-bonuses {
     label {
       font-weight: bold;
@@ -199,7 +203,7 @@
   }
 }
 
-.sheet.roll-table-config {
+&.sheet.roll-table-config {
   .sheet-header {
     .toggle-treasure {
       flex: 0 0 30px;

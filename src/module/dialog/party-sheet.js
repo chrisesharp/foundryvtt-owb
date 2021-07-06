@@ -59,14 +59,14 @@ export class OWBPartySheet extends FormApplication {
   }
 
   async _selectActors(ev) {
-    const entities = this.object.contents.sort((a, b) => b.data.token.disposition - a.data.token.disposition);
+    const entities = this.object.documents.sort((a, b) => b.data.token.disposition - a.data.token.disposition);
     const template = "/systems/owb/templates/apps/party-select.html";
     const templateData = {
       actors: entities
     }
     const content = await renderTemplate(template, templateData);
     new Dialog({
-      title: game.i18n.localize("OSE.dialog.selectActors"),
+      title: game.i18n.localize("OWB.dialog.selectActors"),
       content: content,
       buttons: {
         set: {
@@ -74,10 +74,9 @@ export class OWBPartySheet extends FormApplication {
           label: game.i18n.localize("OWB.Update"),
           callback: async (html) => {
             let checks = html.find("input[data-action='select-actor']");
-            // checks.each(async (_, c) => {
             await Promise.all(checks.map(async (_, c) => {
               let key = c.getAttribute('name');
-              await this.object.contents[key].setFlag('owb', 'party', c.checked);
+              await this.object.documents[key].setFlag('owb', 'party', c.checked);
             }));
             this.render(true);
           },
@@ -94,11 +93,10 @@ export class OWBPartySheet extends FormApplication {
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
-    html
-      .find(".item-controls .item-control .select-actors")
-      .click(this._selectActors.bind(this));
+    html.find(".item-controls .item-control .select-actors")
+        .click(this._selectActors.bind(this));
     
-      html.find(".item-controls .item-control .deal-xp").click(this._dealXP.bind(this));
+    html.find(".item-controls .item-control .deal-xp").click(this._dealXP.bind(this));
     
     html.find("a.resync").click(() => this.render(true));
 

@@ -15,10 +15,10 @@
     {{/if}}
   </div>
   <ol class="actor-list">
-    {{#each data.contents as |e|}} {{#if e.data.flags.owb.party}}
+    {{#each data.documents as |e|}} {{#if e.data.flags.owb.party}}
     <li class="actor flexrow" data-actor-id="{{e.id}}">
       <div class="field-img">
-        <img src="{{e.img}}" />
+        <img src="{{e.img}}" class="profile actor-profile" />
         <div class="img-btns flexrow">
           <button type="button" data-action="open-sheet"><i class="fas fa-user"></i></button>
         </div>
