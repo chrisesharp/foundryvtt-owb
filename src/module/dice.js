@@ -132,7 +132,8 @@ export class OWBDice {
     result.victim = data.roll.target ? data.roll.target.data.name : null;
 
     if (game.settings.get("owb", "ascendingAC")) {
-      if (roll.results[0] != 1 & (roll.total < targetAac || roll.results[0] == 20)) {
+      console.log("Roll:",roll)
+      if (roll.terms[0] != 1 & (roll.total < targetAac || roll.terms[0] == 20)) {
         result.details = game.i18n.format( "OWB.messages.AttackAscendingFailure", { bonus: result.target});
         return result;
       }
