@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.9] - 1/9/21
+
+### Added
+
+### Changed
+
+- Fixed bug in AAC rolling
+
+### Removed
+
 ## [1.0.8] - 6/7/21
 
 ### Added
