@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 31/1/22
+
+### Added
+
+- V9 support
+
+### Changed
+
+- Fixed bug for tab rendering in V9 CSS
+- Fixed bug in consumable counters for enemies and vehicles
+
+### Removed
+
 ## [1.0.9] - 1/9/21
 
 ### Added
