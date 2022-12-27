@@ -5,7 +5,7 @@ function getAmmo(token, calibre) {
                 (i.system.tags.find(t => t.title === "cal" && t.value === calibre) !== undefined)
                 );
       }
-      return token.actor.data.items.find(f => hasAmmo(f));
+      return token.actor.items.find(f => hasAmmo(f));
     }
     return [];
 }

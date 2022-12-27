@@ -2,7 +2,7 @@ export class OWBCombat {
   static  async rollInitiative(combat, data) {
     // Check groups
     const groups = {};
-    combat.data.combatants.forEach((cbt) => {
+    combat.combatants.forEach((cbt) => {
       const group = cbt.getFlag("owb","group");
       groups[group] = { present: true };
     });
@@ -15,7 +15,7 @@ export class OWBCombat {
     });
 
     // Set init
-    combat.data.combatants.forEach((cbt)=> {
+    combat.combatants.forEach((cbt)=> {
       const group = cbt.getFlag("owb","group");
       const initiative = groups[group].initiative;
       combat.setInitiative(cbt.id, initiative);
@@ -34,7 +34,7 @@ export class OWBCombat {
   static async individualInitiative(combat, data) {
     const updates = [];
     const messages = [];
-    combat.data.combatants.forEach((c, i) => {
+    combat.combatants.forEach((c, i) => {
       // This comes from foundry.js, had to remove the update turns thing
       // Roll initiative
       const cf = combat._getInitiativeFormula(c);
@@ -113,7 +113,7 @@ export class OWBCombat {
     if (data.initiative && init === "group") {
       const groupInit = data.initiative;
       // Check if there are any members of the group with init
-      game.combat.data.combatants.forEach((ct) => {
+      game.combat.combatants.forEach((ct) => {
         if (
           ct.initiative &&
           ct.initiative != "-789.00" &&
@@ -132,7 +132,7 @@ export class OWBCombat {
       ev.preventDefault();
       const id = $(ev.currentTarget).closest(".combatant")[0].dataset.combatantId;
       const isActive = ev.currentTarget.classList.contains('active');
-      const cbnt = game.combat.data.combatants.get(id);
+      const cbnt = game.combat.combatants.get(id);
       cbnt.update({
         id: id,
         flags: { owb: { moveInCombat: !isActive } },
@@ -150,7 +150,7 @@ export class OWBCombat {
       const colors = Object.keys(CONFIG.OWB.colors);
       const index = (colors.indexOf(currentColor) + 1) % colors.length;
       const id = $(ev.currentTarget).closest(".combatant")[0].dataset.combatantId;
-      const cbnt = game.combat.data.combatants.get(id);
+      const cbnt = game.combat.combatants.get(id);
       cbnt.update({
         id: id,
         flags: { owb: { group: colors[index] } },
@@ -167,7 +167,7 @@ export class OWBCombat {
   static addCombatant(combatant, data, options, id) {
     let token = canvas.tokens.get(data.tokenId);
     let color = "black";
-    switch (token.data.disposition) {
+    switch (token.document.disposition) {
       case -1:
         color = "red";
         break;
@@ -183,7 +183,7 @@ export class OWBCombat {
         group: color,
       },
     };
-    combatant.data.update({flags: flags});
+    combatant.updateSource({flags: flags});
   }
 
   static activateCombatant(li) {

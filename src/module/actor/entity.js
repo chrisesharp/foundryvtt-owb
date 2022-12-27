@@ -58,7 +58,7 @@ export class OWBActor extends Actor {
       return;
     }
     let modified = Math.floor(value + (this.system.details.xp.bonus * value) / 100);
-    return this.update({"data.details.xp.value": modified + this.system.details.xp.value}).then(() => {
+    return this.update({"system.details.xp.value": modified + this.system.details.xp.value}).then(() => {
       const speaker = ChatMessage.getSpeaker({ actor: this });
       ChatMessage.create({
         content: game.i18n.format("OWB.messages.GetExperience", {
@@ -96,7 +96,7 @@ export class OWBActor extends Actor {
       }
     }
     this.update({
-      "data.saves": {
+      "system.saves": {
         save: {
           value: saves.st,
         }
@@ -108,10 +108,10 @@ export class OWBActor extends Actor {
   /*  Rolls                                       */
   /* -------------------------------------------- */
 
-  rollHP(options = {}) {
-    const roll = new Roll(this.system.hp.hd).roll();
+  async rollHP(options = {}) {
+    const roll = await new Roll(this.system.hp.hd).roll({async: true});
     return this.update({
-      data: {
+      system: {
         hp: {
           max: roll.total,
           value: roll.total,

@@ -66,11 +66,11 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
   }
 
   async _resetCounters(event) {
-    const weapons = this.actor.data.items.filter(i => i.type === 'weapon');
+    const weapons = this.actor.items.filter(i => i.type === 'weapon');
     for (let wp of weapons) {
       const item = this.actor.items.get(wp.id);
       await item.update({
-        data: {
+        system: {
           counter: {
             value: parseInt(wp.system.counter.max),
           },
@@ -84,9 +84,9 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
     const itemId = event.currentTarget.closest(".item").dataset.itemId;
     const item = this.actor.items.get(itemId);
     if (event.target.dataset.field === "value") {
-      return item.update({"data.counter.value": parseInt(event.target.value)});
+      return item.update({"system.counter.value": parseInt(event.target.value)});
     } else if (event.target.dataset.field == "max") {
-      return item.update({"data.counter.max": parseInt(event.target.value)});
+      return item.update({"system.counter.max": parseInt(event.target.value)});
     }
   }
 
@@ -162,7 +162,7 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
       const currentColor = item.system.pattern;
       const colors = Object.keys(CONFIG.OWB.colors);
       const index = (colors.indexOf(currentColor) + 1) % colors.length;
-      item.update({"data.pattern": colors[index]})
+      item.update({"system.pattern": colors[index]})
     });
   }
 }

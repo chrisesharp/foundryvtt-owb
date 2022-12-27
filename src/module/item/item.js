@@ -317,7 +317,7 @@ export class OWBItem extends Item {
     const token = this.actor.token;
     const templateData = {
       actor: this.actor,
-      tokenId: token ? `${token.scene.id}.${token.id}` : null,
+      tokenId: token ? `${token.uuid}` : null,
       item: foundry.utils.duplicate(this),
       data: await this.getChatData(),
       labels: this.labels,
@@ -387,7 +387,7 @@ export class OWBItem extends Item {
     if (!(isTargetted || game.user.isGM || message.isAuthor)) return;
 
     // Get the Actor from a synthetic Token
-    const actor = this._getChatCardActor(card);
+    const actor = await this._getChatCardActor(card);
     if (!actor) return;
 
     // Get the Item
@@ -424,17 +424,18 @@ export class OWBItem extends Item {
     button.disabled = false;
   }
 
-  static _getChatCardActor(card) {
+  static async _getChatCardActor(card) {
     // Case 1 - a synthetic actor from a Token
     const tokenKey = card.dataset.tokenId;
     if (tokenKey) {
-      const [sceneId, tokenId] = tokenKey.split(".");
-      const scene = game.scenes.get(sceneId);
-      if (!scene) return null;
-      const tokenData = scene.getEmbeddedDocument("Token", tokenId);
-      if (!tokenData) return null;
-      const token = new Token(tokenData);
-      return token.actor;
+      const token = await fromUuid(tokenKey);
+      // const [sceneId, tokenId] = tokenKey.split(".");
+      // const scene = game.scenes.get(sceneId);
+      // if (!scene) return null;
+      // const tokenData = scene.getEmbeddedDocument("Token", tokenId);
+      // if (!tokenData) return null;
+      // const token = new Token(tokenData);
+      return token?.actor;
     }
 
     // Case 2 - use Actor ID directory
