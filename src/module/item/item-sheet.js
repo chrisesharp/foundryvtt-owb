@@ -27,17 +27,18 @@ export class OWBItemSheet extends ItemSheet {
   /** @override */
   get template() {
     const path = "systems/owb/templates/items/";
-    return `${path}/${this.item.data.type}-sheet.html`;
+    return `${path}/${this.item.type}-sheet.html`;
   }
 
   /**
    * Prepare data for rendering the Item sheet
    * The prepared data object contains both the actor data as well as additional sheet options
    */
-  getData() {
-    const data = super.getData().data;
+ async getData() {
+    const data = await super.getData();
     data.editable = this.document.sheet.isEditable;
     data.config = CONFIG.OWB;
+    data.data = this.item.system;
     return data;
   }
 
@@ -60,11 +61,11 @@ export class OWBItemSheet extends ItemSheet {
       this.object.popTag(value);
     });
     html.find('a.melee-toggle').click(() => {
-      this.object.update({data: {melee: !this.object.data.data.melee}});
+      this.object.update({system: {melee: !this.object.system.melee}});
     });
 
     html.find('a.missile-toggle').click(() => {
-      this.object.update({data: {missile: !this.object.data.data.missile}});
+      this.object.update({system: {missile: !this.object.system.missile}});
     });
 
     super.activateListeners(html);

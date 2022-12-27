@@ -28,7 +28,7 @@ export class OWBCharacterCreator extends FormApplication {
    * @return {Object}
    */
   getData() {
-    let data = this.object.data;
+    let data = this.object;
     data.user = game.user;
     data.config = CONFIG.OWB;
     data.counters = {
@@ -73,7 +73,7 @@ export class OWBCharacterCreator extends FormApplication {
       $(ev.currentTarget).closest('form').find('button[type="submit"]').removeAttr('disabled');
     }
 
-    this.object.data.stats = {
+    this.object.stats = {
       sum: sum,
       avg: Math.round(10 * sum / n) / 10,
       std: Math.round(100 * std) / 100
@@ -82,7 +82,7 @@ export class OWBCharacterCreator extends FormApplication {
 
   rollScore(score, options = {}) {
     // Increase counter
-    this.object.data.counters[score]++;
+    this.object.counters[score]++;
 
     const label = score != "gold" ? game.i18n.localize(`OWB.scores.${score}.long`) : "Gold";
     const rollParts = ["3d6"];
@@ -98,8 +98,8 @@ export class OWBCharacterCreator extends FormApplication {
       data: data,
       skipDialog: true,
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: game.i18n.format('OWB.dialog.generateScore', { score: label, count: this.object.data.counters[score] }),
-      title: game.i18n.format('OWB.dialog.generateScore', { score: label, count: this.object.data.counters[score] }),
+      flavor: game.i18n.format('OWB.dialog.generateScore', { score: label, count: this.object.counters[score] }),
+      title: game.i18n.format('OWB.dialog.generateScore', { score: label, count: this.object.counters[score] }),
     });
   }
 

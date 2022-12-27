@@ -137,7 +137,7 @@ Hooks.once("dragRuler.ready", (SpeedProvider) => {
       }
 
       getRanges(token) {
-          const baseSpeed = token.actor.data.data.movement.base;
+          const baseSpeed = token.actor.system.movement.base;
 
           const ranges = [
             {range: baseSpeed / 2, color: "careful"},

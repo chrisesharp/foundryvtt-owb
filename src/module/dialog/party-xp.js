@@ -27,7 +27,7 @@ export class OWBPartyXP extends FormApplication {
      * @return {Object}
      */
     getData() {
-        const actors = this.object.documents.filter(e => e.data.type === "character" && e.data.flags.owb && e.data.flags.owb.party === true);
+        const actors = this.object.documents.filter(e => e.type === "character" && e.flags.owb && e.flags.owb.party === true);
         let data = {
             actors: actors,
             data: this.object,
@@ -52,12 +52,12 @@ export class OWBPartyXP extends FormApplication {
     /* -------------------------------------------- */
 
     _calculateShare(ev) {
-        const actors = this.object.documents.filter(e => e.data.type === "character" && e.data.flags.owb && e.data.flags.owb.party === true);
+        const actors = this.object.documents.filter(e => e.type === "character" && e.flags.owb && e.flags.owb.party === true);
         const toDeal = $(ev.currentTarget.parentElement).find('input[name="total"]').val();
         const html = $(this.form);
         const value = parseFloat(toDeal) / actors.length;
         actors.forEach(a => {
-            html.find(`li[data-actor-id='${a.id}'] input`).val(Math.floor(a.data.data.details.xp.share / 100 * value));
+            html.find(`li[data-actor-id='${a.id}'] input`).val(Math.floor(a.system.details.xp.share / 100 * value));
         })
     }
 

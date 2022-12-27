@@ -29,8 +29,8 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
    * Prepare data for rendering the Actor sheet
    * The prepared data object contains both the actor data as well as additional sheet options
    */
-  getData() {
-    const data = super.getData();
+  async getData() {
+    const data = await super.getData();
     data.config.morale = game.settings.get("owb", "morale");
     data.isNew = this.actor.isNew();
     return this._prepareItems(data);;
@@ -66,13 +66,13 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
   }
 
   async _resetCounters(event) {
-    const weapons = this.actor.data.items.filter(i => i.type === 'weapon');
+    const weapons = this.actor.items.filter(i => i.type === 'weapon');
     for (let wp of weapons) {
       const item = this.actor.items.get(wp.id);
       await item.update({
-        data: {
+        system: {
           counter: {
-            value: parseInt(wp.data.data.counter.max),
+            value: parseInt(wp.system.counter.max),
           },
         },
       });
@@ -84,9 +84,9 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
     const itemId = event.currentTarget.closest(".item").dataset.itemId;
     const item = this.actor.items.get(itemId);
     if (event.target.dataset.field === "value") {
-      return item.update({"data.counter.value": parseInt(event.target.value)});
+      return item.update({"system.counter.value": parseInt(event.target.value)});
     } else if (event.target.dataset.field == "max") {
-      return item.update({"data.counter.max": parseInt(event.target.value)});
+      return item.update({"system.counter.max": parseInt(event.target.value)});
     }
   }
 
@@ -159,10 +159,10 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
     html.find(".item-pattern").click(ev => {
       const li = $(ev.currentTarget).parents(".item");
       const item = this.actor.items.get(li.data("itemId"));
-      const currentColor = item.data.data.pattern;
+      const currentColor = item.system.pattern;
       const colors = Object.keys(CONFIG.OWB.colors);
       const index = (colors.indexOf(currentColor) + 1) % colors.length;
-      item.update({"data.pattern": colors[index]})
+      item.update({"system.pattern": colors[index]})
     });
   }
 }

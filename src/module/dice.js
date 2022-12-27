@@ -127,12 +127,11 @@ export class OWBDice {
     };
     result.target = data.roll.thac0;
 
-    const targetAc = data.roll.target ? data.roll.target.actor.data.data.ac.value : 9;
-    const targetAac = data.roll.target ? data.roll.target.actor.data.data.aac.value : 0;
-    result.victim = data.roll.target ? data.roll.target.data.name : null;
+    const targetAc = data.roll.target ? data.roll.target.actor.system.ac.value : 9;
+    const targetAac = data.roll.target ? data.roll.target.actor.system.aac.value : 0;
+    result.victim = data.roll.target ? data.roll.target.name : null;
 
     if (game.settings.get("owb", "ascendingAC")) {
-      console.log("Roll:",roll)
       if (roll.terms[0] != 1 & (roll.total < targetAac || roll.terms[0] == 20)) {
         result.details = game.i18n.format( "OWB.messages.AttackAscendingFailure", { bonus: result.target});
         return result;
@@ -177,8 +176,8 @@ export class OWBDice {
     // Optionally include a situational bonus
     if (form !== null && form.bonus.value) parts.push(form.bonus.value);
 
-    const roll = new Roll(parts.join("+"), data).evaluate({async:false});
-    const dmgRoll = new Roll(data.roll.dmg.join("+"), data).evaluate({async:false});
+    const roll = await new Roll(parts.join("+"), data).evaluate({async:true});
+    const dmgRoll = await new Roll(data.roll.dmg.join("+"), data).evaluate({async:true});
 
     // Convert the roll to a chat message and return the roll
     let rollMode = game.settings.get("core", "rollMode");

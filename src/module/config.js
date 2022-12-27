@@ -37,7 +37,7 @@ export const OWB = {
   languages: [
     {name: "English", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Flag_of_Great_Britain_%281707%E2%80%931800%29.svg/32px-Flag_of_Great_Britain_%281707%E2%80%931800%29.svg.png"},
     {name: "German", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Flag_of_Germany_%281935%E2%80%931945%29.svg/32px-Flag_of_Germany_%281935%E2%80%931945%29.svg.png"},
-    {name: "French", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931958%29.svg/32px-Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931958%29.svg.png"},
+    {name: "French", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931974%2C_2020%E2%80%93present%29.svg/32px-Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931974%2C_2020%E2%80%93present%29.svg.png"},
     {name: "Italian", img:"https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Flag_of_Italy.svg/32px-Flag_of_Italy.svg.png"},
     {name: "Spanish", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Flag_of_Spain_%281938%E2%80%931945%29.svg/32px-Flag_of_Spain_%281938%E2%80%931945%29.svg.png"},
     {name: "Norwegian", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Norway.svg/32px-Flag_of_Norway.svg.png"},
@@ -50,7 +50,7 @@ export const OWB = {
     {name: "Flemish", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Belgium.svg/32px-Flag_of_Belgium.svg.png"},
     {name: "Greek", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Flag_of_Greece_%281822-1978%29.svg/32px-Flag_of_Greece_%281822-1978%29.svg.png"},
     {name: "Polish", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_Poland_%281928%E2%80%931980%29.svg/32px-Flag_of_Poland_%281928%E2%80%931980%29.svg.png"},
-    {name: "Russian", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_the_Soviet_Union_%281924%E2%80%931955%29.svg/32px-Flag_of_the_Soviet_Union_%281924%E2%80%931955%29.svg.png"}
+    {name: "Russian", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_the_Soviet_Union.svg/64px-Flag_of_the_Soviet_Union.svg.png"}
   ],
   tags: {
     melee: "OWB.items.Melee",

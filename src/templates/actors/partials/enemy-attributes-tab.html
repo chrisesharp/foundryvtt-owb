@@ -44,17 +44,6 @@
                     <div class="health-value health-top" title="{{localize 'OWB.BHB'}}">{{data.thac0.bhb}}</div>
                 </div>
             </li>
-            {{#if data.retainer.enabled}}
-            <li class="attribute">
-                <h4 class="attribute-name box-title" title="{{ localize 'OWB.Loyalty' }}">
-                    {{ localize "OWB.LoyaltyShort" }}
-                </h4>
-                <div class="attribute-value">
-                    <input name="data.retainer.loyalty" type="text" value="{{data.retainer.loyalty}}" placeholder="0"
-                        data-dtype="Number" />
-                </div>
-            </li>
-            {{/if}}
             <li class="attribute">
                 <h4 class="attribute-name box-title" title="{{localize 'OWB.movement.base'}}">
                     {{ localize "OWB.movement.short" }}
@@ -92,8 +81,8 @@
                     {{#each abilities as |item|}}
                     <li class="item-entry">
                         <div class="item flexrow" data-item-id="{{item.id}}">
-                            <div class="item-pattern" title="{{localize 'OWB.items.pattern'}}" style="background:linear-gradient(0.25turn, {{item.data.data.pattern}}, transparent)"></div>
-                            <div class="item-name {{#if item.data.data.roll}}item-rollable{{/if}} flexrow">
+                            <div class="item-pattern" title="{{localize 'OWB.items.pattern'}}" style="background:linear-gradient(0.25turn, {{item.system.pattern}}, transparent)"></div>
+                            <div class="item-name {{#if item.system.roll}}item-rollable{{/if}} flexrow">
                                 <div class="item-image" style="background-image: url({{item.img}})"></div>
                                 <h4 title="{{item.name}}">
                                     {{item.name~}}
@@ -117,7 +106,7 @@
                     <li class="item-entry">
                         <div class="item flexrow" data-item-id="{{item.id}}">
                             {{#if (eq item.type 'weapon')}}
-                            <div class="item-pattern" title="{{localize 'OWB.items.pattern'}}" style="background:linear-gradient(0.25turn, {{item.data.data.pattern}}, transparent)"></div>
+                            <div class="item-pattern" title="{{localize 'OWB.items.pattern'}}" style="background:linear-gradient(0.25turn, {{item.system.pattern}}, transparent)"></div>
                             {{/if}}
                             <div class="item-name {{#if (eq item.type 'weapon')}}item-rollable{{/if}}  flexrow">
                                 <div class="item-image" style="background-image: url({{item.img}})"></div>
@@ -127,10 +116,10 @@
                             </div>
                             {{#if (eq item.type 'weapon')}}
                             <div class="field-long counter flexrow">
-                                <input type="text" value="{{item.data.data.counter.value}}" data-dtype="Number"
+                                <input type="text" value="{{item.system.counter.value}}" data-dtype="Number"
                                     placeholder="0" data-field="value" title="{{localize 'OWB.items.roundAttacks'}}">
                                 /
-                                <input type="text" value="{{item.data.data.counter.max}}" data-field="max"
+                                <input type="text" value="{{item.system.counter.max}}" data-field="max"
                                     data-dtype="Number" placeholder="0"
                                     title="{{localize 'OWB.items.roundAttacksMax'}}"></div>
                             {{/if}}
@@ -143,11 +132,11 @@
                                 {{/if}}
                             </div>
                         </div>
-                        {{#if item.data.data.quantity.max}}
-                        {{#if (lte item.data.data.quantity.max 38)}}
+                        {{#if item.system.quantity.max}}
+                        {{#if (lte item.system.quantity.max 38)}}
                         <div class="consumable-counter">
-                        {{#times item.data.data.quantity.value}}<div class="full-mark"></div>{{/times}}
-                        {{#times (subtract item.data.data.quantity.max item.data.data.quantity.value)}}<div class="empty-mark"></div>{{/times}}
+                        {{#times item.system.quantity.value}}<div class="full-mark"></div>{{/times}}
+                        {{#times (subtract item.system.quantity.max item.system.quantity.value)}}<div class="empty-mark"></div>{{/times}}
                         </div>
                         {{/if}}
                         {{/if}}

@@ -27,8 +27,8 @@ export class OWBEntityTweaks extends FormApplication {
    * @return {Object}
    */
   getData() {
-    let data = this.object.data;
-    data.isCharacter = (this.object.data.type === 'character');
+    let data = this.object;
+    data.isCharacter = (this.object.type === 'character');
     data.user = game.user;
     data.config = CONFIG.OWB;
     return data;

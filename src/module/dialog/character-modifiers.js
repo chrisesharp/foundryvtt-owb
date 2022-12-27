@@ -28,7 +28,7 @@ export class OWBCharacterModifiers extends FormApplication {
    * @return {Object}
    */
   getData() {
-    let data = this.object.data;
+    let data = this.object;
     data.user = game.user;
     return data;
   }

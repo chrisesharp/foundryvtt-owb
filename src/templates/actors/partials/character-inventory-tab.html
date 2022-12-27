@@ -12,7 +12,7 @@
       </div>
     </li>
     <ol class="item-list">
-      {{#each owned.weapons as |item|}}
+      {{#each data.owned.weapons as |item|}}
       <li class="item-entry">
         <div class="item flexrow" data-item-id="{{item.id}}">
           <div class="item-name item-rollable flexrow">
@@ -24,26 +24,26 @@
             </a>
           </div>
           <div class="icon-row flexrow">
-            {{#each item.data.data.tags as |tag|}}
+            {{#each item.system.tags as |tag|}}
               {{#if (getTagIcon tag.value)}}
               <img title="{{tag.title}}" src="{{getTagIcon tag.value}}" width="24" height="24"/>
               {{/if}}
             {{/each}}
-            {{#each item.data.data.tags as |tag|}}
+            {{#each item.system.tags as |tag|}}
             {{#unless (getTagIcon tag.value)}}
               <span title="{{tag.title}}">{{tag.value}}{{#unless @last}},{{/unless}}</span>
             {{/unless}}
             {{/each}}
           </div>
           <div class="field-short">
-            {{item.data.data.counter.max}}
+            {{item.system.counter.max}}
           </div>
           <div class="field-short">
-            {{#if (eq @root.config.encumbrance "basic")}}_{{else}}{{item.data.data.weight}}{{/if}}
+            {{#if (eq @root.config.encumbrance "basic")}}_{{else}}{{item.system.weight}}{{/if}}
           </div>
           <div class="item-controls">
             {{#if ../owner}}
-            <a class="item-control item-toggle {{#unless item.data.data.equipped}}item-unequipped{{/unless}}"
+            <a class="item-control item-toggle {{#unless item.system.equipped}}item-unequipped{{/unless}}"
               title='{{localize "OWB.items.Equip"}}'>
               <i class="fas fa-tshirt"></i>
             </a>
@@ -72,7 +72,7 @@
       </div>
     </li>
     <ol class="item-list">
-      {{#each owned.armors as |item|}}
+      {{#each data.owned.armors as |item|}}
       <li class="item-entry">
         <div class="item flexrow" data-item-id="{{item.id}}">
           <div class="item-name flexrow">
@@ -85,17 +85,17 @@
           </div>
           <div class="field-short">
             {{#if @root.config.ascendingAC}}
-            {{item.data.aac.value}}
+            {{item.system.aac.value}}
             {{else}}
-            {{item.data.ac.value}}
+            {{item.system.ac.value}}
             {{/if}}
           </div>
           <div class="field-short">
-            {{#if (eq @root.config.encumbrance "basic")}}_{{else}}{{item.data.data.weight}}{{/if}}
+            {{#if (eq @root.config.encumbrance "basic")}}_{{else}}{{item.system.weight}}{{/if}}
           </div>
           <div class="item-controls">
             {{#if ../owner}}
-            <a class="item-control item-toggle {{#unless item.data.data.equipped}}item-unequipped{{/unless}}"
+            <a class="item-control item-toggle {{#unless item.system.equipped}}item-unequipped{{/unless}}"
               title='{{localize "OWB.items.Equip"}}'>
               <i class="fas fa-tshirt"></i>
             </a>
@@ -121,7 +121,7 @@
       </div>
     </li>
     <ol class="item-list">
-      {{#each owned.items as |item|}}
+      {{#each data.owned.items as |item|}}
       <li class="item-entry">
         <div class="item flexrow" data-item-id="{{item.id}}">
           <div class="item-name flexrow">
@@ -133,11 +133,11 @@
             </a>
           </div>
           <div class="field-short">
-            {{item.data.data.quantity.value}}
-            {{#if item.data.data.quantity.max}}<span>/{{item.data.data.quantity.max}}</span>{{/if}}
+            {{item.system.quantity.value}}
+            {{#if item.system.quantity.max}}<span>/{{item.system.quantity.max}}</span>{{/if}}
           </div>
           <div class="field-short">
-            {{#if (eq @root.config.encumbrance "basic")}}_{{else if (eq @root.config.encumbrance "detailed")}}_{{else}}{{item.data.data.weight}}{{/if}}
+            {{#if (eq @root.config.encumbrance "basic")}}_{{else if (eq @root.config.encumbrance "detailed")}}_{{else}}{{item.system.weight}}{{/if}}
           </div>
           <div class="item-controls">
             {{#if ../owner}}
@@ -146,11 +146,11 @@
             {{/if}}
           </div>
         </div>
-        {{#if item.data.data.quantity.max}}
-        {{#if (lte item.data.data.quantity.max 38)}}
+        {{#if item.system.quantity.max}}
+        {{#if (lte item.system.quantity.max 38)}}
         <div class="consumable-counter">
-          {{#times item.data.data.quantity.value}}<div class="full-mark"></div>{{/times}}
-          {{#times (subtract item.data.data.quantity.max item.data.data.quantity.value)}}<div class="empty-mark"></div>{{/times}}
+          {{#times item.system.quantity.value}}<div class="full-mark"></div>{{/times}}
+          {{#times (subtract item.system.quantity.max item.system.quantity.value)}}<div class="empty-mark"></div>{{/times}}
         </div>
         {{/if}}
         {{/if}}

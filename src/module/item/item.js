@@ -14,7 +14,7 @@ export class OWBItem extends Item {
     super.prepareData();
     // Set default image
     let img = CONST.DEFAULT_TOKEN;
-    switch (this.data.type) {
+    switch (this.type) {
       case "ability":
         img = "/systems/owb/assets/default/abilities.png";
         break;
@@ -31,7 +31,7 @@ export class OWBItem extends Item {
         img = "/systems/owb/assets/default/abilities.png";
         break;
     }
-    if (!this.data.img) this.data.img = img;
+    if (!this.img) this.img = img;
     
   }
 
@@ -40,16 +40,16 @@ export class OWBItem extends Item {
     html.on("click", ".item-name", this._onChatCardToggleContent.bind(this));
   }
 
-  getChatData(htmlOptions) {
-    const data = duplicate(this.data.data);
+ async  getChatData(htmlOptions={async: true}) {
+    const data = duplicate(this.system);
 
     // Rich text description
-    data.description = TextEditor.enrichHTML(data.description, htmlOptions);
+    data.description = await TextEditor.enrichHTML(data.description, htmlOptions);
 
     // Item properties
     const props = [];
 
-    if (this.data.type == "weapon" || this.data.type == "item") {
+    if (this.type == "weapon" || this.type == "item") {
       data.tags.forEach(t => props.push(t.value));
     }
     if (data.hasOwnProperty("equipped")) {
@@ -62,8 +62,8 @@ export class OWBItem extends Item {
   }
 
   rollWeapon(options = {}) {
-    const isNPC = this.actor.data.type != "character";
-    const data = this.data.data;
+    const isNPC = this.actor.type != "character";
+    const data = this.system;
     const type = isNPC ? "attack" : "melee";
     
     let calibre;
@@ -72,11 +72,11 @@ export class OWBItem extends Item {
       calibre = data.tags.filter(i => i.title === "cal");
       calibre = calibre.length > 0 ? calibre[0].value : 0;
       const hasAmmo = (i) => {
-        return (i.data.type == "item" &&  i.data.data.tags &&
-                (i.data.data.tags.find(t => t.title === "cal" && t.value === calibre) !== undefined)
+        return (i.type == "item" &&  i.system.tags &&
+                (i.system.tags.find(t => t.title === "cal" && t.value === calibre) !== undefined)
                 );
       }
-      ammo = this.actor.data.items.contents.filter(hasAmmo);
+      ammo = this.actor.items.contents.filter(hasAmmo);
       if (calibre) {
         if (ammo.length == 0) {
           ui.notifications.warn(`You have no ammunition for this weapon.`);
@@ -89,10 +89,10 @@ export class OWBItem extends Item {
     }
 
     const rollData = {
-      item: this.data,
-      actor: this.actor.data,
+      item: this,
+      actor: this.actor,
       roll: {
-        save: this.data.data.save,
+        save: this.system.save,
         target: null
       }
     };
@@ -159,7 +159,7 @@ export class OWBItem extends Item {
   }
 
   async rollFormula(options = {}) {
-    const data = this.data.data;
+    const data = this.system;
     if (!data.roll) {
       throw new Error("This Item does not have a formula to roll!");
     }
@@ -170,8 +170,8 @@ export class OWBItem extends Item {
     let type = data.rollType;
 
     const newData = {
-      actor: this.actor.data,
-      item: this.data,
+      actor: this.actor,
+      item: this,
       roll: {
         type: type,
         target: data.rollTarget,
@@ -201,8 +201,8 @@ export class OWBItem extends Item {
       return `<li class='tag'>${fa}${tag}</li>`;
     };
 
-    const data = this.data.data;
-    switch (this.data.type) {
+    const data = this.system;
+    switch (this.type) {
       case "weapon":
         let wTags = formatTag(data.damage, "fa-bolt");
         wTags += formatTag(data.counter.max, "fa-times");
@@ -238,7 +238,7 @@ export class OWBItem extends Item {
   }
 
   pushTag(values) {
-    const data = this.data.data;
+    const data = this.system;
     let update = (data.tags) ? duplicate(data.tags) : [];
     let newData = {};
     var regExp = /\(([^)]+)\)/;
@@ -275,16 +275,16 @@ export class OWBItem extends Item {
       update = values;
     }
     newData.tags = update;
-    return this.update({ data: newData });
+    return this.update({ system: newData });
   }
 
   popTag(value) {
-    const data = this.data.data;
+    const data = this.system;
     let update = data.tags.filter((el) => el.value != value);
     let newData = {
       tags: update,
     };
-    return this.update({ data: newData });
+    return this.update({ system: newData });
   }
 
   roll() {
@@ -293,7 +293,7 @@ export class OWBItem extends Item {
         this.rollWeapon();
         break;
       case "ability":
-        if (this.data.data.roll) {
+        if (this.system.roll) {
           this.rollFormula();
         } else {
           this.show();
@@ -317,9 +317,9 @@ export class OWBItem extends Item {
     const token = this.actor.token;
     const templateData = {
       actor: this.actor,
-      tokenId: token ? `${token.scene.id}.${token.id}` : null,
-      item: foundry.utils.duplicate(this.data),
-      data: this.getChatData(),
+      tokenId: token ? `${token.uuid}` : null,
+      item: foundry.utils.duplicate(this),
+      data: await this.getChatData(),
       labels: this.labels,
       isHealing: this.isHealing,
       hasDamage: this.hasDamage,
@@ -387,7 +387,7 @@ export class OWBItem extends Item {
     if (!(isTargetted || game.user.isGM || message.isAuthor)) return;
 
     // Get the Actor from a synthetic Token
-    const actor = this._getChatCardActor(card);
+    const actor = await this._getChatCardActor(card);
     if (!actor) return;
 
     // Get the Item
@@ -424,17 +424,18 @@ export class OWBItem extends Item {
     button.disabled = false;
   }
 
-  static _getChatCardActor(card) {
+  static async _getChatCardActor(card) {
     // Case 1 - a synthetic actor from a Token
     const tokenKey = card.dataset.tokenId;
     if (tokenKey) {
-      const [sceneId, tokenId] = tokenKey.split(".");
-      const scene = game.scenes.get(sceneId);
-      if (!scene) return null;
-      const tokenData = scene.getEmbeddedDocument("Token", tokenId);
-      if (!tokenData) return null;
-      const token = new Token(tokenData);
-      return token.actor;
+      const token = await fromUuid(tokenKey);
+      // const [sceneId, tokenId] = tokenKey.split(".");
+      // const scene = game.scenes.get(sceneId);
+      // if (!scene) return null;
+      // const tokenData = scene.getEmbeddedDocument("Token", tokenId);
+      // if (!tokenData) return null;
+      // const token = new Token(tokenData);
+      return token?.actor;
     }
 
     // Case 2 - use Actor ID directory
