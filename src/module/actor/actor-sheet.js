@@ -6,9 +6,8 @@ export class OWBActorSheet extends ActorSheet {
   }
   /* -------------------------------------------- */
 
-  getData() {
-    // const data = super.getData();
-    const data = foundry.utils.deepClone(super.getData().data);
+  async getData() {
+    const data = foundry.utils.deepClone(await super.getData());
     data.owner = this.actor.isOwner;
     data.editable = this.actor.sheet.isEditable;
 
@@ -18,6 +17,7 @@ export class OWBActorSheet extends ActorSheet {
     data.config.encumbrance = game.settings.get("owb", "encumbranceOption");
 
     data.isNew = this.actor.isNew();
+    data.data = this.actor.system;
     // // Prepare owned items
     // this._prepareItems(data);
     return data;
@@ -28,44 +28,30 @@ export class OWBActorSheet extends ActorSheet {
    * @private
    */
   _prepareItems(data) {
-    // Partition items by category
-    let [items, weapons, armors, abilities, languages] = this.actor.data.items.reduce(
-      (arr, item) => {
-        // Classify items into types
-        if (item.type === "item") arr[0].push(item);
-        else if (item.type === "weapon") arr[1].push(item);
-        else if (item.type === "armor") arr[2].push(item);
-        else if (item.type === "ability") arr[3].push(item);
-        else if (item.type === "language") arr[4].push(item);
-        return arr;
-      },
-      [[], [], [], [], []]
-    );
-
     // Assign and return
     data.owned = {
-      items: items,
-      weapons: weapons,
-      armors: armors,
+      items: this.actor.itemTypes['item'],
+      weapons: this.actor.itemTypes['weapon'],
+      armors:this.actor.itemTypes['armor'],
     };
-    data.abilities = abilities;
-    data.languages = languages;
+    data.abilities = this.actor.itemTypes['ability'];
+    data.languages = this.actor.itemTypes['language'];
     return data;
   }
 
   activateEditor(target, editorOptions, initialContent) {
     // remove some controls to the editor as the space is lacking
-    if (target === "data.details.description") {
+    if (target === "system.details.biography") {
       editorOptions.toolbar = "styleselect bullist hr table removeFormat save";
     }
     super.activateEditor(target, editorOptions, initialContent);
   }
 
-  _onItemSummary(event) {
+  async _onItemSummary(event) {
     event.preventDefault();
     const li = $(event.currentTarget).parents(".item");
     const item = this.actor.items.get(li.data("item-id"));
-    const description = TextEditor.enrichHTML(item.data.data.description);
+    const description = await TextEditor.enrichHTML(item.system.description,{ async: true});
     // Toggle summary
     if (li.hasClass("expanded")) {
       let summary = li.parents(".item-entry").children(".item-summary");
@@ -105,15 +91,15 @@ export class OWBActorSheet extends ActorSheet {
       const li = $(ev.currentTarget).parents(".item");
       const item = this.actor.items.get(li.data("itemId"));
       if (item.type == "weapon") {
-        if (this.actor.data.type === "enemy" || this.actor.data.type === "vehicle") {
+        if (this.actor.type === "enemy" || this.actor.type === "vehicle") {
           item.update({
-            data: { counter: { value: item.data.data.counter.value - 1 } },
+            system: { counter: { value: item.system.counter.value - 1 } },
           });
         }
         item.rollWeapon({ skipDialog: ev.ctrlKey });
       } else if (item.type == "language") {
         let actorObject = this.actor;
-        let language = item.data.data;
+        let language = item.system;
         actorObject.rollLanguageSave(language, { event: ev });
       } else {
         item.rollFormula({ skipDialog: ev.ctrlKey });
@@ -124,14 +110,14 @@ export class OWBActorSheet extends ActorSheet {
       const el = ev.currentTarget.parentElement.parentElement.children[0];
       const id = el.dataset.itemId;
       const item = this.actor.items.get(id);
-      item.update({"data.quantity.value": item.data.data.quantity.value + 1});
+      item.update({system:{"quantity.value": item.system.quantity.value + 1}});
     });
 
     html.find(".item-entry .consumable-counter .full-mark").click(ev => {
       const el = ev.currentTarget.parentElement.parentElement.children[0];
       const id = el.dataset.itemId;
       const item = this.actor.items.get(id);
-      item.update({"data.quantity.value": item.data.data.quantity.value - 1});
+      item.update({system:{"quantity.value": item.system.quantity.value - 1}});
     });
 
 
@@ -140,7 +126,7 @@ export class OWBActorSheet extends ActorSheet {
       const element = ev.currentTarget;
       const attack = element.parentElement.parentElement.dataset.attack;
       const rollData = {
-        actor: this.data,
+        actor: this.system,
         roll: {},
       };
       actorObject.targetAttack(rollData, attack, {

@@ -13,11 +13,11 @@
                     </div>
                 </div>
                 <ol>
-                    {{#each languages as |lang|}}
+                    {{#each data.languages.value as |lang|}}
                     <li class="item item-entry" data-lang="{{lang.name}}" data-item-id="{{lang.id}}">
                         <div class="item-name attribute item-rollable flexrow">
                             <div class="item-image" style="background-image: url({{lang.img}}); background-size: 32px; width: 32px"></div>
-                            {{lang.name}} ({{lang.data.data.fluency}})
+                            {{lang.name}} ({{lang.system.fluency}})
                         <div></div>
                         <div class="item-controls">
                             {{#if ../owner}}
@@ -34,8 +34,7 @@
             <div class="flex3 description">
                 <div class="item-titles">{{localize "OWB.category.description"}}</div>
                 <div>
-                    {{editor content=data.details.description target="data.details.description"
-                button=true owner=owner editable=editable}}
+                    {{editor data.details.biography target="system.details.biography" button=true editable=editable}}
                 </div>
             </div>
         </div>
@@ -43,8 +42,7 @@
     <div class="inventory notes">
         <div class="item-titles">{{localize "OWB.category.notes"}}</div>
         <div class="resizable-editor" >
-            {{editor content=data.details.notes target="data.details.notes"
-            button=true owner=owner editable=editable}}
+            {{editor data.details.notes target="system.details.notes" button=true editable=editable}}
         </div>
     </div>
 </section>

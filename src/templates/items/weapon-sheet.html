@@ -2,17 +2,17 @@
   <header class="sheet-header">
     <img
       class="profile-img"
-      src="{{img}}"
+      src="{{item.img}}"
       data-edit="img"
-      title="{{name}}"
+      title="{{item.name}}"
       />
     <div class="header-col">
       <div class="flexrow">
         <h1 class="charname">
           <input
-            name="name"
+            name="item.name"
             type="text"
-            value="{{name}}"
+            value="{{item.name}}"
             placeholder="Name"
             />
         </h1>
@@ -131,8 +131,7 @@
         {{/if}}
       </div>
       <div class="description weapon-editor">
-        {{editor content=data.description target="data.description" button=true
-        owner=owner editable=editable}}
+        {{editor data.description target="system.description" button=true editable=editable}}
       </div>
     </div>
   </section>

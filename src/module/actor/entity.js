@@ -7,9 +7,9 @@ export class OWBActor extends Actor {
 
   prepareData() {
     super.prepareData();
-    const data = this.data.data;
+    const data = this.system;
 
-    if (this.data.type === "character") this.prepareCharacterData(this.data.data);
+    if (this.type === "character") this.prepareCharacterData(this.system);
     // Compute modifiers from actor scores
     this.computeModifiers();
     this.computeAC();
@@ -18,7 +18,7 @@ export class OWBActor extends Actor {
     // Determine Initiative
     if (game.settings.get("owb", "initiative") != "group") {
       data.initiative.value = data.initiative.mod;
-      if (this.data.type == "character") {
+      if (this.type == "character") {
         data.initiative.value += data.scores.dex.mod;
       }
     } else {
@@ -28,7 +28,7 @@ export class OWBActor extends Actor {
   }
 
   prepareCharacterData(data) {
-    let [items, weapons, armors, abilities, languages] = this.data.items.reduce(
+    let [items, weapons, armors, abilities, languages] = this.items.reduce(
       (arr, item) => {
         // Classify items into types
         if (item.type === "item") arr[0].push(item);
@@ -54,11 +54,11 @@ export class OWBActor extends Actor {
   /*  Socket Listeners and Handlers
     /* -------------------------------------------- */
   getExperience(value, options = {}) {
-    if (this.data.type != "character") {
+    if (this.type != "character") {
       return;
     }
-    let modified = Math.floor(value + (this.data.data.details.xp.bonus * value) / 100);
-    return this.update({"data.details.xp.value": modified + this.data.data.details.xp.value}).then(() => {
+    let modified = Math.floor(value + (this.system.details.xp.bonus * value) / 100);
+    return this.update({"data.details.xp.value": modified + this.system.details.xp.value}).then(() => {
       const speaker = ChatMessage.getSpeaker({ actor: this });
       ChatMessage.create({
         content: game.i18n.format("OWB.messages.GetExperience", {
@@ -71,14 +71,14 @@ export class OWBActor extends Actor {
   }
 
   isNew() {
-    const data = this.data.data;
-    if (this.data.type == "character") {
+    const data = this.system;
+    if (this.type == "character") {
       let ct = 0;
       Object.values(data.scores).forEach((el) => {
         ct += el.value;
       });
       return ct == 0 ? true : false;
-    } else if (this.data.type == "enemy") {
+    } else if (this.type == "enemy") {
       let ct = 0;
       Object.values(data.saves).forEach((el) => {
         ct += el.value;
@@ -109,7 +109,7 @@ export class OWBActor extends Actor {
   /* -------------------------------------------- */
 
   rollHP(options = {}) {
-    const roll = new Roll(this.data.data.hp.hd).roll();
+    const roll = new Roll(this.system.hp.hd).roll();
     return this.update({
       data: {
         hp: {
@@ -121,17 +121,17 @@ export class OWBActor extends Actor {
   }
 
   rollLanguageSave(language, options = {}) {
-    let target = this.data.data.saves["save"].value
+    let target = this.system.saves["save"].value
     let speakerRank = 1;
     let speakerFluency = null;
     let mod = 0;
     let bonus = 0;
     if (game.user.targets.size > 0) {
       for (let t of game.user.targets.values()) {
-        speakerRank = t.actor.data.data.details.rank;
-        let speakerLangs = t.actor.data.data.languages.value.filter((el) => el.name === language.name);
+        speakerRank = t.actor.system.details.rank;
+        let speakerLangs = t.actor.system.languages.value.filter((el) => el.name === language.name);
         if (speakerLangs.length > 0) {
-          speakerFluency = speakerLangs[0].data.data.fluency
+          speakerFluency = speakerLangs[0].system.fluency
         }
       }
     }
@@ -185,7 +185,7 @@ export class OWBActor extends Actor {
     const rollParts = ["1d20", speakerRank * mod, bonus];
 
     const data = {
-      actor: this.data,
+      actor: this.system,
       roll: {
         type: "above",
         target: target,
@@ -196,7 +196,7 @@ export class OWBActor extends Actor {
     let skip = options?.event?.ctrlKey || options.fastForward;
     // let skip = true;
 
-    const rollMethod = this.data.type == "character" ? OWBDice.RollSave : OWBDice.Roll;
+    const rollMethod = this.type == "character" ? OWBDice.RollSave : OWBDice.Roll;
 
     // Roll and return
     return rollMethod({
@@ -216,17 +216,17 @@ export class OWBActor extends Actor {
     const rollParts = ["1d20"];
 
     const data = {
-      actor: this.data,
+      actor: this.system,
       roll: {
         type: "above",
-        target: this.data.data.saves[save].value,
+        target: this.system.saves[save].value,
       },
       details: game.i18n.format("OWB.roll.details.save", { save: label }),
     };
 
     let skip = options?.event?.ctrlKey || options.fastForward;
 
-    const rollMethod = this.data.type == "character" ? OWBDice.RollSave : OWBDice.Roll;
+    const rollMethod = this.type == "character" ? OWBDice.RollSave : OWBDice.Roll;
 
     // Roll and return
     return rollMethod({
@@ -243,10 +243,10 @@ export class OWBActor extends Actor {
   rollMorale(options = {}) {
     const rollParts = ["2d6"];
     const data = {
-      actor: this.data,
+      actor: this.system,
       roll: {
         type: "below",
-        target: this.data.data.details.morale,
+        target: this.system.details.morale,
       },
     };
 
@@ -263,52 +263,27 @@ export class OWBActor extends Actor {
     });
   }
 
-  rollLoyalty(options = {}) {
-    const label = game.i18n.localize("OWB.roll.loyalty");
-    const rollParts = ["2d6"];
-
-    const data = {
-      actor: this.data,
-      roll: {
-        type: "below",
-        target: this.data.data.retainer.loyalty,
-      },
-    };
-
-    // Roll and return
-    return OWBDice.Roll({
-      event: options.event,
-      parts: rollParts,
-      data: data,
-      skipDialog: true,
-      speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: label,
-      title: label,
-      chatMessage: options.chatMessage
-    });
-  }
-
   rollReaction(options = {}) {
     const rollParts = ["2d6"];
     const data = {
-      actor: this.data,
+      actor: this.system,
       roll: {
         type: "table",
         table: {
           2: game.i18n.format("OWB.reaction.Hostile", {
-            name: this.data.name,
+            name: this.name,
           }),
           3: game.i18n.format("OWB.reaction.Unfriendly", {
-            name: this.data.name,
+            name: this.name,
           }),
           6: game.i18n.format("OWB.reaction.Neutral", {
-            name: this.data.name,
+            name: this.name,
           }),
           9: game.i18n.format("OWB.reaction.Indifferent", {
-            name: this.data.name,
+            name: this.name,
           }),
           12: game.i18n.format("OWB.reaction.Friendly", {
-            name: this.data.name,
+            name: this.name,
           }),
         },
       },
@@ -333,10 +308,10 @@ export class OWBActor extends Actor {
     const rollParts = ["1d20"];
 
     const data = {
-      actor: this.data,
+      actor: this.system,
       roll: {
         type: "check",
-        target: this.data.data.scores[score].value,
+        target: this.system.scores[score].value,
       },
 
       details: game.i18n.format("OWB.roll.details.attribute", {
@@ -360,13 +335,13 @@ export class OWBActor extends Actor {
 
   rollHitDice(options = {}) {
     const label = game.i18n.localize(`OWB.roll.hd`);
-    const rollParts = [this.data.data.hp.hd];
-    if (this.data.type == "character") {
-      rollParts.push(this.data.data.scores.con.mod);
+    const rollParts = [this.system.hp.hd];
+    if (this.type == "character") {
+      rollParts.push(this.system.scores.con.mod);
     }
 
     const data = {
-      actor: this.data,
+      actor: this.system,
       roll: {
         type: "hitdice",
       },
@@ -389,10 +364,10 @@ export class OWBActor extends Actor {
     const rollParts = ["1d6"];
 
     const data = {
-      actor: this.data,
+      actor: this.system,
       roll: {
         type: "below",
-        target: this.data.data.exploration[expl],
+        target: this.system.exploration[expl],
       },
       details: game.i18n.format("OWB.roll.details.exploration", {
         expl: label,
@@ -414,10 +389,10 @@ export class OWBActor extends Actor {
   }
 
   rollDamage(attData, options = {}) {
-    const data = this.data.data;
+    const data = this.system;
 
     const rollData = {
-      actor: this.data,
+      actor: this.system,
       item: attData.item,
       roll: {
         type: "damage",
@@ -464,16 +439,16 @@ export class OWBActor extends Actor {
 
   async rollAttack(attData, options = {}) {
     const burst = (attData.burst || attData.suppress) ? "+2" : "0";
-    const data = this.data.data;
+    const data = this.system;
     const rollParts = ["1d20"];
     const dmgParts = [];
-    let label = game.i18n.format("OWB.roll.attacks", {name: this.data.name});
+    let label = game.i18n.format("OWB.roll.attacks", {name: this.name});
 
     if (!attData.item) {
       dmgParts.push("1d3");
     } else {
       label = game.i18n.format("OWB.roll.attacksWith", {name: attData.item.name});
-      dmgParts.push(attData.item.data.damage);
+      dmgParts.push(attData.item.system.damage);
     }
 
     const ascending = game.settings.get("owb", "ascendingAC");
@@ -516,7 +491,7 @@ export class OWBActor extends Actor {
     }
 
     if (attData.ammo) {
-      if (attData.ammo.data.data.quantity.value > 0) {
+      if (attData.ammo.system.quantity.value > 0) {
         this.decreaseQuantity(attData.ammo, attData.burst, attData.suppress);
       } else {
         const messageContent = `<b>OUT OF AMMO!</b><p>You need to reload with more <b>${attData.ammo.calibre}</b> rounds</p>`;
@@ -530,7 +505,7 @@ export class OWBActor extends Actor {
     }
 
     const rollData = {
-      actor: this.data,
+      actor: this.system,
       item: attData.item,
       roll: {
         type: options.type,
@@ -556,8 +531,8 @@ export class OWBActor extends Actor {
   }
 
   decreaseQuantity(item, burst, suppressive) {
-    const max = item.data.data.quantity.max;
-    let qty = item.data.data.quantity.value;
+    const max = item.system.quantity.max;
+    let qty = item.system.quantity.value;
 
     if (suppressive) {
       qty = 0;
@@ -567,18 +542,18 @@ export class OWBActor extends Actor {
       qty -= 1;
     }
     qty = Math.max(0, qty);
-    item.update({data: {quantity: {value: qty}}});
+    item.update({system: {quantity: {value: qty}}});
   }
 
   async applyDamage(amount = 0, multiplier = 1) {
     amount = Math.floor(parseInt(amount) * multiplier);
-    const hp = this.data.data.hp;
+    const hp = this.system.hp;
 
     // Remaining goes to health
     const dh = Math.clamped(hp.value - amount, 0, hp.max);
 
     // Update the Actor
-    return this.update({"data.hp.value": dh});
+    return this.update({"system.hp.value": dh});
   }
 
   static _valueFromTable(table, val) {
@@ -592,12 +567,12 @@ export class OWBActor extends Actor {
   }
 
   computeEncumbrance() {
-    if (!["character","enemy"].includes(this.data.type)) {
+    if (!["character","enemy"].includes(this.type)) {
       return;
     }
-    const data = this.data.data;
+    const data = this.system;
     let option = game.settings.get("owb", "encumbranceOption");
-    const items = [...this.data.items.values()];
+    const items = [...this.items.values()];
     // Compute encumbrance
     const hasItems = items.every((item) => {
       return item.type != "item";
@@ -608,10 +583,10 @@ export class OWBActor extends Actor {
         item.type === "item" &&
         (["complete", "disabled"].includes(option))
       ) {
-        return acc + item.data.data.quantity.value * item.data.data.weight;
+        return acc + item.system.quantity.value * item.system.weight;
       }
       if (["weapon", "armor"].includes(item.type)) {
-        return acc + item.data.data.weight;
+        return acc + item.system.weight;
       }
       return acc;
     }, 0);
@@ -634,7 +609,7 @@ export class OWBActor extends Actor {
   }
 
   _calculateMovement() {
-    const data = this.data.data;
+    const data = this.system;
     const option = game.settings.get("owb", "encumbranceOption");
     const weight = data.encumbrance.value;
     const delta = data.encumbrance.max - 250;
@@ -651,13 +626,13 @@ export class OWBActor extends Actor {
         data.movement.base = 120;
       }
     }
-    if (this.data.type === "character") {
+    if (this.type === "character") {
       data.movement.base = Math.min(120, data.movement.base + 30);
     }
   }
 
   computeAC() {
-    if (this.data.type != "character") {
+    if (this.type != "character") {
       return;
     }
     // Compute AC
@@ -665,12 +640,12 @@ export class OWBActor extends Actor {
     let baseAac = 12;
     let AcShield = 0;
     let AacShield = 0;
-    const data = this.data.data;
+    const data = this.system;
     data.aac.base = baseAac + data.scores.dex.mod;
     data.ac.base = baseAc - data.scores.dex.mod;
-    const armors = this.data.items.filter((i) => i.type === "armor");
+    const armors = this.items.filter((i) => i.type === "armor");
     armors.forEach((a) => {
-      const armorData = a.data.data;
+      const armorData = a.system;
       if (armorData.equipped) {
         baseAc -= armorData.ac.value;
         baseAac += armorData.aac.value;
@@ -683,9 +658,9 @@ export class OWBActor extends Actor {
   }
 
   computeModifiers() {
-    const data = this.data.data;
-    if (this.data.type != "character") {
-      if (this.data.type === "enemy") {
+    const data = this.system;
+    if (this.type != "character") {
+      if (this.type === "enemy") {
         data.thac0.bhb = data.details.rank - 1;
       }
       return;

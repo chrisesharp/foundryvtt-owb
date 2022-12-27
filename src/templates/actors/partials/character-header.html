@@ -1,22 +1,14 @@
-<img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}" />
+<img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
 <section class="header-details flexrow">
   <h1 class="charname">
-    <input name="name" type="text" value="{{name}}" placeholder="{{localize 'OWB.details.name'}}" data-dtype="String" />
+    <input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'OWB.details.name'}}" data-dtype="String" />
   </h1>
   <ul class="summary flexrow">
-    {{#if data.retainer.enabled}}
-    <li>
-      <input type="text" name="data.retainer.wage" value="{{data.retainer.wage}}" data-dtype="String"
-         />
-      <label>{{localize 'OWB.RetainerWage'}}</label>
-    </li>
-    {{else}}
     <li>
       <input type="text" name="data.details.title" value="{{data.details.title}}" data-dtype="String"
          />
       <label>{{localize 'OWB.details.title'}}</label>
     </li>
-    {{/if}}
     <li>
       <input type="text" name="data.details.nationality" value="{{data.details.nationality}}" data-dtype="String"
          />

@@ -44,8 +44,8 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
    * Prepare data for rendering the Actor sheet
    * The prepared data object contains both the actor data as well as additional sheet options
    */
-  getData() {
-    const data = super.getData();
+  async getData() {
+    const data = await super.getData();
     return this._prepareItems(data);
     // return data;
   }
@@ -104,7 +104,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
   }
 
   _popLang(table, lang) {
-    const data = this.actor.data.data;
+    const data = this.actor.system;
     let update = data[table].value.filter((el) => el.name != lang);
     let newData = {};
     newData[table] = { value: update };
@@ -117,7 +117,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     event.preventDefault();
     const itemId = event.currentTarget.closest(".item").dataset.itemId;
     const item = this.actor.items.get(itemId);
-    return item.update({ "data.quantity.value": parseInt(event.target.value) });
+    return item.update({ "system.quantity.value": parseInt(event.target.value) });
   }
 
   _onShowModifiers(event) {
@@ -226,8 +226,8 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
       const li = $(ev.currentTarget).parents(".item");
       const item = this.actor.items.get(li.data("itemId"));
       await item.update({
-        data: {
-          equipped: !item.data.data.equipped,
+        system: {
+          equipped: !item.system.equipped,
         },
       });
     });
