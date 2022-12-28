@@ -26,14 +26,14 @@
       "label": "Macros",
       "package": "owb",
       "path": "packs/macros.db",
-      "entity": "Macro"
+      "type": "Macro"
     },
     {
       "name": "tables",
       "label": "Tables",
       "package": "owb",
       "path": "packs/tables.db",
-      "entity": "RollTable",
+      "type": "RollTable",
       "module": "owb-content"
     }
   ],
