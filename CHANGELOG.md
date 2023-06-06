@@ -1,6 +1,11 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## [1.3.1] - 6/06/23
+### Changed
+- V11 fixes
+
 ## [1.3.0] - 31/05/23
 ### Added
 - V11 support
