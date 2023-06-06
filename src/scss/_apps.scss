@@ -239,8 +239,10 @@
   }
 }
 
-#settings .owb.game-license {
-  font-size: 12px;
+&.owb.game-license {
+  font-size: var(--font-size-12);
+  padding: 10px;
+  flex-basis: 100%;
   .button {
     text-align: center;
     margin: 4px;
