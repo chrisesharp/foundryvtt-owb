@@ -95,3 +95,5 @@ Used with permission under license.
 - Man by Simon Child.
 - Detective by Hey Rabbit.
 - german shepherd by parkjisun.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F6T5AXX)
