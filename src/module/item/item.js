@@ -41,7 +41,7 @@ export class OWBItem extends Item {
   }
 
  async  getChatData(htmlOptions={async: true}) {
-    const data = duplicate(this.system);
+    const data = foundry.utils.duplicate(this.system);
 
     // Rich text description
     data.description = await TextEditor.enrichHTML(data.description, htmlOptions);
@@ -239,7 +239,7 @@ export class OWBItem extends Item {
 
   pushTag(values) {
     const data = this.system;
-    let update = (data.tags) ? duplicate(data.tags) : [];
+    let update = (data.tags) ? foundry.utils.duplicate(data.tags) : [];
     let newData = {};
     var regExp = /\(([^)]+)\)/;
     if (update.length) {
@@ -334,7 +334,7 @@ export class OWBItem extends Item {
     // Basic chat message data
     const chatData = {
       user: game.user.id,
-      type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+      type: CONST.CHAT_MESSAGE_STYLES.OTHER,
       content: html,
       speaker: {
         actor: this.actor.id,

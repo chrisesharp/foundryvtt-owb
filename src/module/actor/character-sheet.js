@@ -87,18 +87,18 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
   async _pushLang(header) {
     const type = header.dataset.type;
     this._chooseLang().then((dialogInput) => {
-      const name = CONFIG.OWB.languages[dialogInput.choice].name;
+      const name = dialogInput.choice;
       const fluency = dialogInput.fluency;
-      const img = CONFIG.OWB.languages[dialogInput.choice].img;
+      const img = CONFIG.OWB.languages[name].img;
       const itemData = {
         name: name,
         type: type,
         img:img,
-        data: {}
+        system: {}
       };
-      itemData.data["name"] = name;
-      itemData.data["fluency"] = fluency;
-      itemData.data["save"] = "save";
+      itemData.system["name"] = name;
+      itemData.system["fluency"] = fluency;
+      itemData.system["save"] = "save";
       return this.actor.createEmbeddedDocuments("Item",[itemData]);
     });
   }
@@ -215,7 +215,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
       const itemData = {
         name: `New ${type.capitalize()}`,
         type: type,
-        data: duplicate(header.dataset),
+        data: foundry.utils.duplicate(header.dataset),
       };
       delete itemData.data["type"];
       return this.actor.createEmbeddedDocuments("Item",[itemData]);

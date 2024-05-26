@@ -64,7 +64,7 @@ export class OWBDice {
       parts.push(form.bonus.value);
     }
 
-    const roll = new Roll(parts.join("+"), data).evaluate({async:false});
+    const roll = await new Roll(parts.join("+"), data).evaluate();
 
     // Convert the roll to a chat message and return the roll
     let rollMode = game.settings.get("core", "rollMode");
@@ -145,7 +145,7 @@ export class OWBDice {
         return result;
       }
       result.isSuccess = true;
-      let value = Math.clamped(result.target - roll.total, -3, 9);
+      let value = Math.clamp(result.target - roll.total, -3, 9);
       result.details = game.i18n.format("OWB.messages.AttackSuccess", {result: value,bonus: result.target - targetAc});
     }
     return result;
@@ -176,8 +176,8 @@ export class OWBDice {
     // Optionally include a situational bonus
     if (form !== null && form.bonus.value) parts.push(form.bonus.value);
 
-    const roll = await new Roll(parts.join("+"), data).evaluate({async:true});
-    const dmgRoll = await new Roll(data.roll.dmg.join("+"), data).evaluate({async:true});
+    const roll = await new Roll(parts.join("+"), data).evaluate();
+    const dmgRoll = await new Roll(data.roll.dmg.join("+"), data).evaluate();
 
     // Convert the roll to a chat message and return the roll
     let rollMode = game.settings.get("core", "rollMode");

@@ -109,7 +109,7 @@ export class OWBActor extends Actor {
   /* -------------------------------------------- */
 
   async rollHP(options = {}) {
-    const roll = await new Roll(this.system.hp.hd).roll({async: true});
+    const roll = await new Roll(this.system.hp.hd).roll();
     return this.update({
       system: {
         hp: {
@@ -550,7 +550,7 @@ export class OWBActor extends Actor {
     const hp = this.system.hp;
 
     // Remaining goes to health
-    const dh = Math.clamped(hp.value - amount, 0, hp.max);
+    const dh = Math.clamp(hp.value - amount, 0, hp.max);
 
     // Update the Actor
     return this.update({"system.hp.value": dh});
@@ -596,7 +596,7 @@ export class OWBActor extends Actor {
     let steps = ["complete"].includes(option) ? [(100 * 400) / max, (100 * 600) / max, (100 * 800) / max] : [];
 
     data.encumbrance = {
-      pct: Math.clamped((100 * parseFloat(totalWeight)) / max, 0, 100),
+      pct: Math.clamp((100 * parseFloat(totalWeight)) / max, 0, 100),
       max: max,
       encumbered: totalWeight > data.encumbrance.max,
       value: totalWeight,

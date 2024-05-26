@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 26/05/24
+### Changed
+- V12 support
+
 ## [1.3.4] - 21/06/23
 ### Changed
 - V11 update

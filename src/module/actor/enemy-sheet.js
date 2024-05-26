@@ -65,12 +65,12 @@ export class OWBActorSheetEnemy extends OWBActorSheetVehicle {
 
     html.find(".morale-check a").click((ev) => {
       let actorObject = this.actor;
-      actorObject.rollMorale({ event: event });
+      actorObject.rollMorale({ event: ev });
     });
 
     html.find(".reaction-check a").click((ev) => {
       let actorObject = this.actor;
-      actorObject.rollReaction({ event: event });
+      actorObject.rollReaction({ event: ev });
     });
 
     // Everything below here is only needed if the sheet is editable

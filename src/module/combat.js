@@ -8,8 +8,8 @@ export class OWBCombat {
     });
 
     // Roll init
-    Object.keys(groups).forEach( (group) => {
-      const roll =  new Roll("1d6").evaluate({async:false});
+    Object.keys(groups).forEach(async (group) => {
+      const roll =  await new Roll("1d6").evaluate();
       roll.toMessage({flavor: game.i18n.format('OWB.roll.initiative', { group: CONFIG["OWB"].colors[group] })});
       groups[group].initiative = roll.total;
     });

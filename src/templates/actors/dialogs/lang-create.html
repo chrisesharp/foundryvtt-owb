@@ -3,11 +3,7 @@
         <label>{{localize 'OWB.Language'}}</label>
         <div class="form-fields">
             <select name="choice">
-                {{#select choices}}
-                {{#each choices as |label mode|}}
-                <option value="{{mode}}">{{label.name}}</option>
-                {{/each}}
-                {{/select}}
+                {{selectOptions choices localize=true}}
             </select>
         </div>
         <div class="form-fields">

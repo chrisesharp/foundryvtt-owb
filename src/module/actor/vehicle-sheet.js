@@ -124,7 +124,7 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
         const itemData = {
           name: name ? name : `New ${type.capitalize()}`,
           type: type,
-          data: duplicate(header.dataset),
+          data: foundry.utils.duplicate(header.dataset),
         };
         delete itemData.data["type"];
         return itemData;

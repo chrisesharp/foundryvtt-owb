@@ -3,7 +3,7 @@
   "id": "owb",
   "title": "WWII:OWB",
   "description": "Play WW2 adventures compatible with WWII:Operation Whitebox™ on Foundry VTT",
-  "version": "1.3.4",
+  "version": "4.0.0",
   "minimumCoreVersion": "11",
   "compatibleCoreVersion": "11",
   "compatibility": {
@@ -44,9 +44,11 @@
       "path": "lang/en.json"
     }
   ],
-  "gridDistance": 5,
-  "gridUnits": "ft",
+  "grid": {
+    "distance": 5,
+    "units": "ft"
+  },
   "url": "https://github.com/chrisesharp/foundryvtt-owb",
   "manifest": "https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb/master/src/system.json",
-  "download": "https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb/master/package/owb-v1.3.4.zip"
+  "download": "https://raw.githubusercontent.com/chrisesharp/foundryvtt-owb/master/package/owb-v4.0.0.zip"
 }
