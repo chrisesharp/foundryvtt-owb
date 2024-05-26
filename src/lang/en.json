@@ -237,5 +237,14 @@
   "OWB.weapons.burst.short": "Burst",
   "OWB.weapons.burst.long": "Burst Fire",
   "OWB.weapons.suppressive.short": "Suppress",
-  "OWB.weapons.suppressive.long": "Suppressive Fire"
+  "OWB.weapons.suppressive.long": "Suppressive Fire",
+
+  "TYPES.Actor.character": "Character",
+  "TYPES.Actor.npc": "NPC",
+  "TYPES.Actor.vehicle": "Vehicle",
+  "TYPES.Item.item": "Item",
+  "TYPES.Item.weapon": "Weapon",
+  "TYPES.Item.armor": "Armor",
+  "TYPES.Item.ability": "Ability",
+  "TYPES.Item.language": "Language"
 }
