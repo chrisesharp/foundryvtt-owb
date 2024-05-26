@@ -4,8 +4,6 @@
   "title": "WWII:OWB",
   "description": "Play WW2 adventures compatible with WWII:Operation Whitebox™ on Foundry VTT",
   "version": "4.0.0",
-  "minimumCoreVersion": "11",
-  "compatibleCoreVersion": "11",
   "compatibility": {
     "minimum": 11,
     "verified": "11"
