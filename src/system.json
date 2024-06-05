@@ -1,5 +1,4 @@
 {
-  "name": "owb",
   "id": "owb",
   "title": "WWII:OWB",
   "description": "Play WW2 adventures compatible with WWII:Operation Whitebox™ on Foundry VTT",
@@ -8,7 +7,6 @@
     "minimum": 11,
     "verified": "12"
   },
-  "author": "chrisesharp",
   "authors": [
     {
       "name": "chrisesharp",
