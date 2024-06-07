@@ -23,7 +23,7 @@
             <div class="form-fields">
               <input
                 type="text"
-                name="data.weight"
+                name="system.weight"
                 value="{{data.weight}}"
                 data-dtype="Number"
                 />
@@ -59,7 +59,7 @@
           <div class="form-fields">
             <input
               type="text"
-              name="data.damage"
+              name="system.damage"
               value="{{data.damage}}"
               data-dtype="String"
               />
@@ -78,7 +78,7 @@
           <div class="form-fields">
             <input
               type="text"
-              name="data.counter.max"
+              name="system.counter.max"
               value="{{data.counter.max}}"
               data-dtype="Number"
               />
@@ -89,28 +89,28 @@
           <div class="form-fields range">
             <input
               type="text"
-              name="data.range.short"
+              name="system.range.short"
               value="{{data.range.short}}"
               data-dtype="Number"
               />
               <div class="sep"></div>
               <input
               type="text"
-              name="data.range.medium"
+              name="system.range.medium"
               value="{{mult data.range.short 2}}"
               data-dtype="Number"
               />
               <div class="sep"></div>
               <input
               type="text"
-              name="data.range.long"
+              name="system.range.long"
               value="{{mult data.range.short 6}}"
               data-dtype="Number"
               />
               <div class="sep"></div>
               <input
               type="text"
-              name="data.range.extreme"
+              name="system.range.extreme"
               value="{{mult data.range.short 24}}"
               data-dtype="Number"
               />
@@ -121,7 +121,7 @@
           <div class="form-fields">
             <input
               type="checkbox"
-              name="data.save"
+              name="system.save"
               name="{{data.save}}"
               {{checked data.save}}
               data-dtype="Number"

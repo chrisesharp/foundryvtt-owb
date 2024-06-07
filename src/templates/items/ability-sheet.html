@@ -13,19 +13,19 @@
         <div class="form-group block-input">
           <label>{{localize 'OWB.abilities.Requirements'}}</label>
           <div class="form-fields">
-            <input type="text" name="data.requirements" value="{{data.requirements}}" data-dtype="String" />
+            <input type="text" name="system.requirements" value="{{data.requirements}}" data-dtype="String" />
           </div>
         </div>
         <div class="form-group block-input">
           <label>{{localize 'OWB.items.Roll'}}</label>
           <div class="form-fields">
-            <input type="text" name="data.roll" value="{{data.roll}}" data-dtype="String" />
+            <input type="text" name="system.roll" value="{{data.roll}}" data-dtype="String" />
           </div>
         </div>
         <div class="form-group">
           <label>{{localize 'OWB.items.RollType'}}</label>
           <div class="form-fields">
-            <select name="data.rollType">
+            <select name="system.rollType">
               {{#select data.rollType}}
               {{#each config.roll_type as |t a|}}
               <option value="{{a}}">{{t}}</option>
@@ -37,19 +37,19 @@
         <div class="form-group">
           <label>{{localize 'OWB.items.RollTarget'}}</label>
           <div class="form-fields">
-            <input type="text" name="data.rollTarget" value="{{data.rollTarget}}" data-dtype="Number" />
+            <input type="text" name="system.rollTarget" value="{{data.rollTarget}}" data-dtype="Number" />
           </div>
         </div>
         <div class="form-group">
           <label>{{localize 'OWB.items.BlindRoll'}}</label>
           <div class="form-fields">
-            <input type="checkbox" name="data.blindroll" value="{{data.blindroll}}" {{checked data.blindroll}}  data-dtype="Number"/>
+            <input type="checkbox" name="system.blindroll" value="{{data.blindroll}}" {{checked data.blindroll}}  data-dtype="Number"/>
           </div>
         </div>
         <div class="form-group">
           <label>{{localize 'OWB.weapons.save'}}</label>
           <div class="form-fields">
-            <select name="data.save">
+            <select name="system.save">
               {{#select data.save}}
               <option value=""></option>
               {{#each config.saves_short as |save a|}}

@@ -14,7 +14,7 @@
                     <a>{{ localize "OWB.scores.str.short" }}</a>
                 </h4>
                 <div class="attribute-value">
-                    <input name="data.scores.str.value" type="text" value="{{data.scores.str.value}}" placeholder="0"
+                    <input name="system.scores.str.value" type="text" value="{{data.scores.str.value}}" placeholder="0"
                         data-dtype="Number" />
                 </div>
             </li>
@@ -23,7 +23,7 @@
                     <a>{{ localize "OWB.scores.int.short" }}</a>
                 </h4>
                 <div class="attribute-value">
-                    <input name="data.scores.int.value" type="text" value="{{data.scores.int.value}}" placeholder="0"
+                    <input name="system.scores.int.value" type="text" value="{{data.scores.int.value}}" placeholder="0"
                         data-dtype="Number" />
                 </div>
             </li>
@@ -32,7 +32,7 @@
                     <a>{{ localize "OWB.scores.wis.short" }}</a>
                 </h4>
                 <div class="attribute-value">
-                    <input name="data.scores.wis.value" type="text" value="{{data.scores.wis.value}}" placeholder="0"
+                    <input name="system.scores.wis.value" type="text" value="{{data.scores.wis.value}}" placeholder="0"
                         data-dtype="Number" />
                 </div>
             </li>
@@ -41,7 +41,7 @@
                     <a>{{ localize "OWB.scores.con.short" }}</a>
                 </h4>
                 <div class="attribute-value">
-                    <input name="data.scores.con.value" type="text" value="{{data.scores.con.value}}" placeholder="0"
+                    <input name="system.scores.con.value" type="text" value="{{data.scores.con.value}}" placeholder="0"
                         data-dtype="Number" />
                 </div>
             </li>
@@ -50,7 +50,7 @@
                     <a>{{ localize "OWB.scores.dex.short" }}</a>
                 </h4>
                 <div class="attribute-value">
-                    <input name="data.scores.dex.value" type="text" value="{{data.scores.dex.value}}" placeholder="0"
+                    <input name="system.scores.dex.value" type="text" value="{{data.scores.dex.value}}" placeholder="0"
                         data-dtype="Number" />
                 </div>
             </li>
@@ -59,7 +59,7 @@
                     <a>{{ localize "OWB.scores.cha.short" }}</a>
                 </h4>
                 <div class="attribute-value">
-                    <input name="data.scores.cha.value" type="text" value="{{data.scores.cha.value}}" placeholder="0"
+                    <input name="system.scores.cha.value" type="text" value="{{data.scores.cha.value}}" placeholder="0"
                         data-dtype="Number" />
                 </div>
             </li>
@@ -70,9 +70,9 @@
         <div class="flexrow">
             {{!-- Hit Points --}}
             <div class="health">
-                <input class="health-value health-top" name="data.hp.value" type="text" value="{{data.hp.value}}"
+                <input class="health-value health-top" name="system.hp.value" type="text" value="{{data.hp.value}}"
                     data-dtype="Number" placeholder="0" title="{{localize 'OWB.Health'}}" />
-                <input class="health-value health-bottom" name="data.hp.max" type="text" value="{{data.hp.max}}"
+                <input class="health-value health-bottom" name="system.hp.max" type="text" value="{{data.hp.max}}"
                     data-dtype="Number" placeholder="0" title="{{localize 'OWB.HealthMax'}}" />
                 <div class="health-empty" style="height:{{counter false data.hp.value data.hp.max}}%"></div>
                 <div class="health-full" style="height:{{counter true data.hp.value data.hp.max}}%"></div>
@@ -102,7 +102,7 @@
                         <a>{{ localize "OWB.HitDiceShort" }}</a>
                     </h4>
                     <div class="attribute-value">
-                        <input name="data.hp.hd" type="text" value="{{data.hp.hd}}" placeholder=""
+                        <input name="system.hp.hd" type="text" value="{{data.hp.hd}}" placeholder=""
                             data-dtype="String" />
                     </div>
                 </li>
@@ -121,7 +121,7 @@
                         <a>{{ localize "OWB.saves.save.short" }}</a>
                     </h4>
                     <div class="attribute-value">
-                        <input name="data.saves.save.value" type="text" value="{{data.saves.save.value}}" placeholder="0"
+                        <input name="system.saves.save.value" type="text" value="{{data.saves.save.value}}" placeholder="0"
                             data-dtype="Number" />
                 </li>
             </ul>
@@ -145,7 +145,7 @@
                     </h4>
                     <div class="flexrow">
                         <div class="attribute-value">
-                            <input name="data.thac0.bba" type="text" value="{{data.thac0.bba}}" placeholder="0"
+                            <input name="system.thac0.bba" type="text" value="{{data.thac0.bba}}" placeholder="0"
                                 data-dtype="Number" />
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                         {{ localize "OWB.movement.short" }}
                     </h4>
                     <div class="attribute-value flexrow">
-                        <input name="data.movement.base" type="text" value="{{data.movement.base}}" placeholder="0"
+                        <input name="system.movement.base" type="text" value="{{data.movement.base}}" placeholder="0"
                             data-dtype="Number" {{#if data.config.movementAuto}}disabled{{/if}} />
                     </div>
                 </li>
