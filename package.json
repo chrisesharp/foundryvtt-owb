@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "owb",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "OWB:WW2 system in Foundry VTT",
   "scripts": {
     "package": "gulp package",
