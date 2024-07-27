@@ -61,12 +61,12 @@ export const OWB = {
     suppressive: "OWB.weapons.suppressive.short"
   },
   tag_images: {
-    melee: "/systems/owb/assets/default/melee.png",
-    missile: "/systems/owb/assets/default/ability.png",
-    splash: "/systems/owb/assets/default/ability.png",
-    reload: "/systems/owb/assets/default/ammunition.png",
-    burst: "/systems/owb/assets/default/burst.png",
-    suppressive: "/systems/owb/assets/default/suppress.png"
+    melee: "systems/owb/assets/default/melee.png",
+    missile: "systems/owb/assets/default/ability.png",
+    splash: "systems/owb/assets/default/ability.png",
+    reload: "systems/owb/assets/default/ammunition.png",
+    burst: "systems/owb/assets/default/burst.png",
+    suppressive: "systems/owb/assets/default/suppress.png"
   },
   enemy_saves: {
     0: {

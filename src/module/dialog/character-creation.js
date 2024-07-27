@@ -133,7 +133,7 @@ export class OWBCharacterCreator extends FormApplication {
     const itemData = {
       name: "money",
       type: "item",
-      img: "/systems/owb/assets/default/ability.png",
+      img: "systems/owb/assets/default/ability.png",
       data: {
         weight: 0,
         quantity: {

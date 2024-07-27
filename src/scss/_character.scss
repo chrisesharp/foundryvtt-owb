@@ -13,7 +13,7 @@
     background-repeat: no-repeat;
     background-size: cover;
 
-    background-image: url("/systems/owb/assets/folder-page.png");
+    background-image: url("../assets/folder-page.png");
   }
 
   .sheet-frame {
@@ -116,7 +116,7 @@
     }
     .health {
       &.armor-class {
-        background: url('/systems/owb/assets/default/ability.png') no-repeat center;
+        background: url('../systems/owb/assets/default/ability.png') no-repeat center;
         background-size: 70px;
         .shield {
           text-align: right;
@@ -148,12 +148,12 @@
           right: calc(50% + -20px);
         }
         .health-empty {
-          background: url('/systems/owb/assets/heart_empty.png') no-repeat center;
+          background: url('../systems/owb/assets/heart_empty.png') no-repeat center;
           background-size: 70px;
           background-position: top;
         }
         .health-full {
-          background: url('/systems/owb/assets/heart_full.png') no-repeat center;
+          background: url('../systems/owb/assets/heart_full.png') no-repeat center;
           background-size: 70px;
           background-position: bottom;
         }

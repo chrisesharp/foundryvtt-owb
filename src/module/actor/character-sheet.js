@@ -55,7 +55,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     let choices = CONFIG.OWB.languages;
     let templateData = { choices: choices },
       dlg = await renderTemplate(
-        "/systems/owb/templates/actors/dialogs/lang-create.html",
+        "systems/owb/templates/actors/dialogs/lang-create.html",
         templateData
       );
     //Create Dialog window

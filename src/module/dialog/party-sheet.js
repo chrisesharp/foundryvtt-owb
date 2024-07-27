@@ -60,7 +60,7 @@ export class OWBPartySheet extends FormApplication {
 
   async _selectActors(ev) {
     const entities = this.object.documents.sort((a, b) => b.data.token.disposition - a.data.token.disposition);
-    const template = "/systems/owb/templates/apps/party-select.html";
+    const template = "systems/owb/templates/apps/party-select.html";
     const templateData = {
       actors: entities
     }

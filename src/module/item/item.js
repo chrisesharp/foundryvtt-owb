@@ -16,19 +16,19 @@ export class OWBItem extends Item {
     let img = CONST.DEFAULT_TOKEN;
     switch (this.type) {
       case "ability":
-        img = "/systems/owb/assets/default/abilities.png";
+        img = "systems/owb/assets/default/abilities.png";
         break;
       case "armor":
-        img = "/systems/owb/assets/default/clothing.png";
+        img = "systems/owb/assets/default/clothing.png";
         break;
       case "weapon":
-        img = "/systems/owb/assets/default/ability.png";
+        img = "systems/owb/assets/default/ability.png";
         break;
       case "item":
-        img = "/systems/owb/assets/default/backpack.png";
+        img = "systems/owb/assets/default/backpack.png";
         break;
       case "language":
-        img = "/systems/owb/assets/default/abilities.png";
+        img = "systems/owb/assets/default/abilities.png";
         break;
     }
     if (!this.img) this.img = img;

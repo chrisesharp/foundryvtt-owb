@@ -31,7 +31,7 @@ export class OWBActorSheetEnemy extends OWBActorSheetVehicle {
   async generateSave() {
     const choices = CONFIG.OWB.enemy_saves;
     const templateData = { choices: choices };
-    const dlg = await renderTemplate("/systems/owb/templates/actors/dialogs/enemy-saves.html", templateData);
+    const dlg = await renderTemplate("systems/owb/templates/actors/dialogs/enemy-saves.html", templateData);
     //Create Dialog window
     new Dialog({
       title: game.i18n.localize("OWB.dialog.generateSaves"),
