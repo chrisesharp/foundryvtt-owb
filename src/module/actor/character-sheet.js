@@ -108,7 +108,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     let update = data[table].value.filter((el) => el.name != lang);
     let newData = {};
     newData[table] = { value: update };
-    return this.actor.update({ data: newData });
+    return this.actor.update({ system: newData });
   }
 
   /* -------------------------------------------- */
@@ -215,9 +215,9 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
       const itemData = {
         name: `New ${type.capitalize()}`,
         type: type,
-        data: foundry.utils.duplicate(header.dataset),
+        system: foundry.utils.duplicate(header.dataset),
       };
-      delete itemData.data["type"];
+      //delete itemData.system["type"];
       return this.actor.createEmbeddedDocuments("Item",[itemData]);
     });
 

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.4] - 7/07/24
+
+### Changed
+
+- More V12 support fixes and relative path fix
+
 ## [1.4.3] - 7/07/24
 
 ### Changed

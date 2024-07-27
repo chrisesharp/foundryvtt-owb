@@ -134,7 +134,7 @@ export class OWBCharacterCreator extends FormApplication {
       name: "money",
       type: "item",
       img: "systems/owb/assets/default/ability.png",
-      data: {
+      system: {
         weight: 0,
         quantity: {
           value: gold
