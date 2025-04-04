@@ -13,6 +13,9 @@ import * as chat from "./chat.js";
 import * as macros from "./macros.js";
 import * as party from "./party.js";
 import { OWBCombat } from "./combat.js";
+const { Actors, Items } = foundry.documents.collections;
+const { renderTemplate } = foundry.applications.handlebars;
+const { ActorSheet, ItemSheet } = foundry.appv1.sheets;
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -84,29 +87,28 @@ Hooks.once("ready", async () => {
 });
 
 // License and KOFI infos
-Hooks.on("renderSidebarTab", async (object, html) => {
-  if (object instanceof ActorDirectory) {
-    party.addControl(object, html);
-  }
-  if (object instanceof Settings) {
-    let gamesystem = html.find("#game-details");
-    // SRD Link
-    let owb = gamesystem.find('h4').last();
-    owb.append(` <sub><a href="https://oldschoolessentials.necroticgnome.com/srd/index.php">SRD<a></sub>`);
+Hooks.on('renderActorDirectory', async (object, html) => {
+  party.addControl(object, html);
+});
 
-    // License text
-    const template = "systems/owb/templates/chat/license.html";
-    const rendered = await renderTemplate(template);
-    gamesystem.find(".system").append(rendered);
-    
-    // User guide
-    let docs = html.find("button[data-action='docs']");
-    const styling = "border:none;margin-right:2px;vertical-align:middle;margin-bottom:5px";
-    $(`<button data-action="userguide"><img src='systems/owb/assets/default/ability.png' width='16' height='16' style='${styling}'/>WWII:OWB Guide</button>`).insertAfter(docs);
-    html.find('button[data-action="userguide"]').click(ev => {
-      new FrameViewer('https://chrisesharp.github.io/foundryvtt-owb', {resizable: true}).render(true);
-    });
-  }
+Hooks.on('renderSettings', async (object, html) => {
+  const gamesystem = html.querySelector('.info');
+  // License text
+  const template = 'systems/owb/templates/chat/license.html';
+  const rendered = await renderTemplate(template, {});
+  gamesystem.querySelector('.system').innerHTML += rendered;
+
+  // User guide
+  const docs = html.querySelector("button[data-app='support']");
+  const site = 'https://chrisesharp.github.io/foundryvtt-owb';
+  const styling = 'border:none;margin-right:2px;vertical-align:middle;margin-bottom:5px';
+  const button = `<button data-action="userguide"><img src='systems/owb/assets/default/ability.png' width='16' height='16' style='${styling}'/>WWII:OWB Guide</button>`;
+  docs.parentNode.innerHTML += button;
+  html.querySelector('button[data-action="userguide"]').addEventListener('click', () => {
+    const fv = new FrameViewer({ url: site });
+    fv.url = site;
+    fv.render(true);
+  });
 });
 
 Hooks.on("preCreateCombatant", (combatant, data, options, id) => {
@@ -123,7 +125,7 @@ Hooks.on("getCombatTrackerEntryContext", OWBCombat.addContextEntry);
 
 Hooks.on("renderChatLog", (app, html, data) => OWBItem.chatListeners(html));
 Hooks.on("getChatLogEntryContext", chat.addChatMessageContextOptions);
-Hooks.on("renderChatMessage", chat.addChatMessageButtons);
+Hooks.on("renderChatMessageHTML", chat.addChatMessageButtons);
 Hooks.on("updateActor", party.update);
 
 Hooks.once("dragRuler.ready", (SpeedProvider) => {

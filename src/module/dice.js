@@ -1,3 +1,5 @@
+const { renderTemplate } = foundry.applications.handlebars;
+
 export class OWBDice {
   static digestResult(data, roll) {
     let result = {

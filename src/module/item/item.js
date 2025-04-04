@@ -1,4 +1,5 @@
 import { OWBDice } from "../dice.js";
+const { renderTemplate } = foundry.applications.handlebars;
 
 /**
  * Override and extend the basic :class:`Item` implementation
@@ -36,8 +37,9 @@ export class OWBItem extends Item {
   }
 
   static chatListeners(html) {
-    html.on("click", ".card-buttons button", this._onChatCardAction.bind(this));
-    html.on("click", ".item-name", this._onChatCardToggleContent.bind(this));
+    // TODO
+    // html.on("click", ".card-buttons button", this._onChatCardAction.bind(this));
+    // html.on("click", ".item-name", this._onChatCardToggleContent.bind(this));
   }
 
  async  getChatData(htmlOptions={async: true}) {

@@ -1,26 +1,69 @@
 import { OWBEntityTweaks } from "../dialog/entity-tweaks.js";
+const { DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { ActorSheetV2 } = foundry.applications.sheets;
+const { renderTemplate } = foundry.applications.handlebars;
+const { DragDrop } = foundry.applications.ux;
 
-export class OWBActorSheet extends ActorSheet {
-  constructor(...args) {
-    super(...args);
+export class OWBActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
+  #dragDrop;
+  constructor(options = {}) {
+    super(options);
+    this.#dragDrop = this.#createDragDropHandlers();
   }
-  /* -------------------------------------------- */
 
-  async getData() {
-    const data = foundry.utils.deepClone(await super.getData());
-    data.owner = this.actor.isOwner;
-    data.editable = this.actor.sheet.isEditable;
+  #createDragDropHandlers() {
+    return this.options.dragDrop.map((d) => {
+      d.permissions = {
+        dragstart: this._canDragStart.bind(this),
+        drop: this._canDragDrop.bind(this),
+      };
+      d.callbacks = {
+        dragstart: this._onDragStart.bind(this),
+        dragover: this._onDragOver.bind(this),
+        drop: this._onDrop.bind(this),
+      };
+      return new DragDrop(d);
+    });
+  }
+  
+  static DEFAULT_OPTIONS = {
+    classes: ['owb', 'sheet', 'actor'],
+    position: {
+      width: 450,
+      height: 530,
+    },
+    actions: {
+      rollHitDie: this._onRollHitPoints,
+      itemSummary: this._onItemSummary,
+      roll: this._onRoll,
+      itemEdit: this._itemEdit,
+      itemDelete: this._itemDelete,
+    },
+    window: {
+      resizable: true,
+      // controls: [HVPDF.getPDFButton()],
+    },
+    // Custom property that's merged into `this.options`
+    dragDrop: [{ dragSelector: '[data-drag]', dropSelector: null }],
+    form: {
+      submitOnChange: true,
+    },
+  };
 
-    data.config = CONFIG.OWB;
-    // Settings
-    data.config.ascendingAC = game.settings.get("owb", "ascendingAC");
-    data.config.encumbrance = game.settings.get("owb", "encumbranceOption");
-
-    data.isNew = this.actor.isNew();
-    data.data = this.actor.system;
-    // // Prepare owned items
-    // this._prepareItems(data);
-    return data;
+  async _prepareContext(options) {
+    const config = CONFIG.OWB;
+    config.ascendingAC = game.settings.get("owb", "ascendingAC");
+    config.encumbrance = game.settings.get("owb", "encumbranceOption");
+    return {
+      options: options,
+      owner: this.actor.isOwner,
+      actor: this.actor,
+      editable: this.actor.sheet.isEditable,
+      config: config,
+      isNew: this.actor.isNew(),
+      data: this.actor.system,
+      tabs: this._getTabs(options.parts),
+    }
   }
 
   /**
@@ -39,12 +82,23 @@ export class OWBActorSheet extends ActorSheet {
     return data;
   }
 
-  activateEditor(target, editorOptions, initialContent) {
-    // remove some controls to the editor as the space is lacking
-    if (target === "system.details.biography") {
-      editorOptions.toolbar = "styleselect bullist hr table removeFormat save";
-    }
-    super.activateEditor(target, editorOptions, initialContent);
+  /** @override */
+  _onRender(_context, _options) {
+    this.#dragDrop.forEach((d) => d.bind(this.element));
+    const html = this.element;
+  }
+
+  static _itemEdit(_event, element) {
+    const li = element.parentNode.parentNode;
+    const item = this.actor.items.get(li.dataset.itemId);
+    item?.sheet?.render(true);
+  }
+
+  static async _itemDelete(_event, element) {
+    const li = element.parentNode.parentNode;
+    const itemID = li.dataset.itemId;
+    const item = this.actor.items.get(itemID);
+    await item.delete();
   }
 
   async _onItemSummary(event) {
@@ -139,9 +193,6 @@ export class OWBActorSheet extends ActorSheet {
       const actorObject = this.actor;
       actorObject.rollHitDice({ event: event });
     });
-
-    // Everything below here is only needed if the sheet is editable
-    if (!this.options.editable) return;
   }
 
   // Override to set resizable initial size
@@ -213,5 +264,15 @@ export class OWBActorSheet extends ActorSheet {
       ].concat(buttons);
     }
     return buttons;
+  }
+
+  /** The following pieces set up drag handling and are unlikely to need modification  */
+
+  /**
+   * Returns an array of DragDrop instances
+   * @type {DragDrop[]}
+   */
+  get dragDrop() {
+    return this.#dragDrop;
   }
 }

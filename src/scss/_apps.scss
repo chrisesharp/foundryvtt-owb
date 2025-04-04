@@ -1,11 +1,11 @@
-@at-root .owb.roll-dialog {
+&.roll-dialog {
   .roll-details {
     font-weight: bold;
     text-align: center;
   }
 }
 
-.owb.dialog.creator {
+&.dialog.creator {
   .attribute-list {
     .form-fields {
       flex: 0 0 50px;
@@ -32,7 +32,7 @@
   }
 }
 
-&.owb.dialog.party-xp {
+&.dialog.party-xp {
   .actors {
     max-height: 250px;
     padding: 0 4px 0;
@@ -64,7 +64,7 @@
   }
 }
 
-&.owb.dialog.party-select {
+&.dialog.party-select {
   .actor-list {
     padding: 0 4px 0;
     max-height: 250px;
@@ -87,7 +87,7 @@
   }
 }
 
-&.owb.dialog.party-sheet {
+&.dialog.party-sheet {
   min-width: 250px;
   min-height: 250px;
   .window-content {
@@ -192,7 +192,7 @@
   }
 }
 
-&.owb.dialog.modifiers {
+&.dialog.modifiers {
   .attribute-bonuses {
     label {
       font-weight: bold;
@@ -239,7 +239,7 @@
   }
 }
 
-&.owb.game-license {
+&.game-license {
   font-size: var(--font-size-12);
   padding: 10px;
   flex-basis: 100%;
@@ -252,7 +252,7 @@
   }
 }
 
-&.owb.chat-block {
+&.chat-block {
   margin: 0;
   .chat-header {
     height: 46px;
@@ -328,7 +328,7 @@
   }
 }
 
-&.owb.chat-card {
+&.chat-card {
   font-style: normal;
   font-size: 12px;
 

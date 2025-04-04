@@ -3,7 +3,7 @@
 /* ----------------------------------------- */
 /*  Basic Structure                          */
 /* ----------------------------------------- */
-@at-root .owb.sheet.actor.character {
+&.sheet.actor.character {
   min-width: 450px;
   min-height: 550px;
 
@@ -12,8 +12,8 @@
     // padding: 0px;
     background-repeat: no-repeat;
     background-size: cover;
-
     background-image: url("../assets/folder-page.png");
+    overflow: visible;
   }
 
   .sheet-frame {
@@ -126,14 +126,18 @@
       }
         height: 70px;
         position: relative;
+        input.health-value,
         .health-value {
           font-size: 16px;
+          color: $colorDark;
+          border: none;
           text-align: center;
           font-weight: bolder;
           text-shadow: 0 0 2px white, 0 1px 2px white, 1px 0 2px white, 1px 1px 2px white; 
         }
         .health-top {
           border-bottom: none;
+          background-color: unset;
           position: absolute;
           font-size: 24px;
           top: 10px;
@@ -143,6 +147,7 @@
         .health-bottom {
           border-bottom: none;
           position: absolute;
+          background-color: unset;
           bottom: 8px;
           width: 40px;
           right: calc(50% + -20px);

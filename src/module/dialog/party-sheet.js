@@ -1,4 +1,5 @@
 import { OWBPartyXP } from "./party-xp.js";
+const { renderTemplate } = foundry.applications.handlebars;
 
 export class OWBPartySheet extends FormApplication {
   

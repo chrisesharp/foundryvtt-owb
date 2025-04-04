@@ -1,4 +1,5 @@
 import { OWBActorSheetVehicle } from "./vehicle-sheet.js";
+const { renderTemplate } = foundry.applications.handlebars;
 
 /**
  * Extend the basic ActorSheet with some very simple modifications

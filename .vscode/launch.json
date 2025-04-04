@@ -7,13 +7,14 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "FoundryVTT",
-            "url": "http://localhost:30000/",
-            "webRoot": "/Applications/FoundryVTT.app/Contents/Resources/app/public/",
-            "sourceMapPathOverrides": {
-                "/systems/owb": "${workspaceFolder}/dist",
-            }
-
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:30000",
+            "webRoot": "/Users/chrissharp/Development/GitHub/chrisesharp/foundryvtt-owb/dist",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js",
+                "!**/node_modules/**"
+            ],
+            "sourceMaps": true,
         }
     ]
 }

@@ -1,36 +1,127 @@
 import { OWBActorSheet } from "./actor-sheet.js";
 import { OWBCharacterModifiers } from "../dialog/character-modifiers.js";
 import { OWBCharacterCreator } from "../dialog/character-creation.js";
+const { renderTemplate } = foundry.applications.handlebars;
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  */
 export class OWBActorSheetCharacter extends OWBActorSheet {
-  constructor(...args) {
-    super(...args);
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Extend and override the default options used by the 5e Actor Sheet
-   * @returns {Object}
-   */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["owb", "sheet", "actor", "character"],
-      template: "systems/owb/templates/actors/character-sheet.html",
+  static DEFAULT_OPTIONS = {
+    classes: ['owb', 'sheet', 'actor', 'character'],
+    position: {
       width: 450,
       height: 530,
+    },
+    actions: {
+      rollHitDie: this._onRollHitPoints,
+      itemSummary: this._onItemSummary,
+      roll: this._onRoll,
+      itemEdit: this._itemEdit,
+      itemDelete: this._itemDelete,
+    },
+    window: {
       resizable: true,
-      tabs: [
-        {
-          navSelector: ".sheet-tabs",
-          contentSelector: ".sheet-body",
-          initial: "attributes",
-        },
-      ],
-    });
+    },
+    // Custom property that's merged into `this.options`
+    dragDrop: [{ dragSelector: '[data-drag]', dropSelector: null }],
+    form: {
+      submitOnChange: true,
+    },
+  };
+
+  /** @override */
+  static PARTS = {
+    header: {
+      template: 'systems/owb/templates/actors/partials/character-header.hbs',
+    },
+    tabs: {
+      template: 'systems/owb/templates/actors/partials/character-nav.hbs',
+    },
+    abilities: {
+      template: 'systems/owb/templates/actors/partials/character-abilities.hbs',
+    },
+    attributes: {
+      template: 'systems/owb/templates/actors/partials/character-attributes.hbs',
+    },
+    inventory: {
+      template: 'systems/owb/templates/actors/partials/character-inventory.hbs',
+    },
+    notes: {
+      template: 'systems/owb/templates/actors/partials/actor-notes.hbs',
+    },
+  };
+
+  /** @override */
+  _configureRenderOptions(options) {
+    super._configureRenderOptions(options);
+    // Not all parts always render
+    options.parts = ['header', 'tabs', 'abilities', 'attributes', 'inventory', 'notes'];
+  }
+
+  /**
+  * Prepare data for rendering the Actor sheet
+  * The prepared data object contains both the actor data as well as additional sheet options
+  */
+  async _prepareContext(options) {
+    const data = await super._prepareContext(options);
+    return this._prepareItems(data);
+  }
+
+  _getTabs(parts) {
+    // If you have sub-tabs this is necessary to change
+    const tabGroup = 'primary';
+    // Default tab for first time it's rendered this session
+    if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'attributes';
+    return parts.reduce((tabs, partId) => {
+      const tab = {
+        cssClass: '',
+        group: tabGroup,
+        // Matches tab property to
+        id: '',
+        // FontAwesome Icon, if you so choose
+        icon: '',
+        // Run through localization
+        label: 'HV.tabs.',
+      };
+      switch (partId) {
+        case 'header':
+        case 'tabs':
+          return tabs;
+        default:
+          tab.id = partId;
+          tab.label += partId;
+          break;
+      }
+      if (this.tabGroups[tabGroup] === tab.id) tab.cssClass = 'active';
+      tabs[partId] = tab;
+      return tabs;
+    }, {});
+  }
+
+  /** @override */
+  async _preparePartContext(partId, context) {
+    switch (partId) {
+      case 'notes':
+        context.tab = context.tabs[partId];
+        context.enrichedBio = await TextEditor.enrichHTML(this.actor.system.details.biography, {
+          secrets: this.document.isOwner,
+          rollData: this.actor.getRollData(),
+          // Relative UUID resolution
+          relativeTo: this.actor,
+        });
+        context.enrichedNotes = await TextEditor.enrichHTML(this.actor.system.details.notes, {
+          secrets: this.document.isOwner,
+          rollData: this.actor.getRollData(),
+          // Relative UUID resolution
+          relativeTo: this.actor,
+        });
+        break;
+      default:
+        context.tab = context.tabs[partId];
+        break;
+    }
+    return context;
   }
 
   generateScores() {
@@ -39,17 +130,6 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
       left: this.position.left + (this.position.width - 400) / 2,
     }).render(true);
   }
-
-  /**
-   * Prepare data for rendering the Actor sheet
-   * The prepared data object contains both the actor data as well as additional sheet options
-   */
-  async getData() {
-    const data = await super.getData();
-    return this._prepareItems(data);
-    // return data;
-  }
-
 
   async _chooseLang() {
     let choices = CONFIG.OWB.languages;
