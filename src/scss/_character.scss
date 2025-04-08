@@ -100,8 +100,16 @@
         .description {
           margin: 2px;
           .editor {
-            .tox .tox-tbtn {
-              height: 24px;
+            .prosemirror {
+              position: relative;
+          
+              button.toggle {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                height: 32px;
+                width: 32px;
+              }
             }
             height: 110px;
           }

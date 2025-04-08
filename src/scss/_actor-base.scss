@@ -155,7 +155,9 @@
     }
   }
   .sheet-body {
-    height: calc(100% - 140px);
+    // height: calc(100% - 140px);
+    height: 340px;
+    overflow: scroll;
     .tab {
       height: 100%;
     }
@@ -243,6 +245,10 @@
       }
     }
     .inventory {
+      .languages .language .item-name {
+        align-content: center;
+        font-size: 10px;
+      } 
       overflow: auto;
       .item-titles {
         text-align: center;
@@ -333,6 +339,7 @@
           .item-image {
             flex-basis: 30px;
             flex-grow: 0;
+            height: -webkit-fill-available;
             background-size: contain;
             background-repeat: no-repeat;
           }
@@ -427,7 +434,7 @@
       }
       &.languages {
         .item-entry {
-          line-height: 19px;
+          line-height: 12px;
         }
         .item-controls {
           flex-basis: 0px;
@@ -447,8 +454,19 @@
       }
     }
     .editor {
-      height: 300px;
+      height: 150px;
       padding: 4px;
+      &.prosemirror {
+        position: relative;
+    
+        button.toggle {
+          position: absolute;
+          top: 5px;
+          right: 5px;
+          height: 32px;
+          width: 32px;
+        }
+      }
     }
   }
 }

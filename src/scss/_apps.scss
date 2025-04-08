@@ -264,16 +264,22 @@
     padding: 2px;
     box-shadow: 0 0 2px #fff inset;
     .chat-title {
+      font-family: $font-primary;
       margin: 4px 0;
       height: 30px;
       overflow: hidden;
-      h2 {
+      h2, h3 {
+        font-family: $font-primary;
         border: none;
         line-height: 34px;
         margin: 0;
         text-indent: 10px;
         font-size: 16px;
         word-break: break-all;
+        color: $colorFaint;
+      }
+      h3 {
+        font-size: 14px;
       }
     }
     .chat-img {
@@ -288,6 +294,7 @@
   }
   .chat-details {
     padding: 4px;
+    font-family: $font-primary;
     font-size: 13px;
   }
   .roll-result {
@@ -344,6 +351,7 @@
     }
 
     h3 {
+      font-family: $font-primary;
       flex: 1;
       margin: 0;
       line-height: 36px;
@@ -355,6 +363,7 @@
   }
 
   .card-content {
+    font-family: $font-primary;
     margin: 5px 0;
     .treasure-list {
       padding: 0;

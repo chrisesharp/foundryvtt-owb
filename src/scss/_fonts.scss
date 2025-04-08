@@ -9,9 +9,14 @@
     & h2,
     & h3,
     & h4 {
-        font-family: 'Special Elite', cursive;
+        font-family: $font-primary;
         line-height: 1.4;
+        font-size: revert;
         color: $colorOlive;
         text-shadow: none;
+    }
+
+    & h1 {
+        font-size: x-large;
     }
 }

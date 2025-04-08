@@ -8,11 +8,11 @@
             {{#unless isNew}}
             <a data-action="modifiers" title="{{localize 'OWB.Modifiers'}}"><i class="fas fa-book"></i></a>
             {{else}}
-            <a data-action="generate-scores" title="{{localize 'OWB.dialog.generateScores'}}"><i class="fas fa-dice blinking"></i></a>
+            <a data-action="generateScores" title="{{localize 'OWB.dialog.generateScores'}}"><i class="fas fa-dice blinking"></i></a>
             {{/unless}}
         </div>
         <ul class="attributes">
-            <li class="attribute ability-score" data-score="str">
+            <li class="attribute ability-score" data-action="rollCheck" data-score="str">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.str.long' }}">
                     <a>{{ localize "OWB.scores.str.short" }}</a>
                 </h4>
@@ -21,7 +21,7 @@
                         data-dtype="Number" />
                 </div>
             </li>
-            <li class="attribute ability-score" data-score="int">
+            <li class="attribute ability-score" data-action="rollCheck" data-score="int">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.int.long' }}">
                     <a>{{ localize "OWB.scores.int.short" }}</a>
                 </h4>
@@ -30,7 +30,7 @@
                         data-dtype="Number" />
                 </div>
             </li>
-            <li class="attribute ability-score" data-score="wis">
+            <li class="attribute ability-score" data-action="rollCheck" data-score="wis">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.wis.long' }}">
                     <a>{{ localize "OWB.scores.wis.short" }}</a>
                 </h4>
@@ -39,7 +39,7 @@
                         data-dtype="Number" />
                 </div>
             </li>
-            <li class="attribute ability-score" data-score="con">
+            <li class="attribute ability-score" data-action="rollCheck" data-score="con">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.con.long' }}">
                     <a>{{ localize "OWB.scores.con.short" }}</a>
                 </h4>
@@ -48,7 +48,7 @@
                         data-dtype="Number" />
                 </div>
             </li>
-            <li class="attribute ability-score" data-score="dex">
+            <li class="attribute ability-score" data-action="rollCheck" data-score="dex">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.dex.long' }}">
                     <a>{{ localize "OWB.scores.dex.short" }}</a>
                 </h4>
@@ -57,7 +57,7 @@
                         data-dtype="Number" />
                 </div>
             </li>
-            <li class="attribute ability-score" data-score="cha">
+            <li class="attribute ability-score" data-action="rollCheck" data-score="cha">
                 <h4 class="attribute-name box-title" title="{{ localize 'OWB.scores.cha.long' }}">
                     <a>{{ localize "OWB.scores.cha.short" }}</a>
                 </h4>
@@ -102,7 +102,7 @@
             <ul class="attributes flexrow">
                 <li class="attribute hit-dice">
                     <h4 class="attribute-name box-title" title="{{ localize 'OWB.HitDice' }}">
-                        <a>{{ localize "OWB.HitDiceShort" }}</a>
+                        <a data-action="onRollHitDice">{{ localize "OWB.HitDiceShort" }}</a>
                     </h4>
                     <div class="attribute-value">
                         <input name="system.hp.hd" type="text" value="{{data.hp.hd}}" placeholder=""
@@ -110,18 +110,18 @@
                     </div>
                 </li>
                 {{!-- Base Hit Bonus --}}
-                <li class="attribute hit-dice">
+                <li class="attribute">
                     <h4 class="attribute-name box-title" title="{{ localize 'OWB.BHB' }}">
                         <a>{{ localize "OWB.BHB" }}</a>
                     </h4>
                     <div class="attribute-value">
-                        <input name="system.hp.hd" type="number" value="{{data.thac0.bhb}}" disabled/>
+                        <input name="system.thac0.bhb" type="number" value="{{data.thac0.bhb}}" disabled/>
                     </div>
                 </li>
                 {{!-- Saving Throw --}}
-                <li class="attribute saving-throw" data-save="save">
+                <li class="attribute saving-throw">
                     <h4 class="attribute-name box-title">
-                        <a>{{ localize "OWB.saves.save.short" }}</a>
+                        <a data-action="onRollSave" data-save="save">{{ localize "OWB.saves.save.short" }}</a>
                     </h4>
                     <div class="attribute-value">
                         <input name="system.saves.save.value" type="text" value="{{data.saves.save.value}}" placeholder="0"
@@ -131,7 +131,7 @@
         </div>
         <div class="flexrow">
             <ul class="attributes flexrow">
-                <li class="attribute attack" data-attack="melee">
+                <li class="attribute attack" data-action="attack" data-attack="melee">
                     <h4 class="attribute-name box-title" title="{{localize 'OWB.Melee'}}"><a>{{localize 'OWB.MeleeShort'}}</a></h4>
                     <div class="attribute-value"
                         title="{{localize 'OWB.scores.str.long'}}({{data.scores.str.mod}}) + {{localize 'OWB.Modifier'}}({{data.thac0.mod.melee}})">
@@ -147,7 +147,7 @@
                     </div>
                 </li>
                 {{/if}}
-                <li class="attribute attack" data-attack="missile">
+                <li class="attribute attack" data-action="attack" data-attack="missile">
                     <h4 class="attribute-name box-title" title="{{localize 'OWB.Missile'}}"><a>{{localize 'OWB.MissileShort'}}</a></h4>
                     <div class="attribute-value"
                         title="{{localize 'OWB.scores.dex.long'}}({{data.scores.dex.mod}}) + {{localize 'OWB.Modifier'}}({{data.thac0.mod.missile}})">

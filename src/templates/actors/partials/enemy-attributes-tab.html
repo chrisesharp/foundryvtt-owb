@@ -83,7 +83,7 @@
                         <div class="item flexrow" data-item-id="{{item.id}}">
                             <div class="item-pattern" title="{{localize 'OWB.items.pattern'}}" style="background:linear-gradient(0.25turn, {{item.system.pattern}}, transparent)"></div>
                             <div class="item-name {{#if item.system.roll}}item-rollable{{/if}} flexrow">
-                                <div class="item-image" style="background-image: url({{item.img}})"></div>
+                                <div class="item-image" data-action="onRollItem" style="background-image: url({{item.img}})"></div>
                                 <h4 title="{{item.name}}">
                                     {{item.name~}}
                                 </h4>

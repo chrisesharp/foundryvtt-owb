@@ -36,10 +36,10 @@ export const addChatMessageButtons = function(msg, html, data) {
   }
   // Buttons
   const roll = html.querySelector('.damage-roll');
-  if (roll.length > 0) {
+  if (roll) {
     const total = roll.querySelector('.dice-total');
     roll.innerHHTML += `<div class="dice-damage"><button type="button" data-action="apply-damage"><i class="fas fa-tint"></i></button></div>`;
-    roll.querySelector('button[data-action="apply-damage"]').addEventListener('click', (ev) => {
+    roll.querySelector('button[data-action="apply-damage"]')?.addEventListener('click', (ev) => {
       ev.preventDefault();
       applyChatCardDamage(roll, 1);
     });

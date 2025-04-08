@@ -66,7 +66,7 @@ export class OWBItem extends Item {
   rollWeapon(options = {}) {
     const isNPC = this.actor.type != "character";
     const data = this.system;
-    const type = isNPC ? "attack" : "melee";
+    let type = isNPC ? "attack" : "melee";
     
     let calibre;
     let ammo;
@@ -163,7 +163,7 @@ export class OWBItem extends Item {
   async rollFormula(options = {}) {
     const data = this.system;
     if (!data.roll) {
-      throw new Error("This Item does not have a formula to roll!");
+      return;
     }
 
     const label = `${this.name}`;

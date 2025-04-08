@@ -2,6 +2,7 @@ import { OWBActorSheet } from "./actor-sheet.js";
 import { OWBCharacterModifiers } from "../dialog/character-modifiers.js";
 import { OWBCharacterCreator } from "../dialog/character-creation.js";
 const { renderTemplate } = foundry.applications.handlebars;
+import { slideToggle } from '../utils/slide.js';
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -14,11 +15,13 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
       height: 530,
     },
     actions: {
-      rollHitDie: this._onRollHitPoints,
-      itemSummary: this._onItemSummary,
-      roll: this._onRoll,
-      itemEdit: this._itemEdit,
-      itemDelete: this._itemDelete,
+      generateScores: this.generateScores,
+      modifiers: this._onShowModifiers,
+      rollCheck: this._onRollCheck,
+      rollExplore: this._onRollExploration,
+      onCaret: this._onCaret,
+      addLang: this._pushLang,
+      removeLang: this._popLang,
     },
     window: {
       resizable: true,
@@ -124,11 +127,16 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     return context;
   }
 
-  generateScores() {
+  static async generateScores() {
     new OWBCharacterCreator(this.actor, {
       top: this.position.top + 40,
       left: this.position.left + (this.position.width - 400) / 2,
     }).render(true);
+  }
+
+  static async _onRollCheck(event, target) {
+    const score = target.dataset.score;
+    this.actor.rollCheck(score, { event: event });
   }
 
   async _chooseLang() {
@@ -164,7 +172,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     });
   }
 
-  async _pushLang(header) {
+  static async _pushLang(event, header) {
     const type = header.dataset.type;
     this._chooseLang().then((dialogInput) => {
       const name = dialogInput.choice;
@@ -183,11 +191,18 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     });
   }
 
-  _popLang(table, lang) {
+  static async _popLang(event, target) {
+    event.preventDefault();
+    const header = target.parentElement.parentElement;
+    const table = target.dataset.array;
+    const lang = header.dataset.lang;
+    const itemID = header.dataset.itemId;
     const data = this.actor.system;
     let update = data[table].value.filter((el) => el.name != lang);
     let newData = {};
     newData[table] = { value: update };
+    const item = this.actor.items.get(itemID);
+    await item.delete();
     return this.actor.update({ system: newData });
   }
 
@@ -200,7 +215,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     return item.update({ "system.quantity.value": parseInt(event.target.value) });
   }
 
-  _onShowModifiers(event) {
+  static async _onShowModifiers(event) {
     event.preventDefault();
     new OWBCharacterModifiers(this.actor, {
       top: this.position.top + 40,
@@ -208,99 +223,30 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     }).render(true);
   }
 
+  static async _onRollExploration(event, target) {
+    const expl = target.dataset.exploration;
+    this.actor.rollExploration(expl, { event: event });
+  }
+
+  static async _onCaret(event, target) {
+    const items = target.parentElement.parentElement.querySelector(".item-list");
+    if (items.style.display == "none") {
+      const el = target.querySelector(".fas.fa-caret-right");
+      el.classList.remove("fa-caret-right");
+      el.classList.add("fa-caret-down");
+      slideToggle(items);
+    } else {
+      const el = target.querySelector(".fas.fa-caret-down");
+      el.classList.remove("fa-caret-down");
+      el.classList.add("fa-caret-right");
+      slideToggle(items);
+    }
+  }
   /**
    * Activate event listeners using the prepared sheet HTML
    * @param html {HTML}   The prepared HTML object ready to be rendered into the DOM
    */
   activateListeners(html) {
-    super.activateListeners(html);
-
-    html.find(".ability-score .attribute-name a").click((event) => {
-      const actorObject = this.actor;
-      const element = event.currentTarget;
-      const score = element.parentElement.parentElement.dataset.score;
-      const stat = element.parentElement.parentElement.dataset.stat;
-      if (!score) {
-        if (stat === "lr") {
-          actorObject.rollLoyalty(score, { event: event });
-        }
-      } else {
-        actorObject.rollCheck(score, { event: event });
-      }
-    });
-
-    html.find(".exploration .attribute-name a").click((event) => {
-      const actorObject = this.actor;
-      const element = event.currentTarget;
-      const expl = element.parentElement.parentElement.dataset.exploration;
-      actorObject.rollExploration(expl, { event: event });
-    });
-
-    html.find(".inventory .item-titles .item-caret").click((event) => {
-      const items = $(event.currentTarget.parentElement.parentElement).children(".item-list");
-      if (items.css("display") == "none") {
-        const el = $(event.currentTarget).find(".fas.fa-caret-right");
-        el.removeClass("fa-caret-right");
-        el.addClass("fa-caret-down");
-        items.slideDown(200);
-      } else {
-        const el = $(event.currentTarget).find(".fas.fa-caret-down");
-        el.removeClass("fa-caret-down");
-        el.addClass("fa-caret-right");
-        items.slideUp(200);
-      }
-    });
-
-    html.find("a[data-action='modifiers']").click((ev) => {
-      this._onShowModifiers(ev);
-    });
-
-    // Everything below here is only needed if the sheet is editable
-    if (!this.options.editable) return;
-
-    // Update Inventory Item
-    html.find(".item-edit").click((ev) => {
-      const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.items.get(li.data("itemId"));
-      item.sheet.render(true);
-    });
-
-    // Delete Inventory Item
-    html.find(".item-delete").click((ev) => {
-      const li = $(ev.currentTarget).parents(".item");
-      this.actor.deleteEmbeddedDocuments("Item",[li.data("itemId")]);
-      li.slideUp(200, () => this.render(false));
-    });
-
-    html.find(".item-push").click((event) => {
-      event.preventDefault();
-      const header = event.currentTarget;
-      return this._pushLang(header);
-    });
-
-    html.find(".item-pop").click((event) => {
-      event.preventDefault();
-      const header = event.currentTarget;
-      const table = header.dataset.array;
-      this._popLang(
-        table,
-        $(event.currentTarget).closest(".item").data("lang")
-      );
-    });
-
-    html.find(".item-create").click((event) => {
-      event.preventDefault();
-      const header = event.currentTarget;
-      const type = header.dataset.type;
-      const itemData = {
-        name: `New ${type.capitalize()}`,
-        type: type,
-        system: foundry.utils.duplicate(header.dataset),
-      };
-      //delete itemData.system["type"];
-      return this.actor.createEmbeddedDocuments("Item",[itemData]);
-    });
-
     //Toggle Equipment
     html.find(".item-toggle").click(async (ev) => {
       const li = $(ev.currentTarget).parents(".item");
@@ -310,14 +256,6 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
           equipped: !item.system.equipped,
         },
       });
-    });
-
-    html.find(".quantity input")
-        .click((ev) => ev.target.select())
-        .change(this._onQtChange.bind(this));
-
-    html.find("a[data-action='generate-scores']").click((ev) => {
-      this.generateScores(ev);
     });
   }
 }
