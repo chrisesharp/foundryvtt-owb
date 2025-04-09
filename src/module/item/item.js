@@ -1,5 +1,6 @@
 import { OWBDice } from "../dice.js";
 const { renderTemplate } = foundry.applications.handlebars;
+const { DialogV2 } = foundry.applications.api;
 
 /**
  * Override and extend the basic :class:`Item` implementation
@@ -107,15 +108,14 @@ export class OWBItem extends Item {
     }
 
     const button = (type) => {
-      let icon = (type === 'melee') ? '<i class="fas fa-fist-raised"></i>': '<i class="fas fa-bullseye"></i>';
+      let icon = (type === 'melee') ? 'fas fa-fist-raised': 'fas fa-bullseye';
       return {
         icon: icon,
         label: type.charAt(0).toUpperCase() + type.slice(1),
-        callback: () => {
-          let burst = $("#burst")[0].checked;
-          let suppress = $("#suppress")[0].checked;
-          rollData['burst'] = burst;
-          rollData['suppress'] = suppress;
+        action: type,
+        callback: (html) => {
+          rollData['burst'] = html.currentTarget.querySelector("#burst").checked;
+          rollData['suppress'] = html.currentTarget.querySelector("#suppress").checked;
           this.actor.targetAttack(rollData, type, options);
         }
       }
@@ -128,14 +128,14 @@ export class OWBItem extends Item {
     }
 
     if (data.missile) {
-      let btns = {}
+      let btns = []
       if (data.melee) {
-        btns['melee'] = button("melee");
+        btns.push(button("melee"));
       }
-      btns['short'] = button("short");
-      btns['medium'] = button("medium");
-      btns['long'] = button("long");
-      btns['extreme'] = button("extreme");
+      btns.push(button("short"));
+      btns.push(button("medium"));
+      btns.push(button("long"));
+      btns.push(button("extreme"));
 
       let extra_options = "<label>Fire:</label>" + fire_opt("normal",true, true);
       if (data.burst) {
@@ -150,12 +150,18 @@ export class OWBItem extends Item {
         extra_options += fire_opt("suppress");
       }
 
-      // Dialog
-      new Dialog({
-        title: "Choose Attack Range",
+      DialogV2.wait({
+        classes: ['owb', 'ranged-attack'],
+        window: {
+          title: 'Choose Attack Range',
+        },
+        modal: false,
         content: extra_options,
-        buttons: btns
-      }).render(true);
+        buttons: btns,
+        rejectClose: false,
+        submit: () => {
+        },
+      });
       return true;
     } else if (!data.missile && !isNPC) {
       type = "melee";

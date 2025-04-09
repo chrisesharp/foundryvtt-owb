@@ -1,4 +1,5 @@
 const { renderTemplate } = foundry.applications.handlebars;
+const { DialogV2 } = foundry.applications.api;
 
 export class OWBDice {
   static digestResult(data, roll) {
@@ -275,37 +276,46 @@ export class OWBDice {
     };
     if (skipDialog) { return OWBDice.sendRoll(rollData); }
 
-    let buttons = {
-      ok: {
-        label: game.i18n.localize("OWB.Roll"),
-        icon: '<i class="fas fa-dice-d20"></i>',
+    const buttons = [
+      {
+        action: 'ok',
+        label: 'OWB.Roll',
+        icon: 'fas fa-dice-d20',
         callback: (html) => {
           rolled = true;
-          rollData.form = html[0].querySelector("form");
+          rollData.form = html.currentTarget.querySelector("form");
           roll = OWBDice.sendRoll(rollData);
         },
       },
-      cancel: {
-        icon: '<i class="fas fa-times"></i>',
-        label: game.i18n.localize("OWB.Cancel"),
-        callback: (html) => { },
+      {
+        action: 'cancel',
+        icon: 'fas fa-times',
+        label: 'OWB.Cancel',
+        callback: () => { },
       },
-    };
+    ];
 
     const html = await renderTemplate(template, dialogData);
     let roll;
 
-    //Create Dialog window
     return new Promise((resolve) => {
-      new Dialog({
-        title: title,
+      DialogV2.wait({
+        classes: ['owb'],
+        window: {
+          title: title ?? '',
+        },
+        modal: false,
         content: html,
         buttons: buttons,
-        default: "ok",
-        close: () => {
-          resolve(rolled ? roll : false);
+        rejectClose: false,
+        submit: () => {
+          if (rolled) {
+            resolve(roll);
+          } else {
+            PromiseRejectionEvent;
+          }
         },
-      }).render(true);
+      });
     });
   }
 
@@ -320,14 +330,14 @@ export class OWBDice {
   } = {}) {
     let rolled = false;
     const template = "systems/owb/templates/chat/roll-dialog.html";
-    let dialogData = {
+    const dialogData = {
       formula: parts.join(" "),
       data: data,
       rollMode: game.settings.get("core", "rollMode"),
       rollModes: CONFIG.Dice.rollModes,
     };
 
-    let rollData = {
+    const rollData = {
       parts: parts,
       data: data,
       title: title,
@@ -341,39 +351,48 @@ export class OWBDice {
         : OWBDice.sendRoll(rollData);
     }
 
-    let buttons = {
-      ok: {
-        label: game.i18n.localize("OWB.Roll"),
-        icon: '<i class="fas fa-dice-d20"></i>',
+    const buttons = [
+      {
+        action: 'ok',
+        label: 'OWB.Roll',
+        icon: 'fas fa-dice-d20',
         callback: (html) => {
           rolled = true;
-          rollData.form = html[0].querySelector("form");
+          rollData.form = html.currentTarget.querySelector("form");
           roll = ["melee", "missile", "attack"].includes(data.roll.type)
             ? OWBDice.sendAttackRoll(rollData)
             : OWBDice.sendRoll(rollData);
         },
       },
-      cancel: {
-        icon: '<i class="fas fa-times"></i>',
-        label: game.i18n.localize("OWB.Cancel"),
-        callback: (html) => { },
+      {
+        action: 'cancel',
+        icon: 'fas fa-times',
+        label: 'OWB.Cancel',
+        callback: () => { },
       },
-    };
+    ];
 
     const html = await renderTemplate(template, dialogData);
     let roll;
 
-    //Create Dialog window
     return new Promise((resolve) => {
-      new Dialog({
-        title: title,
+      DialogV2.wait({
+        classes: ['owb'],
+        window: {
+          title: title ?? '',
+        },
+        modal: false,
         content: html,
         buttons: buttons,
-        default: "ok",
-        close: () => {
-          resolve(rolled ? roll : false);
+        rejectClose: false,
+        submit: () => {
+          if (rolled) {
+            resolve(roll);
+          } else {
+            PromiseRejectionEvent;
+          }
         },
-      }).render(true);
+      });
     });
   }
 }

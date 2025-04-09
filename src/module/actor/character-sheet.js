@@ -3,6 +3,7 @@ import { OWBCharacterModifiers } from "../dialog/character-modifiers.js";
 import { OWBCharacterCreator } from "../dialog/character-creation.js";
 const { renderTemplate } = foundry.applications.handlebars;
 import { slideToggle } from '../utils/slide.js';
+const { DialogV2 } = foundry.applications.api;
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -110,35 +111,43 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
   }
 
   async _chooseLang() {
-    let choices = CONFIG.OWB.languages;
-    let templateData = { choices: choices },
-      dlg = await renderTemplate(
-        "systems/owb/templates/actors/dialogs/lang-create.html",
-        templateData
-      );
-    //Create Dialog window
-    return new Promise((resolve) => {
-      new Dialog({
-        title: "Choose Language",
-        content: dlg,
-        buttons: {
-          ok: {
-            label: game.i18n.localize("OWB.Ok"),
-            icon: '<i class="fas fa-check"></i>',
-            callback: (html) => {
-              resolve({
-                choice: html.find('select[name="choice"]').val(),
-                fluency: html.find('select[name="fluency"]').val(),
-              });
-            },
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize("OWB.Cancel"),
-          },
+    const choices = CONFIG.OWB.languages;
+    const templateData = { choices: choices };
+    const dlg = await renderTemplate("systems/owb/templates/actors/dialogs/lang-create.html", templateData);
+    buttons = [
+      {
+        action: 'ok',
+        label: 'OWB.Ok',
+        icon: 'fas fa-check',
+        callback: (html) => {
+          resolve({
+            choice: html.querySelector('select[name="choice"]').value,
+            fluency: html.querySelector('select[name="fluency"]').value,
+          });
         },
-        default: "ok",
-      }).render(true);
+      },
+      {
+        action: 'cancel',
+        icon: 'fas fa-times',
+        label: 'OWB.Cancel',
+      },
+    ];
+    DialogV2.wait({
+      classes: ['owb'],
+      window: {
+        title: 'Choose Language',
+      },
+      modal: false,
+      content: dlg,
+      buttons: buttons,
+      rejectClose: false,
+      submit: () => {
+        if (rolled) {
+          resolve(roll);
+        } else {
+          PromiseRejectionEvent;
+        }
+      },
     });
   }
 

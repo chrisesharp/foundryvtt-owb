@@ -23,14 +23,15 @@
           </div>
         </div>
         <div class="form-group">
-          <label>{{localize 'OWB.items.RollType'}}</label>
+          <label>{{localize 'OWB.items.RollType'}}</label> 
           <div class="form-fields">
             <select name="system.rollType">
-              {{#select data.rollType}}
+              {{selectOptions config.roll_type inverted=true}}
+              <!-- {{#select data.rollType}}
               {{#each config.roll_type as |t a|}}
               <option value="{{a}}">{{t}}</option>
               {{/each}}
-              {{/select}}
+              {{/select}} -->
             </select>
           </div>
         </div>
@@ -50,12 +51,13 @@
           <label>{{localize 'OWB.weapons.save'}}</label>
           <div class="form-fields">
             <select name="system.save">
-              {{#select data.save}}
+              {{selectOptions config.saves_short inverted=true}}
+              <!-- {{#select data.save}}
               <option value=""></option>
               {{#each config.saves_short as |save a|}}
               <option value="{{a}}">{{save}}</option>
               {{/each}}
-              {{/select}}
+              {{/select}} -->
             </select>
           </div>
         </div>

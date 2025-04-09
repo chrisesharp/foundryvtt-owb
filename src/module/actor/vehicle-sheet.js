@@ -1,5 +1,6 @@
 import { OWBActorSheet } from "./actor-sheet.js";
 const { renderTemplate } = foundry.applications.handlebars;
+const { DialogV2 } = foundry.applications.api;
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -14,6 +15,7 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
     actions: {
       reset: this._resetCounters,
       rollHP: this._onRollHitPoints,
+      createItem: this._createItem
     },
     window: {
       resizable: true,
@@ -59,30 +61,39 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
 
   async _chooseItemType(choices = ["weapon", "armor", "gear"]) {
     const templateData = { types: choices };
-    const dlg = await renderTemplate("systems/owb/templates/items/entity-create.html", templateData);
-    //Create Dialog window
-    return new Promise((resolve) => {
-      new Dialog({
-        title: game.i18n.localize("OWB.dialog.createItem"),
-        content: dlg,
-        buttons: {
-          ok: {
-            label: game.i18n.localize("OWB.Ok"),
-            icon: '<i class="fas fa-check"></i>',
-            callback: (html) => {
-              resolve({
-                type: html.find('select[name="type"]').val(),
-                name: html.find('input[name="name"]').val(),
-              });
-            },
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize("OWB.Cancel"),
-          },
+    const buttons = [
+      {
+        action: 'ok',
+        label: 'OWB.Ok',
+        icon: 'fas fa-check',
+        callback: (html) => {
+          return {
+            type: html.currentTarget.querySelector('select[name="type"]').value,
+            name: html.currentTarget.querySelector('input[name="name"]').value,
+          };
         },
-        default: "ok",
-      }).render(true);
+      },
+      {
+        action: 'cancel',
+        icon: 'fas fa-times',
+        label: 'OWB.Cancel',
+      },
+    ];
+    const dlg = await renderTemplate("systems/owb/templates/items/entity-create.html", templateData);
+    return new Promise((resolve) => {
+      DialogV2.wait({
+        classes: ['owb'],
+        window: {
+          title: 'OWB.dialog.createItem',
+        },
+        modal: false,
+        content: dlg,
+        buttons: buttons,
+        rejectClose: false,
+        submit: (result) => {
+          resolve(result);
+        },
+      });
     });
   }
 
@@ -117,7 +128,8 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
 
     // Getting back to main logic
     if (type == "choice") {
-      const choices = header.dataset.choices.split(",");
+      const choices = {};
+      header.dataset.choices.split(",").forEach((i)=> choices[i] = i);
       this._chooseItemType(choices).then((dialogInput) => {
         const itemData = createItem(dialogInput.type, dialogInput.name);
         this.actor.createEmbeddedDocuments("Item",[itemData], {});

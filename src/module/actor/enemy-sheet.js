@@ -1,82 +1,91 @@
 import { OWBActorSheetVehicle } from "./vehicle-sheet.js";
 const { renderTemplate } = foundry.applications.handlebars;
+const { DialogV2 } = foundry.applications.api;
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  */
 export class OWBActorSheetEnemy extends OWBActorSheetVehicle {
-  /**
-   * Extend and override the default options used by the 5e Actor Sheet
-   * @returns {Object}
-   */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["owb", "sheet", "enemy", "actor"],
-      template: "systems/owb/templates/actors/enemy-sheet.html",
+  static DEFAULT_OPTIONS = {
+    classes: ['owb', 'sheet', 'actor', 'enemy'],
+    position: {
       width: 450,
       height: 560,
+    },
+    actions: {
+      generateSaves: this.generateSave,
+      moraleCheck: this.moraleCheck,
+      reactionCheck: this.reactionCheck
+    },
+    window: {
       resizable: true,
-      tabs: [
-        {
-          navSelector: ".tabs",
-          contentSelector: ".sheet-body",
-          initial: "attributes",
-        },
-      ],
-    });
-  }
+    },
+    // Custom property that's merged into `this.options`
+    dragDrop: [{ dragSelector: '[data-drag]', dropSelector: null }],
+    form: {
+      submitOnChange: true,
+    },
+  };
+
+  /** @override */
+  static PARTS = {
+    header: {
+      template: 'systems/owb/templates/actors/partials/enemy-header.hbs',
+    },
+    tabs: {
+      template: 'systems/owb/templates/actors/partials/actor-nav.hbs',
+    },
+    attributes: {
+      template: 'systems/owb/templates/actors/partials/enemy-attributes.hbs',
+    },
+    notes: {
+      template: 'systems/owb/templates/actors/partials/vehicle-notes.hbs',
+    },
+  };
 
   /**
    * Enemy creation helpers
    */
-  async generateSave() {
+  static async generateSave() {
     const choices = CONFIG.OWB.enemy_saves;
     const templateData = { choices: choices };
     const dlg = await renderTemplate("systems/owb/templates/actors/dialogs/enemy-saves.html", templateData);
-    //Create Dialog window
-    new Dialog({
-      title: game.i18n.localize("OWB.dialog.generateSaves"),
-      content: dlg,
-      buttons: {
-        ok: {
-          label: game.i18n.localize("OWB.Ok"),
-          icon: '<i class="fas fa-check"></i>',
-          callback: (html) => {
-            let hd = html.find('select[name="choice"]').val();
-            this.actor.generateSave(hd);
-          },
-        },
-        cancel: {
-          icon: '<i class="fas fa-times"></i>',
-          label: game.i18n.localize("OWB.Cancel"),
+    const buttons = [
+      {
+        action: 'ok',
+        label: 'OWB.Ok',
+        icon: 'fas fa-check',
+        callback: (html) => {
+          const hd = html.currentTarget.querySelector('select[name="choice"]').value;
+          this.actor.generateSave(hd);
         },
       },
-      default: "ok",
-    }, {
-      width: 250
-    }).render(true);
+      {
+        action: 'cancel',
+        icon: 'fas fa-times',
+        label: 'OWB.Cancel',
+      },
+    ];
+    DialogV2.wait({
+      classes: ['owb'],
+      window: {
+        title: 'Choose Language',
+      },
+      modal: false,
+      content: dlg,
+      buttons: buttons,
+      rejectClose: false,
+      submit: () => {
+
+      },
+    });
   }
 
-  /**
-   * Activate event listeners using the prepared sheet HTML
-   * @param html {HTML}   The prepared HTML object ready to be rendered into the DOM
-   */
-  activateListeners(html) {
-    super.activateListeners(html);
+  static async moraleCheck(event) {
+    this.actor.rollMorale({ event: event });
+  }
 
-    html.find(".morale-check a").click((ev) => {
-      let actorObject = this.actor;
-      actorObject.rollMorale({ event: ev });
-    });
-
-    html.find(".reaction-check a").click((ev) => {
-      let actorObject = this.actor;
-      actorObject.rollReaction({ event: ev });
-    });
-
-    // Everything below here is only needed if the sheet is editable
-    if (!this.options.editable) return;
-
-    html.find('button[data-action="generate-saves"]').click(() => this.generateSave());
+  static async reactionCheck(event) {
+    this.actor.rollReaction({ event: event });
   }
 }

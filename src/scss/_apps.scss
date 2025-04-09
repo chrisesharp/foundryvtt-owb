@@ -460,3 +460,10 @@
     color: red;
   }
 }
+
+&.ranged-attack {
+  div.dialog-content {
+    display: block;
+    color: $colorFaint;
+  }
+}

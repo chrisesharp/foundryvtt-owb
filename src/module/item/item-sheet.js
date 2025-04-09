@@ -1,3 +1,4 @@
+const { ItemSheetV2 } = foundry.applications.sheets;
 /**
  * Extend the basic ItemSheet with some very simple modifications
  */

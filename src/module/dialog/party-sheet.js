@@ -71,8 +71,8 @@ export class OWBPartySheet extends FormApplication {
       content: content,
       buttons: {
         set: {
-          icon: '<i class="fas fa-save"></i>',
-          label: game.i18n.localize("OWB.Update"),
+          icon: 'fas fa-save',
+          label: 'OWB.Update',
           callback: async (html) => {
             let checks = html.find("input[data-action='select-actor']");
             await Promise.all(checks.map(async (_, c) => {

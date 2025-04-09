@@ -26,12 +26,13 @@
           <label>{{localize 'OWB.armor.type'}}</label>
           <div class="form-fields">
             <select name="system.type">
-              {{#select data.type}}
+              {{selectOptions config.armor inverted=true}}
+              <!-- {{#select data.type}}
               <option value=""></option>
               {{#each config.armor as |armor a|}}
               <option value="{{a}}">{{armor}}</option>
               {{/each}}
-              {{/select}}
+              {{/select}} -->
             </select>
           </div>
         </div>
