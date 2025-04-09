@@ -1,0 +1,30 @@
+<section class="header-details flexrow">
+  <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+  <div>
+    <h1 class="charname">
+      <input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'OWB.Name'}}" />
+    </h1>
+    <ul class="summary flexrow">
+      <li class="flex2 check-field">
+        <div>
+          <input type="text" name="system.details.nationality" value="{{data.details.nationality}}" />
+          <label>{{localize 'OWB.details.nationality'}}</label>
+        </div>
+        <div class="check reaction-check" title="{{localize 'OWB.roll.reaction'}}"><a><i class="fas fa-dice"></i></a></div>
+      </li>
+      <li class="flex2 check-field">
+        <input type="text" name="system.details.rank" value="{{data.details.rank}}" data-dtype="Number" />
+        <label>{{localize 'OWB.details.rank'}}</label>
+      </li>
+      {{#if config.morale}}
+      <li class="flexrow check-field">
+        <div>
+          <input type="text" name="system.details.morale" value="{{data.details.morale}}" />
+          <label>{{localize 'OWB.details.morale'}}</label>  
+        </div>
+        <div class="check morale-check" title="{{localize 'OWB.roll.morale'}}"><a><i class="fas fa-dice"></i></a></div>
+      </li>
+      {{/if}}
+    </ul>
+  </div>
+</section>

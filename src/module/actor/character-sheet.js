@@ -22,6 +22,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
       onCaret: this._onCaret,
       addLang: this._pushLang,
       removeLang: this._popLang,
+      toggleEquip: this._toggleEquip,
     },
     window: {
       resizable: true,
@@ -69,37 +70,6 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
   async _prepareContext(options) {
     const data = await super._prepareContext(options);
     return this._prepareItems(data);
-  }
-
-  _getTabs(parts) {
-    // If you have sub-tabs this is necessary to change
-    const tabGroup = 'primary';
-    // Default tab for first time it's rendered this session
-    if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'attributes';
-    return parts.reduce((tabs, partId) => {
-      const tab = {
-        cssClass: '',
-        group: tabGroup,
-        // Matches tab property to
-        id: '',
-        // FontAwesome Icon, if you so choose
-        icon: '',
-        // Run through localization
-        label: 'HV.tabs.',
-      };
-      switch (partId) {
-        case 'header':
-        case 'tabs':
-          return tabs;
-        default:
-          tab.id = partId;
-          tab.label += partId;
-          break;
-      }
-      if (this.tabGroups[tabGroup] === tab.id) tab.cssClass = 'active';
-      tabs[partId] = tab;
-      return tabs;
-    }, {});
   }
 
   /** @override */
@@ -208,13 +178,6 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
 
   /* -------------------------------------------- */
 
-  async _onQtChange(event) {
-    event.preventDefault();
-    const itemId = event.currentTarget.closest(".item").dataset.itemId;
-    const item = this.actor.items.get(itemId);
-    return item.update({ "system.quantity.value": parseInt(event.target.value) });
-  }
-
   static async _onShowModifiers(event) {
     event.preventDefault();
     new OWBCharacterModifiers(this.actor, {
@@ -242,20 +205,14 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
       slideToggle(items);
     }
   }
-  /**
-   * Activate event listeners using the prepared sheet HTML
-   * @param html {HTML}   The prepared HTML object ready to be rendered into the DOM
-   */
-  activateListeners(html) {
-    //Toggle Equipment
-    html.find(".item-toggle").click(async (ev) => {
-      const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.items.get(li.data("itemId"));
-      await item.update({
-        system: {
-          equipped: !item.system.equipped,
-        },
-      });
+
+  static async _toggleEquip(event, target) {
+    const li = target.closest(".item");
+    const item = this.actor.items.get(li.dataset.itemId);
+    await item.update({
+      system: {
+        equipped: !item.system.equipped,
+      },
     });
   }
 }

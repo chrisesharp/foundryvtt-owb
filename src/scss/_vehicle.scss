@@ -1,11 +1,19 @@
-&.actor.vehicle {
+@import "./variables.scss";
+
+&.sheet.actor.vehicle {
   min-height: 565px;
   min-width: 460px;
+
+  .window-content {
+    // padding: 0px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("../assets/folder-page.png");
+    overflow: visible;
+  }
+
   .header-details {
     .summary {
-      .treasure-table {
-        text-align: center;
-      }
       .check-field {
         &:hover {
           .check {
@@ -29,8 +37,7 @@
     .editor {
       height: 300px;
     }
-    .attributes-tab {
-      display: flex;
+    &.attributes {
       justify-content: space-around;
       flex-direction: column;
       height: 100%;
@@ -44,7 +51,7 @@
           margin: 5px;
         }
       }
-      .attributes .attribute {
+      .attribute {
         flex: 0 0 60px;
         &.health {
           flex: 0 0 85px;
@@ -53,19 +60,17 @@
           flex: 0 0 40px;
         }
       }
-    }
-  }
-  .attributes {
-    .attribute.health {
-      position: relative;
-      .attribute-name .hp-roll {
-        font-size: 12px;
-        position: absolute;
-        right: 5px;
-        top: 5px;
-        color: $colorFaint;
-        &:hover {
-          color: white;
+      .attribute.health {
+        position: relative;
+        .attribute-name .hp-roll {
+          font-size: 12px;
+          position: absolute;
+          right: 5px;
+          top: 5px;
+          color: $colorFaint;
+          &:hover {
+            color: white;
+          }
         }
       }
     }
@@ -79,16 +84,6 @@
         color: $colorTan;
         font-size: 10px;
       }
-    }
-  }
-  .panel.abilities {
-    .item-list {
-      .item-entry {
-        .item-pattern {
-          flex: 0 0 15px;
-          cursor: pointer;
-        }
-      }  
     }
   }
 }

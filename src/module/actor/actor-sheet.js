@@ -34,8 +34,6 @@ export class OWBActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       height: 530,
     },
     actions: {
-      rollHitDie: this._onRollHitPoints,
-      roll: this._onRoll,
       attack: this._onAttack,
       itemEdit: this._itemEdit,
       itemDelete: this._itemDelete,
@@ -48,9 +46,11 @@ export class OWBActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       onRollHitDice: this._onRollHitDice,
       incConsumable: this._onConsumable,
       decConsumable: this._onConsumable,
+      configureActor: this._onConfigureActor,
     },
     window: {
       resizable: true,
+      controls: [OWBActorSheet._getHeaderButtons()]
     },
     // Custom property that's merged into `this.options`
     dragDrop: [{ dragSelector: '[data-drag]', dropSelector: null }],
@@ -89,6 +89,37 @@ export class OWBActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     data.abilities = this.actor.itemTypes['ability'];
     data.languages = this.actor.itemTypes['language'];
     return data;
+  }
+
+  _getTabs(parts) {
+    // If you have sub-tabs this is necessary to change
+    const tabGroup = 'primary';
+    // Default tab for first time it's rendered this session
+    if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'attributes';
+    return parts.reduce((tabs, partId) => {
+      const tab = {
+        cssClass: '',
+        group: tabGroup,
+        // Matches tab property to
+        id: '',
+        // FontAwesome Icon, if you so choose
+        icon: '',
+        // Run through localization
+        label: 'HV.tabs.',
+      };
+      switch (partId) {
+        case 'header':
+        case 'tabs':
+          return tabs;
+        default:
+          tab.id = partId;
+          tab.label += partId;
+          break;
+      }
+      if (this.tabGroups[tabGroup] === tab.id) tab.cssClass = 'active';
+      tabs[partId] = tab;
+      return tabs;
+    }, {});
   }
 
   /** @override */
@@ -229,48 +260,8 @@ export class OWBActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const quantity = Math.min(item.system.quantity.max, Math.max(0, item.system.quantity.value + delta));
     item.update({system:{"quantity.value": quantity}});
   }
-  // Override to set resizable initial size
-  async _renderInner(...args) {
-    const html = await super._renderInner(...args);
-    this.form = html[0];
 
-    // Resize resizable classes
-    const resizable = html.find(".resizable");
-    if (resizable.length == 0) {
-      return;
-    }
-    resizable.each((_, el) => {
-      let heightDelta = this.position.height - this.options.height;
-      el.style.height = `${heightDelta + parseInt(el.dataset.baseSize)}px`;
-    });
-    return html;
-  }
-
-  async _onResize(event) {
-    super._onResize(event);
-
-    const html = $(this.form);
-    const resizable = html.find(".resizable");
-    if (resizable.length == 0) {
-      return;
-    }
-    // Resize divs
-    resizable.each((_, el) => {
-      let heightDelta = this.position.height - this.options.height;
-      el.style.height = `${heightDelta + parseInt(el.dataset.baseSize)}px`;
-    });
-    // Resize editors
-    const editors = html.find(".editor");
-    editors.each((id, editor) => {
-      let container = editor.closest(".resizable-editor");
-      if (container) {
-        let heightDelta = this.position.height - this.options.height;
-        editor.style.height = `${heightDelta + parseInt(container.dataset.editorSize)}px`;
-      }
-    });
-  }
-
-  _onConfigureActor(event) {
+  static async _onConfigureActor(event) {
     event.preventDefault();
     new OWBEntityTweaks(this.actor, {
       top: this.position.top + 40,
@@ -282,22 +273,13 @@ export class OWBActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
    * Extend and override the sheet header buttons
    * @override
    */
-  _getHeaderButtons() {
-    let buttons = super._getHeaderButtons();
-
-    // Token Configuration
-    const canConfigure = game.user.isGM || this.actor.owner;
-    if (this.options.editable && canConfigure) {
-      buttons = [
-        {
-          label: game.i18n.localize("OWB.dialog.tweaks"),
-          class: "configure-actor",
-          icon: "fas fa-code",
-          onclick: (ev) => this._onConfigureActor(ev),
-        },
-      ].concat(buttons);
-    }
-    return buttons;
+  static _getHeaderButtons() {
+    return {
+        label: 'OWB.dialog.tweaks',
+        class: "configure-actor",
+        icon: "fas fa-code",
+        action: 'configureActor',
+      };
   }
 
   /** The following pieces set up drag handling and are unlikely to need modification  */

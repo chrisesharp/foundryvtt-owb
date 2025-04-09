@@ -37,9 +37,13 @@ export class OWBItem extends Item {
   }
 
   static chatListeners(html) {
-    // TODO
-    // html.on("click", ".card-buttons button", this._onChatCardAction.bind(this));
-    // html.on("click", ".item-name", this._onChatCardToggleContent.bind(this));
+    html.querySelectorAll('.card-buttons button').forEach((el) => {
+      el.addEventListener("click", this._onChatCardAction.bind(this));
+    });
+
+    html.querySelectorAll('.item-name').forEach((el) => {
+      el.addEventListener("click", this._onChatCardToggleContent.bind(this));
+    });
   }
 
  async  getChatData(htmlOptions={async: true}) {
