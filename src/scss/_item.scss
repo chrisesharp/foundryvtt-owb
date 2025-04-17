@@ -1,4 +1,15 @@
+@import "./variables.scss";
+
 &.sheet.item {
+
+  .window-content {
+    // padding: 0px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("../assets/folder-page.png");
+    overflow: scroll;
+  }
+
   .sheet-header {
     h1 {
       input {
@@ -41,8 +52,13 @@
     }
   }
   .sheet-body {
+    overflow: scroll;
+    .item-body {
+      align-items: flex-start;
+    }
+
     .stats {
-      flex: 0 0 80px;
+      flex: 0 0 100px;
       border-right: 1px groove rgba(0, 0, 0, 0.2);
       padding-right: 2px;
       font-size: 13px;
@@ -56,6 +72,11 @@
         input {
           border-bottom: none;
           margin: auto 0;
+          height: -webkit-fill-available;
+          line-height: normal;
+          background: none;
+          color: $colorDark;
+          padding: 0px;
         }
         .form-fields {
           &.range { 
@@ -106,10 +127,19 @@
       }
     }
     .description {
-      .editor {
+      &.weapon-editor {
         height: 200px;
-        .editor-content {
-          padding: 0 5px;
+        padding: 0 4px;
+        &.prosemirror {
+          position: relative;
+      
+          button.toggle {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            height: 32px;
+            width: 32px;
+          }
         }
       }
     }

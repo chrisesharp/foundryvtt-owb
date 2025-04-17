@@ -6,12 +6,12 @@ export const registerSettings = function () {
     default: "group",
     scope: "world",
     type: String,
-    config: false,
+    config: true,
     choices: {
       individual: "OWB.Setting.InitiativeIndividual",
       group: "OWB.Setting.InitiativeGroup",
     },
-    onChange: _ => window.location.reload()
+    // onChange: _ => window.location.reload()
   });
 
   game.settings.register("owb", "rerollInitiative", {
@@ -20,7 +20,7 @@ export const registerSettings = function () {
     default: "keep",
     scope: "world",
     type: String,
-    config: false,
+    config: true,
     choices: {
       keep: "OWB.Setting.InitiativeKeep",
       reset: "OWB.Setting.InitiativeReset",
@@ -35,7 +35,7 @@ export const registerSettings = function () {
     scope: "world",
     type: Boolean,
     config: true,
-    onChange: _ => window.location.reload()
+    // onChange: _ => window.location.reload()
   });
 
   game.settings.register("owb", "morale", {
@@ -44,7 +44,7 @@ export const registerSettings = function () {
     default: false,
     scope: "world",
     type: Boolean,
-    config: false,
+    config: true,
   });
 
   game.settings.register("owb", "encumbranceOption", {
@@ -53,13 +53,13 @@ export const registerSettings = function () {
     default: "complete",
     scope: "world",
     type: String,
-    config: false,
+    config: true,
     choices: {
       disabled: "OWB.Setting.EncumbranceDisabled",
       basic: "OWB.Setting.EncumbranceBasic",
       detailed: "OWB.Setting.EncumbranceDetailed",
       complete: "OWB.Setting.EncumbranceComplete",
     },
-    onChange: _ => window.location.reload()
+    // onChange: _ => window.location.reload()
   });
 };

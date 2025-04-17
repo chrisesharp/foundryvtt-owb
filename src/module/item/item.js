@@ -38,11 +38,13 @@ export class OWBItem extends Item {
   }
 
   static chatListeners(html) {
-    html.querySelectorAll('.card-buttons button').forEach((el) => {
+    const buttons = html.querySelectorAll('.card-buttons button');
+    buttons.forEach((el) => {
       el.addEventListener("click", this._onChatCardAction.bind(this));
     });
 
-    html.querySelectorAll('.item-name').forEach((el) => {
+    const items = html.querySelectorAll('.item-name')
+    items.forEach((el) => {
       el.addEventListener("click", this._onChatCardToggleContent.bind(this));
     });
   }
@@ -254,38 +256,34 @@ export class OWBItem extends Item {
     let update = (data.tags) ? foundry.utils.duplicate(data.tags) : [];
     let newData = {};
     var regExp = /\(([^)]+)\)/;
-    if (update.length) {
-      values.forEach((val) => {
-        // Catch infos in brackets
-        var matches = regExp.exec(val);
-        let title = "";
-        if (matches) {
-          title = matches[1];
-          val = val.substring(0, matches.index).trim();
-        } else {
-          val = val.trim();
-          title = val;
-        }
-        // Auto fill checkboxes
-        switch (val) {
-          case CONFIG.OWB.tags.melee:
-            newData.melee = true;
-            break;
-          case CONFIG.OWB.tags.missile:
-            newData.missile = true;
-            break;
-          case CONFIG.OWB.tags.burst:
-            newData.burst = true;
-            break;
-          case CONFIG.OWB.tags.suppressive:
-            newData.suppressive = true;
-            break;
-        }
-        update.push({ title: title, value: val });
-      });
-    } else {
-      update = values;
-    }
+    values.forEach((val) => {
+      // Catch infos in brackets
+      var matches = regExp.exec(val);
+      let title = "";
+      if (matches) {
+        title = matches[1];
+        val = val.substring(0, matches.index).trim();
+      } else {
+        val = val.trim();
+        title = val;
+      }
+      // Auto fill checkboxes
+      switch (val) {
+        case CONFIG.OWB.tags.melee:
+          newData.melee = true;
+          break;
+        case CONFIG.OWB.tags.missile:
+          newData.missile = true;
+          break;
+        case CONFIG.OWB.tags.burst:
+          newData.burst = true;
+          break;
+        case CONFIG.OWB.tags.suppressive:
+          newData.suppressive = true;
+          break;
+      }
+      update.push({ title: title, value: val });
+    });
     newData.tags = update;
     return this.update({ system: newData });
   }

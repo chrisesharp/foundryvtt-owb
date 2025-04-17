@@ -1,0 +1,22 @@
+<header class="sheet-header flexrow">
+    <img 
+      class="profile-img" 
+      src="{{item.img}}" 
+      data-edit="img"
+      data-action="onEditImage"
+      title="{{item.name}}" 
+      />
+    <div class="header-col">
+      <h1 class="charname">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Name" />
+      </h1>
+      <ol class="tag-list">
+        {{#each data.tags as |tag|}}
+        <li class="tag" title="{{tag.title}}" data-tag="{{tag.value}}">
+          <span>{{tag.value}}</span>
+          <a class="tag-delete" data-action="delTag" ><i class="fas fa-times"></i></a>
+        </li>
+        {{/each}}
+      </ol>
+    </div>
+  </header>

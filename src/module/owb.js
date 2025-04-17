@@ -123,9 +123,9 @@ Hooks.on("renderCombatTracker", OWBCombat.format);
 Hooks.on("preUpdateCombat", OWBCombat.preUpdateCombat);
 Hooks.on("getCombatTrackerEntryContext", OWBCombat.addContextEntry);
 
-Hooks.on("renderChatLog", (app, html, data) => OWBItem.chatListeners(html));
-Hooks.on("getChatLogEntryContext", chat.addChatMessageContextOptions);
+Hooks.on("getChatLog", chat.addChatMessageContextOptions); // TODO not possible in V13?
 Hooks.on("renderChatMessageHTML", chat.addChatMessageButtons);
+Hooks.on("renderChatMessageHTML", (app, html, data) => OWBItem.chatListeners(html));
 Hooks.on("updateActor", party.update);
 
 Hooks.once("dragRuler.ready", (SpeedProvider) => {

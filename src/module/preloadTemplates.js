@@ -2,7 +2,6 @@ const { loadTemplates } = foundry.applications.handlebars;
 
 export const preloadHandlebarsTemplates = async function () {
     const templatePaths = [
-        //Actor partials
         'systems/owb/templates/actors/partials/actor-notes.hbs',
         'systems/owb/templates/actors/partials/actor-nav.hbs',
         
@@ -17,7 +16,12 @@ export const preloadHandlebarsTemplates = async function () {
 
         'systems/owb/templates/actors/partials/vehicle-header.hbs',
         'systems/owb/templates/actors/partials/vehicle-attributes.hbs',
-        'systems/owb/templates/actors/partials/vehicle-notes.hbs'
+        'systems/owb/templates/actors/partials/vehicle-notes.hbs',
+
+        'systems/owb/templates/items/partials/item-header.hbs',
+        'systems/owb/templates/items/partials/item-body.hbs',
+        'systems/owb/templates/items/partials/ability-body.hbs',
+        'systems/owb/templates/items/partials/weapon-body.hbs',
     ];
     return loadTemplates(templatePaths);
 };

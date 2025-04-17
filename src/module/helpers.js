@@ -56,4 +56,9 @@ export const registerHelpers = async function () {
       ? Math.clamp((100.0 * value) / max, 0, 100)
       : Math.clamp(100 - (100.0 * value) / max, 0, 100);
   });
+
+  Handlebars.registerHelper('isChecked', function (isChecked) {
+    return isChecked ? ' checked ' : '';
+  });
+
 };

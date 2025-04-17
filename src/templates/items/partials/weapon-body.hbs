@@ -1,0 +1,74 @@
+<div class="form-group block-input">
+    <label>{{localize 'OWB.items.Damage'}}</label>
+    <div class="form-fields">
+    <input
+        type="text"
+        name="system.damage"
+        value="{{data.damage}}"
+        data-dtype="String"
+        />
+    </div>
+</div>
+<div class="form-group attack-type">
+    <a title="{{localize 'OWB.items.Melee'}}" data-action="meleeToggle" class="melee-toggle {{#if
+    data.melee}}active{{/if}}"><i class="fas fa-fist-raised"></i></a>
+    <a title="{{localize 'OWB.items.Missile'}}" data-action="rangedToggle" class="missile-toggle
+    {{#if data.missile}}active{{/if}}"><i class="fas fa-bullseye"></i></a>
+</div>
+{{#if data.missile}}
+<div class="form-group">
+    <label title="{{localize 'OWB.weapons.ROF'}}">{{localize
+    'OWB.weapons.ROF'}}</label>
+    <div class="form-fields">
+    <input
+        type="text"
+        name="system.counter.max"
+        value="{{data.counter.max}}"
+        data-dtype="Number"
+        />
+    </div>
+</div>
+<div class="form-group block-input">
+    <label>{{localize 'OWB.items.Range'}}</label>
+    <div class="form-fields range flexrow">
+    <input
+        type="text"
+        name="system.range.short"
+        value="{{data.range.short}}"
+        data-dtype="Number"
+        />
+        <div class="sep"></div>
+        <input
+        type="text"
+        name="system.range.medium"
+        value="{{mult data.range.short 2}}"
+        data-dtype="Number"
+        />
+        <div class="sep"></div>
+        <input
+        type="text"
+        name="system.range.long"
+        value="{{mult data.range.short 6}}"
+        data-dtype="Number"
+        />
+        <div class="sep"></div>
+        <input
+        type="text"
+        name="system.range.extreme"
+        value="{{mult data.range.short 24}}"
+        data-dtype="Number"
+        />
+    </div>
+</div>
+<div class="form-group">
+    <label>{{localize 'OWB.weapons.save'}}</label>
+    <div class="form-fields">
+    <input
+        type="checkbox"
+        name="system.save"
+        name="{{data.save}}"
+        {{isChecked data.save}}
+        />
+    </div>
+</div>
+{{/if}}

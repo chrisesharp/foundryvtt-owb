@@ -7,12 +7,13 @@ export class OWBCombat {
       groups[group] = { present: true };
     });
 
+    // const rolls = await new Roll(`${Object.keys(groups).lenth}d6`).evalute();
     // Roll init
-    Object.keys(groups).forEach(async (group) => {
+    for (const group of Object.keys(groups)) {
       const roll =  await new Roll("1d6").evaluate();
-      roll.toMessage({flavor: game.i18n.format('OWB.roll.initiative', { group: CONFIG["OWB"].colors[group] })});
       groups[group].initiative = roll.total;
-    });
+      await roll.toMessage({flavor: game.i18n.format('OWB.roll.initiative', { group: CONFIG["OWB"].colors[group] })});
+    };
 
     // Set init
     combat.combatants.forEach((cbt)=> {
@@ -74,22 +75,13 @@ export class OWBCombat {
       span.innerHTML = (span?.innerHTML == "-789.00") ? '<i class="fas fa-weight-hanging"></i>' : span?.innerHTML;
       span.innerHTML =  (span?.innerHTML == "-790.00") ? '<i class="fas fa-dizzy"></i>' : span?.innerHTML;
     });
-    
-    html.querySelectorAll(".combatant").forEach((ct) => {
-      // Append spellcast and retreat
-      const controls = ct.querySelector(".combatant-controls .combatant-control");
-      const cmbtant = object.viewed.combatants.get(ct.dataset.combatantId);
-      const moveActive = cmbtant.getFlag("owb", "moveInCombat") ? "active" : "";
-      controls.eq(1).after(`<a class='combatant-control move-combat ${moveActive}'><i class='fas fa-walking'></i></a>`);
-    });
-    OWBCombat.announceListener(html);
 
     const init = game.settings.get("owb", "initiative") === "group";
     if (!init) return;
 
-    html.querySelector('.combat-control[data-control="rollNPC"]')?.remove();
-    html.querySelector('.combat-control[data-control="rollAll"]')?.remove();
-    const trash = html.querySelector('.encounters .combat-control[data-control="endCombat"]');
+    html.querySelector('.combat-control[data-action="rollNPC"]')?.remove();
+    html.querySelector('.combat-control[data-action="rollAll"]')?.remove();
+    const trash = html.querySelector('.encounters .combat-control[data-action="endCombat"]');
     if (trash) {
       trash.innerHTML = '<a class="combat-control" data-control="reroll"><i class="fas fa-dice"></i></a>' + trash.innerHTML;
     }
@@ -102,9 +94,14 @@ export class OWBCombat {
       const cmbtant = object.viewed.combatants.get(ct.dataset.combatantId);
       const color = cmbtant.getFlag("owb","group");
 
+      // moved flag
+      const moveActive = cmbtant.getFlag("owb", "moveInCombat") ? "active" : "";
+      const button = `<button type="button" class='inline-control combatant-control move-combat icon fas fa-walking ${moveActive}' data-tooltip aria-label='Toggle Moved in Combat'></button>`;
+
       // Append colored flag
       const controls = ct.querySelector(".combatant-controls");
-      if (controls) controls.innerHTML = `<a class='combatant-control flag' style='color:${color}' title="${CONFIG.OWB.colors[color]}"><i class='fas fa-flag'></i></a>` + controls.innerHTML;
+      if (controls) controls.innerHTML = `<a class='combatant-control flag' style='color:${color}' title="${CONFIG.OWB.colors[color]}"><i class='fas fa-flag'></i></a>` + button + controls.innerHTML;
+      OWBCombat.announceListener(html);
     });
     OWBCombat.addListeners(html);
   }
@@ -131,7 +128,7 @@ export class OWBCombat {
 
   static announceListener(html) {
     html.querySelectorAll(".combatant-control.move-combat").forEach((el) => {
-      el.addEventListener((ev) => {
+      el.addEventListener('click', (ev) => {
         ev.preventDefault();
         const id = ev.currentTarget.closest(".combatant").dataset.combatantId;
         const isActive = ev.currentTarget.classList.contains('active');

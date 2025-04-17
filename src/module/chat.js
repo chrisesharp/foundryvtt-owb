@@ -7,24 +7,25 @@
  *
  * @return {Array}              The extended options Array including new context choices
  */
-export const addChatMessageContextOptions = function(_html, options) {
-  const canApply = li => canvas.tokens.controlled.length && li.querySelector(".dice-roll").length;
-  options.push(
-    {
-      name: game.i18n.localize("OWB.messages.applyDamage"),
-      icon: '<i class="fas fa-user-minus"></i>',
-      condition: canApply,
-      callback: li => applyChatCardDamage(li, 1)
-    },
-    {
-      name: game.i18n.localize("OWB.messages.applyHealing"),
-      icon: '<i class="fas fa-user-plus"></i>',
-      condition: canApply,
-      callback: li => applyChatCardDamage(li, -1)
-    }
-  );
-  return options;
-};
+// TODO this seems unusable in V13
+// export const addChatMessageContextOptions = function(_html, options) {
+//   const canApply = li => canvas.tokens.controlled.length && li.querySelector(".dice-roll").length;
+//   options.push(
+//     {
+//       name: game.i18n.localize("OWB.messages.applyDamage"),
+//       icon: '<i class="fas fa-user-minus"></i>',
+//       condition: canApply,
+//       callback: li => applyChatCardDamage(li, 1)
+//     },
+//     {
+//       name: game.i18n.localize("OWB.messages.applyHealing"),
+//       icon: '<i class="fas fa-user-plus"></i>',
+//       condition: canApply,
+//       callback: li => applyChatCardDamage(li, -1)
+//     }
+//   );
+//   return options;
+// };
 
 /* -------------------------------------------- */
 
@@ -38,7 +39,7 @@ export const addChatMessageButtons = function(msg, html, data) {
   const roll = html.querySelector('.damage-roll');
   if (roll) {
     const total = roll.querySelector('.dice-total');
-    roll.innerHHTML += `<div class="dice-damage"><button type="button" data-action="apply-damage"><i class="fas fa-tint"></i></button></div>`;
+    roll.innerHTML += `<div class="dice-damage"><button type="button" data-action="apply-damage"><i class="fas fa-tint"></i></button></div>`;
     roll.querySelector('button[data-action="apply-damage"]')?.addEventListener('click', (ev) => {
       ev.preventDefault();
       applyChatCardDamage(roll, 1);
@@ -55,7 +56,7 @@ export const addChatMessageButtons = function(msg, html, data) {
  * @return {Promise}
  */
 function applyChatCardDamage(roll, multiplier) {
-  const amount = roll.querySelector('.dice-total').lastChild.text;
+  const amount = roll.querySelector('.dice-total').textContent;
   return Promise.all(canvas.tokens.controlled.map(t => {
     const a = t.actor;
     return a.applyDamage(amount, multiplier);

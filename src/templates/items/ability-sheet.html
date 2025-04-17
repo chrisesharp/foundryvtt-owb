@@ -1,6 +1,11 @@
 <form class="{{cssClass}}" autocomplete="off">
   <header class="sheet-header">
-    <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <img 
+      class="profile-img" 
+      src="{{item.img}}" 
+      data-edit="img" 
+      title="{{item.name}}"
+      />
     <div class="header-col">
       <h1 class="charname">
         <input name="name" type="text" value="{{item.name}}" placeholder="Name" />
@@ -27,11 +32,6 @@
           <div class="form-fields">
             <select name="system.rollType">
               {{selectOptions config.roll_type inverted=true}}
-              <!-- {{#select data.rollType}}
-              {{#each config.roll_type as |t a|}}
-              <option value="{{a}}">{{t}}</option>
-              {{/each}}
-              {{/select}} -->
             </select>
           </div>
         </div>
@@ -52,12 +52,6 @@
           <div class="form-fields">
             <select name="system.save">
               {{selectOptions config.saves_short inverted=true}}
-              <!-- {{#select data.save}}
-              <option value=""></option>
-              {{#each config.saves_short as |save a|}}
-              <option value="{{a}}">{{save}}</option>
-              {{/each}}
-              {{/select}} -->
             </select>
           </div>
         </div>
