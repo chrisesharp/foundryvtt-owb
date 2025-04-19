@@ -1,7 +1,7 @@
 import { OWBEntityTweaks } from "../dialog/entity-tweaks.js";
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
-const { DragDrop } = foundry.applications.ux;
+const { DragDrop, TextEditor } = foundry.applications.ux;
 import { slideToggle } from '../utils/slide.js';
 
 export class OWBActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {

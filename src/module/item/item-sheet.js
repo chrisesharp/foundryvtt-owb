@@ -1,5 +1,6 @@
 const { ItemSheetV2 } = foundry.applications.sheets;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
+const { TextEditor } = foundry.applications.ux;
 
 /**
  * Extend the basic ItemSheet with some very simple modifications

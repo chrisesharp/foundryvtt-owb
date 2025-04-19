@@ -4,6 +4,7 @@ import { OWBCharacterCreator } from "../dialog/character-creation.js";
 const { renderTemplate } = foundry.applications.handlebars;
 import { slideToggle } from '../utils/slide.js';
 const { DialogV2 } = foundry.applications.api;
+const { TextEditor } = foundry.applications.ux;
 
 /**
  * Extend the basic ActorSheet with some very simple modifications

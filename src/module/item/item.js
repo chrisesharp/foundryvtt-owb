@@ -1,6 +1,7 @@
 import { OWBDice } from "../dice.js";
 const { renderTemplate } = foundry.applications.handlebars;
 const { DialogV2 } = foundry.applications.api;
+const { TextEditor } = foundry.applications.ux;
 
 /**
  * Override and extend the basic :class:`Item` implementation

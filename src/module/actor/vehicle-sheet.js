@@ -1,6 +1,7 @@
 import { OWBActorSheet } from "./actor-sheet.js";
 const { renderTemplate } = foundry.applications.handlebars;
 const { DialogV2 } = foundry.applications.api;
+const { TextEditor } = foundry.applications.ux;
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
