@@ -81,9 +81,9 @@ export class OWBCombat {
 
     html.querySelector('.combat-control[data-action="rollNPC"]')?.remove();
     html.querySelector('.combat-control[data-action="rollAll"]')?.remove();
-    const trash = html.querySelector('.encounters .combat-control[data-action="endCombat"]');
-    if (trash) {
-      trash.innerHTML = '<a class="combat-control" data-control="reroll"><i class="fas fa-dice"></i></a>' + trash.innerHTML;
+    const gear = html.querySelector('button[data-action="trackerSettings"]');
+    if (gear) {
+      gear.previousElementSibling.insertAdjacentHTML('afterend', '<button type="button" class="inline-control roll icon fas fa-dice" data-action="reroll" data-tooltip aria-label="roll initiative"></button>');
     }
 
     html.querySelectorAll(".combatant").forEach((ct) => {
@@ -95,8 +95,8 @@ export class OWBCombat {
       const color = cmbtant.getFlag("owb","group");
 
       // moved flag
-      const moveActive = cmbtant.getFlag("owb", "moveInCombat") ? "active" : "";
-      const button = `<button type="button" class='inline-control combatant-control move-combat icon fas fa-walking ${moveActive}' data-tooltip aria-label='Toggle Moved in Combat'></button>`;
+      const moveActive = cmbtant.token.movementHistory.length > 0 ? "active" : "";
+      const button = `<button type="button" class='inline-control combatant-control move-combat icon fas fa-walking ${moveActive}' data-tooltip aria-label='Moved in Combat'></button>`;
 
       // Append colored flag
       const controls = ct.querySelector(".combatant-controls");
@@ -160,7 +160,15 @@ export class OWBCombat {
       });
     });
 
-    html.querySelectorAll('.combat-control[data-control="reroll"]').forEach((el) => {
+    html.querySelectorAll('.combat-control[data-action="reroll"]').forEach((el) => {
+      el.addEventListener('click', (ev) => {
+        if (!game.combat) return;
+        const data = {};
+        OWBCombat.rollInitiative(game.combat, data);
+      });
+    });
+
+    html.querySelectorAll('button[data-action="reroll"]').forEach((el) => {
       el.addEventListener('click', (ev) => {
         if (!game.combat) return;
         const data = {};
