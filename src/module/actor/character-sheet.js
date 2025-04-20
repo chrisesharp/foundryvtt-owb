@@ -115,60 +115,55 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     const choices = CONFIG.OWB.languages;
     const templateData = { choices: choices };
     const dlg = await renderTemplate("systems/owb/templates/actors/dialogs/lang-create.html", templateData);
-    buttons = [
-      {
-        action: 'ok',
-        label: 'OWB.Ok',
-        icon: 'fas fa-check',
-        callback: (html) => {
-          resolve({
-            choice: html.querySelector('select[name="choice"]').value,
-            fluency: html.querySelector('select[name="fluency"]').value,
-          });
-        },
-      },
-      {
-        action: 'cancel',
-        icon: 'fas fa-times',
-        label: 'OWB.Cancel',
-      },
-    ];
-    DialogV2.wait({
+    return DialogV2.wait({
       classes: ['owb'],
       window: {
         title: 'Choose Language',
       },
       modal: false,
       content: dlg,
-      buttons: buttons,
+      buttons: [
+        {
+          action: 'ok',
+          label: 'OWB.Ok',
+          icon: 'fas fa-check',
+          callback: (ev) => {
+            const html = ev.currentTarget;
+            return {
+              choice: html.querySelector('select[name="choice"]').value,
+              fluency: html.querySelector('select[name="fluency"]').value,
+            };
+          },
+        },
+        {
+          action: 'cancel',
+          icon: 'fas fa-times',
+          label: 'OWB.Cancel',
+        },
+      ],
       rejectClose: false,
-      submit: () => {
-        if (rolled) {
-          resolve(roll);
-        } else {
-          PromiseRejectionEvent;
-        }
+      submit: (result) => {
+        return result;
       },
     });
   }
 
   static async _pushLang(event, header) {
     const type = header.dataset.type;
-    this._chooseLang().then((dialogInput) => {
-      const name = dialogInput.choice;
-      const fluency = dialogInput.fluency;
-      const img = CONFIG.OWB.languages[name].img;
-      const itemData = {
-        name: name,
-        type: type,
-        img:img,
-        system: {}
-      };
-      itemData.system["name"] = name;
-      itemData.system["fluency"] = fluency;
-      itemData.system["save"] = "save";
-      return this.actor.createEmbeddedDocuments("Item",[itemData]);
-    });
+    const dialogInput = await this._chooseLang();
+    const name = dialogInput.choice;
+    const fluency = dialogInput.fluency;
+    const img = CONFIG.OWB.languages[name].img;
+    const itemData = {
+      name: name,
+      type: type,
+      img:img,
+      system: {}
+    };
+    itemData.system["name"] = name;
+    itemData.system["fluency"] = fluency;
+    itemData.system["save"] = "save";
+    return this.actor.createEmbeddedDocuments("Item",[itemData]);
   }
 
   static async _popLang(event, target) {

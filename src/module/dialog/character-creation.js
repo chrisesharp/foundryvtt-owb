@@ -20,7 +20,7 @@ export class OWBCharacterCreator  extends HandlebarsApplicationMixin(Application
 
   static DEFAULT_OPTIONS = {
     id: 'character-creator',
-    classes: ['owb, dialog, creator'],
+    classes: ['owb', 'dialog', 'creator'],
     actions: {
       submit: OWBCharacterCreator._onSubmit,
       scoreRoll: OWBCharacterCreator._scoreRoll,

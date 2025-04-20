@@ -66,7 +66,7 @@ export class OWBActorSheetEnemy extends OWBActorSheetVehicle {
         label: 'OWB.Cancel',
       },
     ];
-    DialogV2.wait({
+    return DialogV2.wait({
       classes: ['owb'],
       window: {
         title: 'Choose Language',
@@ -75,8 +75,8 @@ export class OWBActorSheetEnemy extends OWBActorSheetVehicle {
       content: dlg,
       buttons: buttons,
       rejectClose: false,
-      submit: () => {
-
+      submit: (result) => {
+        return result;
       },
     });
   }
