@@ -12,6 +12,7 @@ export class OWBCharacterModifiers extends HandlebarsApplicationMixin(Applicatio
       width: 240,
     },
     window: {
+      title: 'Modifiers',
       resizable: false,
       contentClasses: ['owb', 'dialog', 'modifiers'],
     },
