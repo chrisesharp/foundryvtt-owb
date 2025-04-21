@@ -169,5 +169,6 @@ export class OWBCharacterCreator  extends HandlebarsApplicationMixin(Application
     const actor = game.actors.get(actorId);
     await actor.update({system:{scores: scores}});
     await actor.createEmbeddedDocuments("Item",[itemData]);
+    this.close();
   }
 }
