@@ -1,6 +1,5 @@
 <form autocomplete="off" onsubmit="event.preventDefault();">
     <div class="flexrow">
-        {{ log . }}
         <div class="attribute-list">
             {{#each config.scores as |score id| }}
             <div data-score="{{id}}" class="form-group">

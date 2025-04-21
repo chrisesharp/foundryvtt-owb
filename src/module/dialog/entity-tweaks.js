@@ -1,57 +1,54 @@
 // eslint-disable-next-line no-unused-vars
-import { OWBActor } from '../actor/entity.js';
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
-export class OWBEntityTweaks extends FormApplication {
-  static get defaultOptions() {
-    const options = super.defaultOptions;
-    options.id = 'sheet-tweaks';
-    options.template = 'systems/owb/templates/actors/dialogs/tweaks-dialog.html';
-    options.width = 380;
-    return options;
-  }
+export class OWBEntityTweaks extends HandlebarsApplicationMixin(ApplicationV2) {
+  static DEFAULT_OPTIONS = {
+    id: 'sheet-tweaks',
+    form: {
+      handler: OWBEntityTweaks._onSubmitForm,
+      closeOnSubmit: true,
+    },
+    tag: 'form',
+    position: {
+      width: 380,
+    },
+    window: {
+      title: 'OWB.dialog.tweaks',
+      resizable: false,
+      contentClasses: ['standard-form', 'owb', 'dialog'],
+    },
+  };
 
-  /* -------------------------------------------- */
-
-  /**
-   * Add the Entity name into the window title
-   * @type {String}
-   */
-  get title() {
-    return `${this.object.name}: ${game.i18n.localize('OWB.dialog.tweaks')}`;
-  }
-
-  /* -------------------------------------------- */
-
+  static PARTS = {
+    body: {
+      template: 'systems/owb/templates/actors/dialogs/tweaks-dialog.html',
+    },
+    footer: {
+      template: "templates/generic/form-footer.hbs",
+    },
+  };
   /**
    * Construct and return the data object used to render the HTML template for this form application.
    * @return {Object}
    */
-  getData() {
-    let data = this.object;
-    data.isCharacter = (this.object.type === 'character');
+  async _prepareContext(options) {
+    let data = {};
+    data.system = this.options.system;
+    data.isCharacter = (this.options.prototypeToken.actor.type === 'character');
     data.user = game.user;
     data.config = CONFIG.OWB;
+    data.actorId = this.options.prototypeToken.actor.id;
+    data.buttons= [
+      { type: "submit", icon: "fa-solid fa-save", label: "SETTINGS.Save" }
+    ]
     return data;
   }
 
-  /* -------------------------------------------- */
-
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-  }
-
-  /**
-   * This method is called upon form submission after form data is validated
-   * @param event {Event}       The initial triggering submission event
-   * @param formData {Object}   The object of validated form data with which to update the object
-   * @private
-   */
-  async _updateObject(event, formData) {
+  static async _onSubmitForm(event, form, formData) {
     event.preventDefault();
-    // Update the actor
-    this.object.update(formData);
-    // Re-draw the updated sheet
-    this.object.sheet.render(true);
+    // const settings = foundry.utils.expandObject(formData.object);
+    const actorId = form.querySelector('div[data-actor-id').dataset.actorId;
+    const actor = game.actors.get(actorId);
+    await actor?.update(formData.object);
   }
 }
