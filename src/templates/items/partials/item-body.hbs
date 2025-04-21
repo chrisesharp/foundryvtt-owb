@@ -1,0 +1,44 @@
+<section class="sheet-body">
+    <div class="item-body flexrow">
+      <div class="stats">
+        {{#if isAbility }}
+            {{> "systems/owb/templates/items/partials/ability-body.hbs"}}
+        {{else}}
+        <div class="form-group">
+          <label>{{localize 'OWB.items.Quantity'}}</label>
+          <div class="form-fields flexrow">
+            <input type="text" name="system.quantity.value" value="{{data.quantity.value}}" data-dtype="Number" />/<input type="text" name="system.quantity.max" value="{{data.quantity.max}}" data-dtype="Number" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>{{localize 'OWB.items.Weight'}}</label>
+          <div class="form-fields flexrow">
+            <input type="text" name="system.weight" value="{{data.weight}}" data-dtype="Number" />
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-fields flexrow">
+            <input
+              type="text"
+              data-action="addTag"
+              title="{{localize 'OWB.items.typeTag'}}"
+              placeholder="{{localize 'OWB.items.enterTag'}}"
+              />
+          </div>
+        </div>
+            {{#if isWeapon }}
+                {{> "systems/owb/templates/items/partials/weapon-body.hbs"}}
+            {{/if}}
+        {{/if}}
+      </div>
+      <div class="description weapon-editor prosemirror">
+        {{!-- {{editor data.description target="system.description" button=true editable=editable}} --}}
+        {{#if editable}} 
+            <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}" value="{{data.description}}" collaborate="true" toggled="true">
+            {{{enrichedNotes}}}
+            </prose-mirror>
+        {{else}} {{{enrichedNotes}}}
+        {{/if}}
+      </div>
+    </div>
+  </section>

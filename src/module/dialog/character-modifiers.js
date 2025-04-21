@@ -1,42 +1,32 @@
-// eslint-disable-next-line no-unused-vars
-import { OWBActor } from '../actor/entity.js';
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
-export class OWBCharacterModifiers extends FormApplication {
-  static get defaultOptions() {
-    const options = super.defaultOptions;
-    options.classes = ["owb", "dialog", "modifiers"],
-    options.id = 'sheet-modifiers';
-    options.template = 'systems/owb/templates/actors/dialogs/modifiers-dialog.html';
-    options.width = 240;
-    return options;
-  }
+export class OWBCharacterModifiers extends HandlebarsApplicationMixin(ApplicationV2) {
+  static DEFAULT_OPTIONS = {
+    id: 'sheet-modifiers',
+    classes: ['owb', 'dialog', 'modifiers'],
+    form: {
+      closeOnSubmit: true,
+    },
+    tag: 'form',
+    position: {
+      width: 240,
+    },
+    window: {
+      title: 'Modifiers',
+      resizable: false,
+      contentClasses: ['owb', 'dialog', 'modifiers'],
+    },
+  };
+  static PARTS = {
+    body: {
+      template: 'systems/owb/templates/actors/dialogs/modifiers-dialog.html',
+    },
+  };
 
-  /* -------------------------------------------- */
-
-  /**
-   * Add the Entity name into the window title
-   * @type {String}
-   */
-  get title() {
-    return `${this.object.name}: Modifiers`;
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Construct and return the data object used to render the HTML template for this form application.
-   * @return {Object}
-   */
-  getData() {
-    let data = this.object;
+  async _prepareContext(options) {
+    let data = {};
     data.user = game.user;
+    data.system = this.options.prototypeToken.actor.system;
     return data;
-  }
-
-  /* -------------------------------------------- */
-
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
   }
 }

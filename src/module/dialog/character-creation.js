@@ -1,15 +1,50 @@
-import { OWBActor } from '../actor/entity.js';
 import { OWBDice } from "../dice.js";
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
-export class OWBCharacterCreator extends FormApplication {
-  static get defaultOptions() {
-    const options = super.defaultOptions;
-    options.classes = ["owb", "dialog", "creator"],
-      options.id = 'character-creator';
-    options.template = 'systems/owb/templates/actors/dialogs/character-creation.html';
-    options.width = 235;
-    return options;
-  }
+export class OWBCharacterCreator  extends HandlebarsApplicationMixin(ApplicationV2) {
+  #counters = {
+    str: 0,
+    wis: 0,
+    dex: 0,
+    int: 0,
+    cha: 0,
+    con: 0,
+    gold: 0
+  };
+
+  #stats = {
+    sum: 0,
+    avg: 0,
+    std: 0
+  };
+
+  static DEFAULT_OPTIONS = {
+    id: 'character-creator',
+    classes: ['owb', 'dialog', 'creator'],
+    actions: {
+      submit: OWBCharacterCreator._onSubmit,
+      scoreRoll: OWBCharacterCreator._scoreRoll,
+      goldRoll: OWBCharacterCreator._goldRoll,
+    },
+    form: {
+      closeOnSubmit: true,
+    },
+    tag: 'form',
+    position: {
+      width: 235,
+    },
+    window: {
+      resizable: false,
+      contentClasses: ['owb', 'dialog', 'creator'],
+    },
+  };
+
+  static PARTS = {
+    body: {
+      template: 'systems/owb/templates/actors/dialogs/character-creation.html',
+    },
+  };
+
 
   /* -------------------------------------------- */
 
@@ -18,42 +53,26 @@ export class OWBCharacterCreator extends FormApplication {
    * @type {String}
    */
   get title() {
-    return `${this.object.name}: ${game.i18n.localize('OWB.dialog.generator')}`;
+    return `${this.options.prototypeToken.actor.name}: ${game.i18n.localize('OWB.dialog.generator')}`;
   }
 
-  /* -------------------------------------------- */
-
-  /**
-   * Construct and return the data object used to render the HTML template for this form application.
-   * @return {Object}
-   */
-  getData() {
-    let data = this.object;
+  async _prepareContext(options) {
+    let data = {};
     data.user = game.user;
+    data.actor = this.options.prototypeToken.actor;
+    data.system = this.options.system;
     data.config = CONFIG.OWB;
-    data.counters = {
-      str: 0,
-      wis: 0,
-      dex: 0,
-      int: 0,
-      cha: 0,
-      con: 0,
-      gold: 0
-    }
-    data.stats = {
-      sum: 0,
-      avg: 0,
-      std: 0
-    }
+    data.counters = this.#counters;
+    data.stats = this.#stats;
     return data;
   }
 
   /* -------------------------------------------- */
 
-  doStats(ev) {
-    const list = $(ev.currentTarget).closest('.attribute-list');
+  async doStats(_ev, target) {
+    const list = target.closest('.attribute-list');
     const values = [];
-    list.find('.score-value').each((i, s) => {
+    list.querySelectorAll('.score-value').forEach( (s) => {
       if (s.value != 0) {
         values.push(parseInt(s.value));
       }
@@ -64,16 +83,20 @@ export class OWBCharacterCreator extends FormApplication {
     const mean = parseFloat(sum) / n;
     const std = Math.sqrt(values.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n);
 
-    const stats = list.siblings('.roll-stats');
-    stats.find('.sum').text(sum);
-    stats.find('.avg').text(Math.round(10 * sum / n) / 10);
-    stats.find('.std').text(Math.round(100 * std) / 100);
+    const stats = list.parentElement.querySelector('.roll-stats');
+    stats.querySelector('.sum').textContent = sum;
+    stats.querySelector('.avg').textContent = Math.round(10 * sum / n) / 10;
+    stats.querySelector('.std').textContent = Math.round(100 * std) / 100;
 
     if (n >= 6) {
-      $(ev.currentTarget).closest('form').find('button[type="submit"]').removeAttr('disabled');
+      target.closest('form').querySelector('button[type="submit"]').removeAttribute('disabled');
     }
 
-    this.object.stats = {
+    this.updateStats(n, sum, std);
+  }
+
+  updateStats(n, sum, std) {
+    this.#stats = {
       sum: sum,
       avg: Math.round(10 * sum / n) / 10,
       std: Math.round(100 * std) / 100
@@ -82,7 +105,7 @@ export class OWBCharacterCreator extends FormApplication {
 
   rollScore(score, options = {}) {
     // Increase counter
-    this.object.counters[score]++;
+    this.#counters[score]++;
 
     const label = score != "gold" ? game.i18n.localize(`OWB.scores.${score}.long`) : "Gold";
     const rollParts = ["3d6"];
@@ -98,38 +121,40 @@ export class OWBCharacterCreator extends FormApplication {
       data: data,
       skipDialog: true,
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: game.i18n.format('OWB.dialog.generateScore', { score: label, count: this.object.counters[score] }),
-      title: game.i18n.format('OWB.dialog.generateScore', { score: label, count: this.object.counters[score] }),
+      flavor: game.i18n.format('OWB.dialog.generateScore', { score: label, count: this.#counters[score] }),
+      title: game.i18n.format('OWB.dialog.generateScore', { score: label, count: this.#counters[score] }),
     });
   }
 
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-    html.find('a.score-roll').click((ev) => {
-      const el = ev.currentTarget.parentElement.parentElement;
-      const score = el.dataset.score;
-      this.rollScore(score, { event: ev }).then(r => {
-        $(el).find('input').val(r.total).trigger('change');
-      });
-    });
+  static async _scoreRoll(event, target) {
+    const el = target.parentElement.parentElement;
+    const score = el.dataset.score;
+    const roll = await this.rollScore(score, { event: event });
+    el.querySelector('input').value = roll.total;
+    this.doStats(event, target);
+  }
 
-    html.find('a.gold-roll').click((ev) => {
-      const el = ev.currentTarget.parentElement.parentElement.parentElement;
-      this.rollScore("gold", { event: ev }).then(r => {
-        $(el).find('.gold-value').val(r.total);
-      });
-    });
+  static async _goldRoll(event, target) {
+    const el = target.parentElement.parentElement.parentElement;
+    const roll = await this.rollScore("gold", { event: event });
+    el.querySelector('.gold-value').value = roll.total;
+  }
 
-    html.find('input.score-value').change(ev => {
-      this.doStats(ev);
+  static async _onSubmit(_event, target) {
+    const actorId = target.dataset.actorId;
+    const gold = target.parentElement.parentElement.querySelector('#gold').value;
+    const scores = {
+      str: { value: 0},
+      int: { value: 0},
+      wis: { value: 0},
+      dex: { value: 0},
+      con: { value: 0},
+      cha: { value: 0},
+    };
+    const list = target.parentElement.parentElement.querySelector('.attribute-list');
+    list.querySelectorAll('.score-value').forEach( (s) => {
+      scores[s.name].value = s.value;
     })
-  }
-
-  async _onSubmit(event, { updateData = null, preventClose = false, preventRender = false } = {}) {
-    super._onSubmit(event, { updateData: updateData, preventClose: preventClose, preventRender: preventRender });
-    // Generate gold
-    const gold = event.target.elements.namedItem('gold').value;
     const itemData = {
       name: "money",
       type: "item",
@@ -141,19 +166,9 @@ export class OWBCharacterCreator extends FormApplication {
         }
       }
     };
-    this.object.createEmbeddedDocuments("Item",[itemData]);
-  }
-  /**
-   * This method is called upon form submission after form data is validated
-   * @param event {Event}       The initial triggering submission event
-   * @param formData {Object}   The object of validated form data with which to update the object
-   * @private
-   */
-  async _updateObject(event, formData) {
-    event.preventDefault();
-    // Update the actor
-    this.object.update(formData);
-    // Re-draw the updated sheet
-    this.object.sheet.render(true);
+    const actor = game.actors.get(actorId);
+    await actor.update({system:{scores: scores}});
+    await actor.createEmbeddedDocuments("Item",[itemData]);
+    this.close();
   }
 }

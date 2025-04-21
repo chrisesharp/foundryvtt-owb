@@ -1,0 +1,40 @@
+<div class="form-group block-input">
+    <label>{{localize 'OWB.abilities.Requirements'}}</label>
+    <div class="form-fields">
+    <input type="text" name="system.requirements" value="{{data.requirements}}" data-dtype="String" />
+    </div>
+</div>
+<div class="form-group block-input">
+    <label>{{localize 'OWB.items.Roll'}}</label>
+    <div class="form-fields">
+    <input type="text" name="system.roll" value="{{data.roll}}" data-dtype="String" />
+    </div>
+</div>
+<div class="form-group flexrow">
+    <label>{{localize 'OWB.items.RollType'}}</label> 
+    <div class="form-fields">
+    <select name="system.rollType">
+        {{selectOptions config.roll_type selected=data.rollType inverted=false}}
+    </select>
+    </div>
+</div>
+<div class="form-group flexrow">
+    <label>{{localize 'OWB.items.RollTarget'}}</label>
+    <div class="form-fields">
+    <input type="text" name="system.rollTarget" value="{{data.rollTarget}}" data-dtype="Number" />
+    </div>
+</div>
+<div class="form-group flexrow">
+    <label>{{localize 'OWB.items.BlindRoll'}}</label>
+    <div class="form-fields">
+    <input type="checkbox" name="system.blindroll"  {{isChecked data.blindroll}} />
+    </div>
+</div>
+<div class="form-group flexrow">
+    <label>{{localize 'OWB.weapons.save'}}</label>
+    <div class="form-fields">
+    <select name="system.save">
+        {{selectOptions config.saves_short selected=data.save inverted=false}}
+    </select>
+    </div>
+</div>

@@ -1,7 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 
-.sheet, .message *:not(i)
+.application.owb .window-content,
+.app.owb .window-content,
+.window-app.owb .window-content
 {
-    font-family: 'Special Elite', cursive;
-    line-height: 1.4;
+    &,
+    & h1,
+    & h2,
+    & h3,
+    & h4 {
+        font-family: $font-primary;
+        line-height: 1.4;
+        font-size: revert;
+        color: $colorOlive;
+        text-shadow: none;
+    }
+
+    & h1 {
+        font-size: x-large;
+    }
 }

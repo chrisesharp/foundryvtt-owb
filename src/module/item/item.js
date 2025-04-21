@@ -1,4 +1,7 @@
 import { OWBDice } from "../dice.js";
+const { renderTemplate } = foundry.applications.handlebars;
+const { DialogV2 } = foundry.applications.api;
+const { TextEditor } = foundry.applications.ux;
 
 /**
  * Override and extend the basic :class:`Item` implementation
@@ -36,8 +39,15 @@ export class OWBItem extends Item {
   }
 
   static chatListeners(html) {
-    html.on("click", ".card-buttons button", this._onChatCardAction.bind(this));
-    html.on("click", ".item-name", this._onChatCardToggleContent.bind(this));
+    const buttons = html.querySelectorAll('.card-buttons button');
+    buttons.forEach((el) => {
+      el.addEventListener("click", this._onChatCardAction.bind(this));
+    });
+
+    const items = html.querySelectorAll('.item-name')
+    items.forEach((el) => {
+      el.addEventListener("click", this._onChatCardToggleContent.bind(this));
+    });
   }
 
  async  getChatData(htmlOptions={async: true}) {
@@ -64,7 +74,7 @@ export class OWBItem extends Item {
   rollWeapon(options = {}) {
     const isNPC = this.actor.type != "character";
     const data = this.system;
-    const type = isNPC ? "attack" : "melee";
+    let type = isNPC ? "attack" : "melee";
     
     let calibre;
     let ammo;
@@ -101,15 +111,14 @@ export class OWBItem extends Item {
     }
 
     const button = (type) => {
-      let icon = (type === 'melee') ? '<i class="fas fa-fist-raised"></i>': '<i class="fas fa-bullseye"></i>';
+      let icon = (type === 'melee') ? 'fas fa-fist-raised': 'fas fa-bullseye';
       return {
         icon: icon,
         label: type.charAt(0).toUpperCase() + type.slice(1),
-        callback: () => {
-          let burst = $("#burst")[0].checked;
-          let suppress = $("#suppress")[0].checked;
-          rollData['burst'] = burst;
-          rollData['suppress'] = suppress;
+        action: type,
+        callback: (html) => {
+          rollData['burst'] = html.currentTarget.querySelector("#burst").checked;
+          rollData['suppress'] = html.currentTarget.querySelector("#suppress").checked;
           this.actor.targetAttack(rollData, type, options);
         }
       }
@@ -122,14 +131,14 @@ export class OWBItem extends Item {
     }
 
     if (data.missile) {
-      let btns = {}
+      let btns = []
       if (data.melee) {
-        btns['melee'] = button("melee");
+        btns.push(button("melee"));
       }
-      btns['short'] = button("short");
-      btns['medium'] = button("medium");
-      btns['long'] = button("long");
-      btns['extreme'] = button("extreme");
+      btns.push(button("short"));
+      btns.push(button("medium"));
+      btns.push(button("long"));
+      btns.push(button("extreme"));
 
       let extra_options = "<label>Fire:</label>" + fire_opt("normal",true, true);
       if (data.burst) {
@@ -144,12 +153,18 @@ export class OWBItem extends Item {
         extra_options += fire_opt("suppress");
       }
 
-      // Dialog
-      new Dialog({
-        title: "Choose Attack Range",
+      DialogV2.wait({
+        classes: ['owb', 'ranged-attack'],
+        window: {
+          title: 'Choose Attack Range',
+        },
+        modal: false,
         content: extra_options,
-        buttons: btns
-      }).render(true);
+        buttons: btns,
+        rejectClose: false,
+        submit: () => {
+        },
+      });
       return true;
     } else if (!data.missile && !isNPC) {
       type = "melee";
@@ -161,7 +176,7 @@ export class OWBItem extends Item {
   async rollFormula(options = {}) {
     const data = this.system;
     if (!data.roll) {
-      throw new Error("This Item does not have a formula to roll!");
+      return;
     }
 
     const label = `${this.name}`;
@@ -242,38 +257,34 @@ export class OWBItem extends Item {
     let update = (data.tags) ? foundry.utils.duplicate(data.tags) : [];
     let newData = {};
     var regExp = /\(([^)]+)\)/;
-    if (update.length) {
-      values.forEach((val) => {
-        // Catch infos in brackets
-        var matches = regExp.exec(val);
-        let title = "";
-        if (matches) {
-          title = matches[1];
-          val = val.substring(0, matches.index).trim();
-        } else {
-          val = val.trim();
-          title = val;
-        }
-        // Auto fill checkboxes
-        switch (val) {
-          case CONFIG.OWB.tags.melee:
-            newData.melee = true;
-            break;
-          case CONFIG.OWB.tags.missile:
-            newData.missile = true;
-            break;
-          case CONFIG.OWB.tags.burst:
-            newData.burst = true;
-            break;
-          case CONFIG.OWB.tags.suppressive:
-            newData.suppressive = true;
-            break;
-        }
-        update.push({ title: title, value: val });
-      });
-    } else {
-      update = values;
-    }
+    values.forEach((val) => {
+      // Catch infos in brackets
+      var matches = regExp.exec(val);
+      let title = "";
+      if (matches) {
+        title = matches[1];
+        val = val.substring(0, matches.index).trim();
+      } else {
+        val = val.trim();
+        title = val;
+      }
+      // Auto fill checkboxes
+      switch (val) {
+        case CONFIG.OWB.tags.melee:
+          newData.melee = true;
+          break;
+        case CONFIG.OWB.tags.missile:
+          newData.missile = true;
+          break;
+        case CONFIG.OWB.tags.burst:
+          newData.burst = true;
+          break;
+        case CONFIG.OWB.tags.suppressive:
+          newData.suppressive = true;
+          break;
+      }
+      update.push({ title: title, value: val });
+    });
     newData.tags = update;
     return this.update({ system: newData });
   }

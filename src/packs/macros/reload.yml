@@ -2,6 +2,7 @@ name: Reload
 type: script
 img: icons/svg/target.svg
 command: |-
+    const { DialogV2 } = foundry.applications.api;
     function getAmmo(token, calibre) {
         if (token && calibre) {
         const hasAmmo = (i) => {
@@ -43,40 +44,44 @@ command: |-
             options += `<option value="${w.id}">${w.name}</option>\n`;
         }
         });
-        new Dialog({
-        title: `Token Vision Configuration`,
-        content: `
-            <form>
-            <div class="form-group">
-                <label>Reload Weapon:</label>
-                <select id="weapon" name="weapon">
-                <option value="none">No Weapon</option>
-                ${options}
-                </select>
-            </div>
-            </form>
-            `,
-        buttons: {
-            yes: {
-            icon: "<i class='fas fa-check'></i>",
-            label: `Reload`,
-            callback: () => applyChanges = true
+        DialogV2.wait({
+            window: {
+                title: `Token Vision Configuration`,
             },
-            no: {
-            icon: "<i class='fas fa-times'></i>",
-            label: `Cancel`
-            },
-        },
-        default: "yes",
-        close: html => {
-            if (applyChanges) {
-                const weapon_id = html.find('[name="weapon"]')[0].value || "none";
-                if (weapon_id !== "none") {
-                    reloadAmmo(token, weapon_id);
+            content: `
+                <form>
+                <div class="form-group">
+                    <label>Reload Weapon:</label>
+                    <select id="weapon" name="weapon">
+                    <option value="none">No Weapon</option>
+                    ${options}
+                    </select>
+                </div>
+                </form>
+                `,
+            buttons: [
+                {
+                    action: 'yes',
+                    icon: 'fas fa-check',
+                    label: 'OWB.Reload',
+                    callback: () => applyChanges = true
+                },
+                {
+                    action: 'no',
+                    icon: 'fas fa-times',
+                    label: 'OWB.Cancel'
+                },
+            ],
+            default: "yes",
+            submit: html => {
+                if (applyChanges) {
+                    const weapon_id = html.querySelector('[name="weapon"]').value || "none";
+                    if (weapon_id !== "none") {
+                        reloadAmmo(token, weapon_id);
+                    }
                 }
             }
-        }
-        }).render(true);
+        });
     } else {
         ui.notifications.warn(`You must select a token first.`);
     }

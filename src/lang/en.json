@@ -240,7 +240,7 @@
   "OWB.weapons.suppressive.long": "Suppressive Fire",
 
   "TYPES.Actor.character": "Character",
-  "TYPES.Actor.npc": "NPC",
+  "TYPES.Actor.enemy": "Enemy",
   "TYPES.Actor.vehicle": "Vehicle",
   "TYPES.Item.item": "Item",
   "TYPES.Item.weapon": "Weapon",

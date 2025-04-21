@@ -211,7 +211,7 @@ export class OWBActor extends Actor {
     });
   }
 
-  rollSave(save, options = {}) {
+  rollSave(save, options) {
     const label = game.i18n.localize(`OWB.saves.${save}.long`);
     const rollParts = ["1d20"];
 

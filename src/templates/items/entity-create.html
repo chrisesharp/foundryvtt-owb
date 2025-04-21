@@ -9,11 +9,7 @@
         <label>{{localize 'OWB.dialog.itemType'}}</label>
         <div class="form-fields">
             <select name="type">
-                {{#select types}}
-                {{#each types as |type|}}
-                <option value="{{type}}">{{type}}</option>
-                {{/each}}
-                {{/select}}
+                {{selectOptions types localize=false}}
             </select>
         </div>
     </div>

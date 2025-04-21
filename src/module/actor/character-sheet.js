@@ -1,126 +1,189 @@
 import { OWBActorSheet } from "./actor-sheet.js";
 import { OWBCharacterModifiers } from "../dialog/character-modifiers.js";
 import { OWBCharacterCreator } from "../dialog/character-creation.js";
+const { renderTemplate } = foundry.applications.handlebars;
+import { slideToggle } from '../utils/slide.js';
+const { DialogV2 } = foundry.applications.api;
+const { TextEditor } = foundry.applications.ux;
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  */
 export class OWBActorSheetCharacter extends OWBActorSheet {
-  constructor(...args) {
-    super(...args);
-  }
-
-  /* -------------------------------------------- */
-
-  /**
-   * Extend and override the default options used by the 5e Actor Sheet
-   * @returns {Object}
-   */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["owb", "sheet", "actor", "character"],
-      template: "systems/owb/templates/actors/character-sheet.html",
+  static DEFAULT_OPTIONS = {
+    classes: ['owb', 'sheet', 'actor', 'character'],
+    position: {
       width: 450,
       height: 530,
+    },
+    actions: {
+      generateScores: this.generateScores,
+      modifiers: this._onShowModifiers,
+      rollCheck: this._onRollCheck,
+      rollExplore: this._onRollExploration,
+      onCaret: this._onCaret,
+      addLang: this._pushLang,
+      removeLang: this._popLang,
+      toggleEquip: this._toggleEquip,
+    },
+    window: {
       resizable: true,
-      tabs: [
-        {
-          navSelector: ".sheet-tabs",
-          contentSelector: ".sheet-body",
-          initial: "attributes",
-        },
-      ],
-    });
+    },
+    // Custom property that's merged into `this.options`
+    dragDrop: [{ dragSelector: '[data-drag]', dropSelector: null }],
+    form: {
+      submitOnChange: true,
+    },
+  };
+
+  /** @override */
+  static PARTS = {
+    header: {
+      template: 'systems/owb/templates/actors/partials/character-header.hbs',
+    },
+    tabs: {
+      template: 'systems/owb/templates/actors/partials/character-nav.hbs',
+    },
+    abilities: {
+      template: 'systems/owb/templates/actors/partials/character-abilities.hbs',
+    },
+    attributes: {
+      template: 'systems/owb/templates/actors/partials/character-attributes.hbs',
+    },
+    inventory: {
+      template: 'systems/owb/templates/actors/partials/character-inventory.hbs',
+    },
+    notes: {
+      template: 'systems/owb/templates/actors/partials/actor-notes.hbs',
+    },
+  };
+
+  /** @override */
+  _configureRenderOptions(options) {
+    super._configureRenderOptions(options);
+    // Not all parts always render
+    options.parts = ['header', 'tabs', 'abilities', 'attributes', 'inventory', 'notes'];
   }
 
-  generateScores() {
+  /**
+  * Prepare data for rendering the Actor sheet
+  * The prepared data object contains both the actor data as well as additional sheet options
+  */
+  async _prepareContext(options) {
+    const data = await super._prepareContext(options);
+    return this._prepareItems(data);
+  }
+
+  /** @override */
+  async _preparePartContext(partId, context) {
+    switch (partId) {
+      case 'notes':
+        context.tab = context.tabs[partId];
+        context.enrichedBio = await TextEditor.enrichHTML(this.actor.system.details.biography, {
+          secrets: this.document.isOwner,
+          rollData: this.actor.getRollData(),
+          // Relative UUID resolution
+          relativeTo: this.actor,
+        });
+        context.enrichedNotes = await TextEditor.enrichHTML(this.actor.system.details.notes, {
+          secrets: this.document.isOwner,
+          rollData: this.actor.getRollData(),
+          // Relative UUID resolution
+          relativeTo: this.actor,
+        });
+        break;
+      default:
+        context.tab = context.tabs[partId];
+        break;
+    }
+    return context;
+  }
+
+  static async generateScores() {
     new OWBCharacterCreator(this.actor, {
       top: this.position.top + 40,
       left: this.position.left + (this.position.width - 400) / 2,
     }).render(true);
   }
 
-  /**
-   * Prepare data for rendering the Actor sheet
-   * The prepared data object contains both the actor data as well as additional sheet options
-   */
-  async getData() {
-    const data = await super.getData();
-    return this._prepareItems(data);
-    // return data;
+  static async _onRollCheck(event, target) {
+    const score = target.dataset.score;
+    this.actor.rollCheck(score, { event: event });
   }
-
 
   async _chooseLang() {
-    let choices = CONFIG.OWB.languages;
-    let templateData = { choices: choices },
-      dlg = await renderTemplate(
-        "systems/owb/templates/actors/dialogs/lang-create.html",
-        templateData
-      );
-    //Create Dialog window
-    return new Promise((resolve) => {
-      new Dialog({
-        title: "Choose Language",
-        content: dlg,
-        buttons: {
-          ok: {
-            label: game.i18n.localize("OWB.Ok"),
-            icon: '<i class="fas fa-check"></i>',
-            callback: (html) => {
-              resolve({
-                choice: html.find('select[name="choice"]').val(),
-                fluency: html.find('select[name="fluency"]').val(),
-              });
-            },
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize("OWB.Cancel"),
+    const choices = CONFIG.OWB.languages;
+    const templateData = { choices: choices };
+    const dlg = await renderTemplate("systems/owb/templates/actors/dialogs/lang-create.html", templateData);
+    return DialogV2.wait({
+      classes: ['owb'],
+      window: {
+        title: 'Choose Language',
+      },
+      modal: false,
+      content: dlg,
+      buttons: [
+        {
+          action: 'ok',
+          label: 'OWB.Ok',
+          icon: 'fas fa-check',
+          callback: (ev) => {
+            const html = ev.currentTarget;
+            return {
+              choice: html.querySelector('select[name="choice"]').value,
+              fluency: html.querySelector('select[name="fluency"]').value,
+            };
           },
         },
-        default: "ok",
-      }).render(true);
+        {
+          action: 'cancel',
+          icon: 'fas fa-times',
+          label: 'OWB.Cancel',
+        },
+      ],
+      rejectClose: false,
+      submit: (result) => {
+        return result;
+      },
     });
   }
 
-  async _pushLang(header) {
+  static async _pushLang(event, header) {
     const type = header.dataset.type;
-    this._chooseLang().then((dialogInput) => {
-      const name = dialogInput.choice;
-      const fluency = dialogInput.fluency;
-      const img = CONFIG.OWB.languages[name].img;
-      const itemData = {
-        name: name,
-        type: type,
-        img:img,
-        system: {}
-      };
-      itemData.system["name"] = name;
-      itemData.system["fluency"] = fluency;
-      itemData.system["save"] = "save";
-      return this.actor.createEmbeddedDocuments("Item",[itemData]);
-    });
+    const dialogInput = await this._chooseLang();
+    const name = dialogInput.choice;
+    const fluency = dialogInput.fluency;
+    const img = CONFIG.OWB.languages[name].img;
+    const itemData = {
+      name: name,
+      type: type,
+      img:img,
+      system: {}
+    };
+    itemData.system["name"] = name;
+    itemData.system["fluency"] = fluency;
+    itemData.system["save"] = "save";
+    return this.actor.createEmbeddedDocuments("Item",[itemData]);
   }
 
-  _popLang(table, lang) {
+  static async _popLang(event, target) {
+    event.preventDefault();
+    const header = target.parentElement.parentElement;
+    const table = target.dataset.array;
+    const lang = header.dataset.lang;
+    const itemID = header.dataset.itemId;
     const data = this.actor.system;
     let update = data[table].value.filter((el) => el.name != lang);
     let newData = {};
     newData[table] = { value: update };
+    const item = this.actor.items.get(itemID);
+    await item.delete();
     return this.actor.update({ system: newData });
   }
 
   /* -------------------------------------------- */
 
-  async _onQtChange(event) {
-    event.preventDefault();
-    const itemId = event.currentTarget.closest(".item").dataset.itemId;
-    const item = this.actor.items.get(itemId);
-    return item.update({ "system.quantity.value": parseInt(event.target.value) });
-  }
-
-  _onShowModifiers(event) {
+  static async _onShowModifiers(event) {
     event.preventDefault();
     new OWBCharacterModifiers(this.actor, {
       top: this.position.top + 40,
@@ -128,116 +191,33 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     }).render(true);
   }
 
-  /**
-   * Activate event listeners using the prepared sheet HTML
-   * @param html {HTML}   The prepared HTML object ready to be rendered into the DOM
-   */
-  activateListeners(html) {
-    super.activateListeners(html);
+  static async _onRollExploration(event, target) {
+    const expl = target.dataset.exploration;
+    this.actor.rollExploration(expl, { event: event });
+  }
 
-    html.find(".ability-score .attribute-name a").click((event) => {
-      const actorObject = this.actor;
-      const element = event.currentTarget;
-      const score = element.parentElement.parentElement.dataset.score;
-      const stat = element.parentElement.parentElement.dataset.stat;
-      if (!score) {
-        if (stat === "lr") {
-          actorObject.rollLoyalty(score, { event: event });
-        }
-      } else {
-        actorObject.rollCheck(score, { event: event });
-      }
-    });
+  static async _onCaret(event, target) {
+    const items = target.parentElement.parentElement.querySelector(".item-list");
+    if (items.style.display == "none") {
+      const el = target.querySelector(".fas.fa-caret-right");
+      el.classList.remove("fa-caret-right");
+      el.classList.add("fa-caret-down");
+      slideToggle(items);
+    } else {
+      const el = target.querySelector(".fas.fa-caret-down");
+      el.classList.remove("fa-caret-down");
+      el.classList.add("fa-caret-right");
+      slideToggle(items);
+    }
+  }
 
-    html.find(".exploration .attribute-name a").click((event) => {
-      const actorObject = this.actor;
-      const element = event.currentTarget;
-      const expl = element.parentElement.parentElement.dataset.exploration;
-      actorObject.rollExploration(expl, { event: event });
-    });
-
-    html.find(".inventory .item-titles .item-caret").click((event) => {
-      const items = $(event.currentTarget.parentElement.parentElement).children(".item-list");
-      if (items.css("display") == "none") {
-        const el = $(event.currentTarget).find(".fas.fa-caret-right");
-        el.removeClass("fa-caret-right");
-        el.addClass("fa-caret-down");
-        items.slideDown(200);
-      } else {
-        const el = $(event.currentTarget).find(".fas.fa-caret-down");
-        el.removeClass("fa-caret-down");
-        el.addClass("fa-caret-right");
-        items.slideUp(200);
-      }
-    });
-
-    html.find("a[data-action='modifiers']").click((ev) => {
-      this._onShowModifiers(ev);
-    });
-
-    // Everything below here is only needed if the sheet is editable
-    if (!this.options.editable) return;
-
-    // Update Inventory Item
-    html.find(".item-edit").click((ev) => {
-      const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.items.get(li.data("itemId"));
-      item.sheet.render(true);
-    });
-
-    // Delete Inventory Item
-    html.find(".item-delete").click((ev) => {
-      const li = $(ev.currentTarget).parents(".item");
-      this.actor.deleteEmbeddedDocuments("Item",[li.data("itemId")]);
-      li.slideUp(200, () => this.render(false));
-    });
-
-    html.find(".item-push").click((event) => {
-      event.preventDefault();
-      const header = event.currentTarget;
-      return this._pushLang(header);
-    });
-
-    html.find(".item-pop").click((event) => {
-      event.preventDefault();
-      const header = event.currentTarget;
-      const table = header.dataset.array;
-      this._popLang(
-        table,
-        $(event.currentTarget).closest(".item").data("lang")
-      );
-    });
-
-    html.find(".item-create").click((event) => {
-      event.preventDefault();
-      const header = event.currentTarget;
-      const type = header.dataset.type;
-      const itemData = {
-        name: `New ${type.capitalize()}`,
-        type: type,
-        system: foundry.utils.duplicate(header.dataset),
-      };
-      //delete itemData.system["type"];
-      return this.actor.createEmbeddedDocuments("Item",[itemData]);
-    });
-
-    //Toggle Equipment
-    html.find(".item-toggle").click(async (ev) => {
-      const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.items.get(li.data("itemId"));
-      await item.update({
-        system: {
-          equipped: !item.system.equipped,
-        },
-      });
-    });
-
-    html.find(".quantity input")
-        .click((ev) => ev.target.select())
-        .change(this._onQtChange.bind(this));
-
-    html.find("a[data-action='generate-scores']").click((ev) => {
-      this.generateScores(ev);
+  static async _toggleEquip(event, target) {
+    const li = target.closest(".item");
+    const item = this.actor.items.get(li.dataset.itemId);
+    await item.update({
+      system: {
+        equipped: !item.system.equipped,
+      },
     });
   }
 }

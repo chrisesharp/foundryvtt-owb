@@ -1,0 +1,56 @@
+<section
+  class='sheet-body tab notes editor {{tab.cssClass}}'
+  data-group='primary'
+  data-tab='notes'
+>
+<div class="inventory">
+        <div class="flexrow" style="align-items: flex-start">
+            <div class="inventory abilities languages flex1">
+                <div class="item-titles flexrow">
+                    <div class="item-name">{{localize "OWB.category.languages"}}</div>
+                    <div class="item-controls">
+                        {{#if owner}}
+                        <a class="item-control item-push" data-action="addLang" data-array="languages" data-type="language" title="{{localize 'OWB.Add'}}">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                        {{/if}}
+                    </div>
+                </div>
+                <ol class="item-list">
+                    {{#each data.languages.value as |lang|}}
+                    <li class="item-entry language">
+                        <div class="item flexrow"  data-lang="{{lang.name}}" data-item-id="{{lang.id}}">
+                            <div class="item-name attribute item-rollable flexrow">
+                                <div class="item-image" data-action="onRollItem" style="background-image: url({{lang.img}}); background-size: 32px; width: 32px"></div>
+                                <div>{{lang.name}} ({{lang.system.fluency}})</div>
+                            </div>
+                            <div class="item-controls">
+                                {{#if ../owner}}
+                                <a class="item-control item-delete item-pop" data-action="removeLang"  data-array="languages" title="{{localize 'OWB.Delete'}}">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </li>
+                    {{/each}}
+                </ol>
+            </div>
+            <div class="flex2 description">
+                <div class="item-titles">{{localize "OWB.category.description"}}</div>
+                <div class="editor prosemirror">
+                    <prose-mirror name="system.details.biography" data-document-u-u-i-d="{{actor.uuid}}" value="{{data.details.biography}}" collaborate="true" toggled="true">
+                    {{{enrichedBio}}}
+                    </prose-mirror>
+                </div>
+            </div>
+        </div>
+    </div>
+  {{! Editors must receive enriched text data from getData to properly handle rolls, UUID links, etc. }}
+  {{#if editable}} 
+    <prose-mirror name="system.details.notes" data-document-u-u-i-d="{{actor.uuid}}" value="{{data.details.notes}}" collaborate="true" toggled="true">
+      {{{enrichedNotes}}}
+    </prose-mirror>
+  {{else}} {{{enrichedNotes}}}
+  {{/if}}
+</section>

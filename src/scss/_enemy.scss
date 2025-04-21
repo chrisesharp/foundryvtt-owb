@@ -1,4 +1,4 @@
-@at-root .owb.actor.enemy {
+&.actor.enemy {
   min-height: 565px;
   min-width: 460px;
   .header-details {
@@ -79,16 +79,6 @@
         color: $colorTan;
         font-size: 10px;
       }
-    }
-  }
-  .panel.abilities {
-    .item-list {
-      .item-entry {
-        .item-pattern {
-          flex: 0 0 15px;
-          cursor: pointer;
-        }
-      }  
     }
   }
 }

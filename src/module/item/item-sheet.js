@@ -1,73 +1,88 @@
+const { ItemSheetV2 } = foundry.applications.sheets;
+const { HandlebarsApplicationMixin } = foundry.applications.api;
+const { TextEditor } = foundry.applications.ux;
+
 /**
  * Extend the basic ItemSheet with some very simple modifications
  */
-export class OWBItemSheet extends ItemSheet {
-  /**
-   * Extend and override the default options used by the Simple Item Sheet
-   * @returns {Object}
-   */
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["owb", "sheet", "item"],
+export class OWBItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
+
+  static DEFAULT_OPTIONS = {
+    classes: ['owb', 'sheet', 'item'],
+    position: {
       width: 520,
       height: 390,
-      resizable: false,
-      tabs: [
-        {
-          navSelector: ".tabs",
-          contentSelector: ".sheet-body",
-          initial: "description",
-        },
-      ],
-    });
+    },
+    actions: {
+      addTag: this._onAddTag,
+      delTag: this._onDeleteTag,
+      meleeToggle: this._onToggleMelee,
+      rangedToggle: this._onToggleRanged,
+    },
+    window: {
+      resizable: true,
+    },
+    // dragDrop: [{ dragSelector: '[data-drag]', dropSelector: null }],
+    form: {
+      submitOnChange: true,
+    },
+  };
+
+  static PARTS = {
+    header: {
+      template: 'systems/owb/templates/items/partials/item-header.hbs',
+    },
+    body: {
+      template: 'systems/owb/templates/items/partials/item-body.hbs',
+    },
   }
 
-  /* -------------------------------------------- */
-
-  /** @override */
-  get template() {
-    const path = "systems/owb/templates/items/";
-    return `${path}/${this.item.type}-sheet.html`;
-  }
-
-  /**
-   * Prepare data for rendering the Item sheet
-   * The prepared data object contains both the actor data as well as additional sheet options
-   */
- async getData() {
-    const data = await super.getData();
-    data.editable = this.document.sheet.isEditable;
-    data.config = CONFIG.OWB;
+  async _prepareContext(options) {
+    let data = await super._prepareContext(options);
     data.data = this.item.system;
+    data.item = this.item;
+    data.config = CONFIG.OWB;
+    data.isWeapon = this.item.type === 'weapon';
+    data.isAbility = this.item.type === 'ability';
+    data.enrichedNotes = await TextEditor.enrichHTML(this.item.system.description, {
+      secrets: this.document.isOwner,
+      rollData: this.actor?.getRollData(),
+      // Relative UUID resolution
+      relativeTo: this.item,
+    });
     return data;
   }
 
-  /* -------------------------------------------- */
-
-  /**
-   * Activate event listeners using the prepared sheet HTML
-   * @param html {HTML}   The prepared HTML object ready to be rendered into the DOM
-   */
-  activateListeners(html) {
-    html.find('input[data-action="add-tag"]').keypress((ev) => {
-      if (ev.which == 13) {
-        let value = $(ev.currentTarget).val();
-        let values = value.split(',');
-        this.object.pushTag(values);
+  _onRender(_context, _options) {
+    const html = this.element;
+    const field = html.querySelector('input[data-action="addTag"]');
+    field?.addEventListener('keyup', (ev) => {
+      if (ev.key === 'Enter') {
+        let value = ev.currentTarget.value;
+        let values = value.split(',').filter((i) => i.length > 0);
+        this.item.pushTag(values);
       }
     });
-    html.find('.tag-delete').click((ev) => {
-      let value = ev.currentTarget.parentElement.dataset.tag;
-      this.object.popTag(value);
-    });
-    html.find('a.melee-toggle').click(() => {
-      this.object.update({system: {melee: !this.object.system.melee}});
-    });
+  }
 
-    html.find('a.missile-toggle').click(() => {
-      this.object.update({system: {missile: !this.object.system.missile}});
-    });
+  static async _onAddTag(event, target) {
+    if (event.type === 'change') {
+      let value = target.value;
+      let values = value.split(',');
+      this.item.pushTag(values);
+    }
+  }
 
-    super.activateListeners(html);
+  static async _onDeleteTag(_event, target) {
+    const value = target.parentElement.dataset.tag;
+    this.item.popTag(value);
+  }
+
+  static async _onToggleMelee() {
+    this.item.update({system: {melee: !this.item.system.melee}});
+  }
+
+  static async  _onToggleRanged() {
+    this.item.update({system: {missile: !this.item.system.missile}});
   }
 }

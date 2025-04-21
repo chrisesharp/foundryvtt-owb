@@ -1,22 +1,27 @@
+const { loadTemplates } = foundry.applications.handlebars;
+
 export const preloadHandlebarsTemplates = async function () {
     const templatePaths = [
-        //Character Sheets
-        'systems/owb/templates/actors/character-sheet.html',
-        'systems/owb/templates/actors/enemy-sheet.html',
-        'systems/owb/templates/actors/vehicle-sheet.html',
-        //Actor partials
-        //Sheet tabs
-        'systems/owb/templates/actors/partials/character-header.html',
-        'systems/owb/templates/actors/partials/character-attributes-tab.html',
-        'systems/owb/templates/actors/partials/character-abilities-tab.html',
-        'systems/owb/templates/actors/partials/character-inventory-tab.html',
-        'systems/owb/templates/actors/partials/character-notes-tab.html',
+        'systems/owb/templates/actors/partials/actor-notes.hbs',
+        'systems/owb/templates/actors/partials/actor-nav.hbs',
+        
+        'systems/owb/templates/actors/partials/character-attributes.hbs',
+        'systems/owb/templates/actors/partials/character-abilities.hbs',
+        'systems/owb/templates/actors/partials/character-header.hbs',
+        'systems/owb/templates/actors/partials/character-inventory.hbs',
+        'systems/owb/templates/actors/partials/character-nav.hbs',
 
-        'systems/owb/templates/actors/partials/enemy-header.html',
-        'systems/owb/templates/actors/partials/enemy-attributes-tab.html',
+        'systems/owb/templates/actors/partials/enemy-header.hbs',
+        'systems/owb/templates/actors/partials/enemy-attributes.hbs',
 
-        'systems/owb/templates/actors/partials/vehicle-header.html',
-        'systems/owb/templates/actors/partials/vehicle-attributes-tab.html'
+        'systems/owb/templates/actors/partials/vehicle-header.hbs',
+        'systems/owb/templates/actors/partials/vehicle-attributes.hbs',
+        'systems/owb/templates/actors/partials/vehicle-notes.hbs',
+
+        'systems/owb/templates/items/partials/item-header.hbs',
+        'systems/owb/templates/items/partials/item-body.hbs',
+        'systems/owb/templates/items/partials/ability-body.hbs',
+        'systems/owb/templates/items/partials/weapon-body.hbs',
     ];
     return loadTemplates(templatePaths);
 };
