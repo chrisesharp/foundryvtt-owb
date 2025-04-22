@@ -16,7 +16,8 @@ import { OWBCombat } from "./combat.js";
 const { Actors, Items } = foundry.documents.collections;
 const { renderTemplate } = foundry.applications.handlebars;
 const { ActorSheet, ItemSheet } = foundry.appv1.sheets;
-const { FrameViewer } = foundry.applications.sidebar.apps;
+// const { FrameViewer } = foundry.applications.sidebar.apps;
+import { FrameView } from './utils/frameview.js';
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -106,7 +107,7 @@ Hooks.on('renderSettings', async (object, html) => {
   const button = `<button data-action="userguide"><img src='systems/owb/assets/default/ability.png' width='16' height='16' style='${styling}'/>WWII:OWB Guide</button>`;
   docs.parentNode.innerHTML += button;
   html.querySelector('button[data-action="userguide"]').addEventListener('click', () => {
-    const fv = new FrameViewer({ url: site });
+    const fv = new FrameView({ url: site });
     fv.url = site;
     fv.render(true);
   });
