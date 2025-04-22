@@ -16,7 +16,6 @@ import { OWBCombat } from "./combat.js";
 const { Actors, Items } = foundry.documents.collections;
 const { renderTemplate } = foundry.applications.handlebars;
 const { ActorSheet, ItemSheet } = foundry.appv1.sheets;
-// const { FrameViewer } = foundry.applications.sidebar.apps;
 import { FrameView } from './utils/frameview.js';
 
 /* -------------------------------------------- */
