@@ -3,7 +3,6 @@ import { OWBPartySheet } from "./dialog/party-sheet.js";
 export const addControl = (object, html) => {
     let control = `<button class='owb-party-sheet' type="button" title='${game.i18n.localize('OWB.dialog.partysheet')}'><i class='fas fa-users'></i></button>`;
     html.querySelector('.directory-header').innerHTML += control;
-    // html.querySelector(".fas.fa-search").replaceWith($(control))
     html.querySelector('.owb-party-sheet').addEventListener('click', (ev) => {
         showPartySheet(object);
     })
