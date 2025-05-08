@@ -1,0 +1,26 @@
+{
+  "name": "Reload",
+  "type": "script",
+  "img": "icons/svg/target.svg",
+  "command": "function getAmmo(token, calibre) {\n    if (token && calibre) {\n    const hasAmmo = (i) => {\n        return (i.type == \"item\" &&  i.system.tags &&\n                (i.system.tags.find(t => t.title === \"cal\" && t.value === calibre) !== undefined)\n                );\n    }\n    return token.actor.items.find(f => hasAmmo(f));\n    }\n    return [];\n}\n\nasync function reloadAmmo(token, weapon_id) {\n    const weapon = token.actor.items.find(f => f.id === weapon_id);\n    let calibre = weapon.system.tags.filter(i => i.title === \"cal\");\n    calibre = calibre.length > 0 ? calibre[0].value : 0;\n    const ammo = getAmmo(token, calibre);\n    let messageContent;\n    if (ammo) {\n        const qty = Math.max(0,ammo.system.quantity.max);\n        await ammo.update({system:{quantity:{value:qty}}});\n        messageContent = `Reloaded ${weapon.name} with ${ammo.name}`;\n    } else {\n        messageContent = `You don't have any ammo for a ${weapon.name}`;\n    }\n    const chatData = {\n        user: game.user._id,\n        speaker: ChatMessage.getSpeaker(),\n        content: messageContent\n    };\n    ChatMessage.create(chatData, {});\n}\n\nif (token) {\n    let applyChanges = false;\n    let options = \"\"\n    token.actor.items.forEach(w => {\n    if (w.type === \"weapon\") {\n        options += `<option value=\"${w.id}\">${w.name}</option>\\n`;\n    }\n    });\n    new Dialog({\n    title: `Token Vision Configuration`,\n    content: `\n        <form>\n        <div class=\"form-group\">\n            <label>Reload Weapon:</label>\n            <select id=\"weapon\" name=\"weapon\">\n            <option value=\"none\">No Weapon</option>\n            ${options}\n            </select>\n        </div>\n        </form>\n        `,\n    buttons: {\n        yes: {\n        icon: \"<i class='fas fa-check'></i>\",\n        label: `Reload`,\n        callback: () => applyChanges = true\n        },\n        no: {\n        icon: \"<i class='fas fa-times'></i>\",\n        label: `Cancel`\n        },\n    },\n    default: \"yes\",\n    close: html => {\n        if (applyChanges) {\n            const weapon_id = html.find('[name=\"weapon\"]')[0].value || \"none\";\n            if (weapon_id !== \"none\") {\n                reloadAmmo(token, weapon_id);\n            }\n        }\n    }\n    }).render(true);\n} else {\n    ui.notifications.warn(`You must select a token first.`);\n}",
+  "_id": "PRCJHQTP32CWKrnH",
+  "_stats": {
+    "coreVersion": "13.342",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "scope": "global",
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!macros!PRCJHQTP32CWKrnH"
+}

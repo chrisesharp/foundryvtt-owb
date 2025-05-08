@@ -1,0 +1,185 @@
+{
+  "name": "Critical Vehicle Damage",
+  "img": "icons/svg/d20-grey.svg",
+  "description": "Rolled when a natural 20 scored against a vehicle",
+  "results": [
+    {
+      "flags": {},
+      "type": "text",
+      "img": "icons/svg/d20-black.svg",
+      "weight": 1,
+      "range": [
+        1,
+        1
+      ],
+      "drawn": false,
+      "_id": "3229I0qKS4kqcglv",
+      "_stats": {
+        "coreVersion": "13.342",
+        "systemId": null,
+        "systemVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "description": "The vehicle's Armor Class is reduced by +1[-1].",
+      "name": "",
+      "_key": "!tables.results!NGXAKdz2EN3u0bZo.3229I0qKS4kqcglv"
+    },
+    {
+      "flags": {},
+      "type": "text",
+      "img": "icons/svg/d20-black.svg",
+      "weight": 1,
+      "range": [
+        2,
+        2
+      ],
+      "drawn": false,
+      "_id": "SZKBreMaw4mI1xXe",
+      "_stats": {
+        "coreVersion": "13.342",
+        "systemId": null,
+        "systemVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "description": "One of the vehicle's Modifications is reduced by one (x1) or rendered unusable. The Referee must determine the effects. For example, a Tracked vehicle might be rendered immobile. An Aerial vehicle may be forced to land. A Cargo compartment may collapse or the cargo inside it may be destroyed. A Waterborne vehicle may begin to sink. The vehicle does not regain the benefit of this Modification until repairs are made.",
+      "name": "",
+      "_key": "!tables.results!NGXAKdz2EN3u0bZo.SZKBreMaw4mI1xXe"
+    },
+    {
+      "flags": {},
+      "type": "text",
+      "img": "icons/svg/d20-black.svg",
+      "weight": 1,
+      "range": [
+        3,
+        3
+      ],
+      "drawn": false,
+      "_id": "sCPWSKtPyoWylJVJ",
+      "_stats": {
+        "coreVersion": "13.342",
+        "systemId": null,
+        "systemVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "description": "The vehicle's engine and/or tracks/tires/props are damaged. The vehicle is reduced to 1/2 its normal Movement. If this result is rolled again, the vehicle is rendered immobile.",
+      "name": "",
+      "_key": "!tables.results!NGXAKdz2EN3u0bZo.sCPWSKtPyoWylJVJ"
+    },
+    {
+      "flags": {},
+      "type": "text",
+      "img": "icons/svg/d20-black.svg",
+      "weight": 1,
+      "range": [
+        4,
+        4
+      ],
+      "drawn": false,
+      "_id": "TUvsD8ao4BvGiksl",
+      "_stats": {
+        "coreVersion": "13.342",
+        "systemId": null,
+        "systemVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "description": "One of the vehicle's operators takes 1d6+1 Hit Points of damage from shrapnel (Saving Throw for 1/2).",
+      "name": "",
+      "_key": "!tables.results!NGXAKdz2EN3u0bZo.TUvsD8ao4BvGiksl"
+    },
+    {
+      "flags": {},
+      "type": "text",
+      "img": "icons/svg/d20-black.svg",
+      "weight": 1,
+      "range": [
+        5,
+        5
+      ],
+      "drawn": false,
+      "_id": "30kzdKh37UX1UPs5",
+      "_stats": {
+        "coreVersion": "13.342",
+        "systemId": null,
+        "systemVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "description": "The visibility of the vehicle's occupants is reduced (broken windows, damaged periscope, smoking engine, etc.), creating a -1 penalty To-Hit with all vehicle-mounted weapons. This result is cumulative.",
+      "name": "",
+      "_key": "!tables.results!NGXAKdz2EN3u0bZo.30kzdKh37UX1UPs5"
+    },
+    {
+      "flags": {},
+      "type": "text",
+      "img": "icons/svg/d20-black.svg",
+      "weight": 1,
+      "range": [
+        6,
+        6
+      ],
+      "drawn": false,
+      "_id": "ELuds8bVaXY4TecL",
+      "_stats": {
+        "coreVersion": "13.342",
+        "systemId": null,
+        "systemVersion": null,
+        "createdTime": null,
+        "modifiedTime": null,
+        "lastModifiedBy": null,
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null
+      },
+      "description": "One of the vehicle's weapons is rendered inoperable. The Referee may decide which weapon, or roll a weapon at random.",
+      "name": "",
+      "_key": "!tables.results!NGXAKdz2EN3u0bZo.ELuds8bVaXY4TecL"
+    }
+  ],
+  "formula": "1d6",
+  "replacement": true,
+  "displayRoll": true,
+  "_id": "NGXAKdz2EN3u0bZo",
+  "_stats": {
+    "coreVersion": "13.342",
+    "systemId": null,
+    "systemVersion": null,
+    "createdTime": null,
+    "modifiedTime": null,
+    "lastModifiedBy": null,
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  },
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {},
+  "_key": "!tables!NGXAKdz2EN3u0bZo"
+}
