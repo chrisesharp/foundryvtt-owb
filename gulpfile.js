@@ -5,10 +5,6 @@ const chalk = require("chalk");
 const archiver = require("archiver");
 const stringify = require("json-stringify-pretty-compact");
 const typescript = require("typescript");
-const through2 = require("through2");
-const yaml = require("js-yaml");
-const Datastore = require("nedb");
-const mergeStream = require("merge-stream");
 
 const ts = require("gulp-typescript");
 const less = require("gulp-less");
@@ -18,6 +14,10 @@ const git = require("gulp-git");
 const argv = require("yargs").argv;
 
 sass.compiler = require("sass");
+
+const sourceDirectory = './src';
+const packsDirectory = `${sourceDirectory}/packs`;
+const distDirectory = './dist';
 
 function getConfig() {
   const configPath = path.resolve(process.cwd(), "foundryconfig.json");
@@ -170,56 +170,17 @@ function buildSASS() {
 /*  Compile Compendia
 /* ----------------------------------------- */
 
-async function compilePacks() {
-  const PACK_SRC = "src/packs";
-  const BUILD_DIR = "dist/packs";
-  // determine the source folders to process
-  const folders = fs.readdirSync(PACK_SRC).filter((file) => {
-    return fs.statSync(path.join(PACK_SRC, file)).isDirectory();
-  });
-
-  // process each folder into a compendium db
-  const packs = folders.map((folder) => {
-    const removeProp = (obj, propToDelete) => {
-      for (var property in obj) {
-         if (typeof obj[property] == "object") {
-            let objectToCheck = obj[property];
-            delete obj[property]
-            if (property !== propToDelete) {
-              let newJsonData= removeProp(objectToCheck, propToDelete);
-              obj[property]= newJsonData
-            }
-         } else {
-             if (property === propToDelete) {
-               delete obj[property];
-             }
-           }
-       }
-       return obj
-    }
-
-    let filename = path.resolve(__dirname, BUILD_DIR, `${folder}.db`);
-    if (fs.existsSync(filename)) { fs.unlinkSync(filename);}
-    const db = new Datastore({ filename: filename, autoload: true });
-    const globs = [path.join(PACK_SRC, folder, "*.json"), path.join(PACK_SRC, folder, "*.yml")];
-    return gulp.src(globs)
-    .pipe(
-      through2.obj((file, enc, cb) => {
-        let json = {};
-        if (path.extname(file.path) === ".json") {
-          let orig_json = JSON.parse(file.contents.toString());
-          json = removeProp(orig_json, "_id");
-          json = removeProp(json, "sort");
-          json = removeProp(json, "flags");
-        } else {
-          json = yaml.loadAll(file.contents.toString());
-        }
-        db.insert(json);
-        cb();
-      })
+async function buildPacks() {
+  const { compilePack } = await import("@foundryvtt/foundryvtt-cli");
+  const dirs = fs
+    .readdirSync(packsDirectory, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => dirent.name);
+  if (dirs.length) {
+    await Promise.all(
+      dirs.map(async (dir) => await compilePack(`${packsDirectory}/${dir}`, `${distDirectory}/packs/${dir}`)),
     );
-  });
-  return mergeStream.call(null, packs);
+  }
 }
 
 /**
@@ -534,14 +495,14 @@ function gitTag() {
 
 const execGit = gulp.series(gitAdd, gitCommit, gitTag);
 
-const execBuild = gulp.parallel(buildTS, buildLess, buildSASS, compilePacks);
+const execBuild = gulp.parallel(buildTS, buildLess, buildSASS, buildPacks);
 
 exports.build = gulp.series(clean, execBuild, copyFiles);
 exports.watch = buildWatch;
 exports.clean = clean;
 exports.link = linkUserData;
 exports.package = packageBuild;
-exports.compendia = compilePacks;
+exports.compendia = buildPacks;
 exports.publish = gulp.series(
   clean,
   updateManifest,
