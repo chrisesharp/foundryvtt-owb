@@ -43,6 +43,9 @@
 
   /* Header Summary Details */
   .header-details {
+    input {
+      box-shadow: none;
+    }
     h1 {
       input {
         height: fit-content;
@@ -164,6 +167,9 @@
       height: 100%;
     }
     .attributes {
+      input {
+      box-shadow: none;
+      }
       list-style: none;
       margin: 0;
       padding: 0;
