@@ -1,12 +1,12 @@
 {
   "private": true,
   "name": "owb",
-  "version": "2.0.5",
+  "version": "3.0.0",
   "description": "OWB:WW2 system in Foundry VTT",
   "engines": {
     "node": ">=24.0.0 <=26.0.0",
     "npm": ">11.0.0 <=12.0.0"
-  },  
+  },
   "scripts": {
     "package": "gulp package",
     "build": "gulp build && gulp link",
