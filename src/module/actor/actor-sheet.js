@@ -59,11 +59,13 @@ export class OWBActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     },
   };
 
-  async _prepareContext(options) {
+  _prepareContext(options) {
+    const context = super._prepareContext(options);
     const config = CONFIG.OWB;
     config.ascendingAC = game.settings.get("owb", "ascendingAC");
     config.encumbrance = game.settings.get("owb", "encumbranceOption");
     return {
+      ...context,
       options: options,
       owner: this.actor.isOwner,
       actor: this.actor,
@@ -128,7 +130,7 @@ export class OWBActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     const html = this.element;
   }
 
-  static async  _itemEdit(_event, element) {
+  static async _itemEdit(_event, element) {
     const li = element.parentNode.parentNode;
     const item = this.actor.items.get(li.dataset.itemId);
     item?.sheet?.render(true);
@@ -249,7 +251,7 @@ export class OWBActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
       });
   }
 
-  static async _onRollHitDice(event) {
+  static async _onRollHitDice(event, target) {
     this.actor.rollHitDice({ event: event })
   }
 
@@ -261,7 +263,7 @@ export class OWBActorSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
     item.update({system:{"quantity.value": quantity}});
   }
 
-  static async _onConfigureActor(event) {
+  static async _onConfigureActor(event, target) {
     event.preventDefault();
     new OWBEntityTweaks(this.actor, {
       top: this.position.top + 40,

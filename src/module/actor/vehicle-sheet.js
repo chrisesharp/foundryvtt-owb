@@ -52,8 +52,8 @@ export class OWBActorSheetVehicle extends OWBActorSheet {
   }
 
 
-  async _prepareContext(options) {
-    const data = await super._prepareContext(options);
+  _prepareContext(options) {
+    const data = super._prepareContext(options);
     data.config.morale = game.settings.get("owb", "morale");
     data.isNew = this.actor.isNew();
     data.isVehicle = true

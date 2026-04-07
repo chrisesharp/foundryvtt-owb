@@ -1,4 +1,13 @@
 // Import Modules
+import { CharacterDataModel } from "./actor/character-data.js";
+import { EnemyDataModel } from "./actor/enemy-data.js";
+import { VehicleDataModel } from "./actor/vehicle-data.js";
+import { ItemDataModel } from "./item/item-data.js";
+import { AbilityDataModel } from "./item/ability-data.js";
+import { ArmorDataModel } from "./item/armor-data.js";
+import { WeaponDataModel } from "./item/weapon-data.js";
+import { LanguageDataModel } from "./item/language-data.js";
+
 import { OWBItemSheet } from "./item/item-sheet.js";
 import { OWBActorSheetCharacter } from "./actor/character-sheet.js";
 import { OWBActorSheetEnemy } from "./actor/enemy-sheet.js";
@@ -15,7 +24,9 @@ import * as party from "./party.js";
 import { OWBCombat } from "./combat.js";
 const { Actors, Items } = foundry.documents.collections;
 const { renderTemplate } = foundry.applications.handlebars;
-const { ActorSheet, ItemSheet } = foundry.appv1.sheets;
+const { DocumentSheetV2 } = foundry.applications.sheets;
+
+// const { ActorSheet, ItemSheet } = foundry.appv1.sheets;
 import { FrameView } from './utils/frameview.js';
 
 /* -------------------------------------------- */
@@ -30,6 +41,20 @@ Hooks.once("init", async function () {
   CONFIG.Combat.initiative = {
     formula: "1d6 + @initiative.value",
     decimals: 2,
+  };
+
+  CONFIG.Item.dataModels = {
+    item: ItemDataModel,
+    ability: AbilityDataModel,
+    armor: ArmorDataModel,
+    weapon: WeaponDataModel,
+    language: LanguageDataModel
+  };
+
+  CONFIG.Actor.dataModels = {
+    character: CharacterDataModel,
+    enemy: EnemyDataModel,
+    vehicle: VehicleDataModel
   };
 
   CONFIG.OWB = OWB;
@@ -47,22 +72,26 @@ Hooks.once("init", async function () {
   CONFIG.Actor.documentClass = OWBActor;
   CONFIG.Item.documentClass = OWBItem;
 
-  // Register sheet application classes
-  Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("owb", OWBActorSheetCharacter, {
-    types: ["character"],
-    makeDefault: true,
-  });
-  Actors.registerSheet("owb", OWBActorSheetEnemy, {
-    types: ["enemy"],
-    makeDefault: true,
-  });
-  Actors.registerSheet("owb", OWBActorSheetVehicle, {
-    types: ["vehicle"],
-    makeDefault: true,
-  });
-  Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("owb", OWBItemSheet, { makeDefault: true });
+// Register the sheets
+Actors.registerSheet("owb", OWBActorSheetCharacter, {
+  types: ["character"],
+  makeDefault: true,
+  label: "OWB.SheetClassCharacter"
+});
+Actors.registerSheet("owb", OWBActorSheetEnemy, {
+  types: ["enemy"],
+  makeDefault: true,
+  label: "OWB.SheetClassEnemy"
+});
+Actors.registerSheet("owb", OWBActorSheetVehicle, {
+  types: ["vehicle"],
+  makeDefault: true,
+  label: "OWB.SheetClassVehicle"
+});
+Items.registerSheet("owb", OWBItemSheet, {
+  makeDefault: true,
+  label: "OWB.SheetClassItem"
+});
 
   await preloadHandlebarsTemplates();
 });

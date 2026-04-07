@@ -5,8 +5,8 @@ export class OWBActor extends Actor {
    * Extends data from base Actor class
    */
 
-  prepareData() {
-    super.prepareData();
+  prepareBaseData() {
+    super.prepareBaseData();
     const data = this.system;
 
     if (this.type === "character") this.prepareCharacterData(this.system);

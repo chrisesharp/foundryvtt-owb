@@ -31,7 +31,7 @@ export class OWBEntityTweaks extends HandlebarsApplicationMixin(ApplicationV2) {
    * Construct and return the data object used to render the HTML template for this form application.
    * @return {Object}
    */
-  async _prepareContext(options) {
+  _prepareContext(options) {
     let data = {};
     data.system = this.options.system;
     data.isCharacter = (this.options.prototypeToken.actor.type === 'character');

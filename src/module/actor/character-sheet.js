@@ -70,7 +70,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
   * The prepared data object contains both the actor data as well as additional sheet options
   */
   async _prepareContext(options) {
-    const data = await super._prepareContext(options);
+    const data = super._prepareContext(options);
     return this._prepareItems(data);
   }
 
@@ -99,7 +99,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
     return context;
   }
 
-  static async generateScores() {
+  static async generateScores(event, target) {
     new OWBCharacterCreator(this.actor, {
       top: this.position.top + 40,
       left: this.position.left + (this.position.width - 400) / 2,
@@ -183,7 +183,7 @@ export class OWBActorSheetCharacter extends OWBActorSheet {
 
   /* -------------------------------------------- */
 
-  static async _onShowModifiers(event) {
+  static async _onShowModifiers(event, target) {
     event.preventDefault();
     new OWBCharacterModifiers(this.actor, {
       top: this.position.top + 40,

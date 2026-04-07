@@ -1,4 +1,3 @@
-import { OWBPartyXP } from "./party-xp.js";
 const { renderTemplate } = foundry.applications.handlebars;
 const { ApplicationV2, DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -35,7 +34,7 @@ export class OWBPartySheet extends HandlebarsApplicationMixin(ApplicationV2) {
     },
   };
 
-  async _prepareContext(options) {
+  _prepareContext(options) {
     this.#party = this._preparePartyData();
     const data = {
       party: this.#party,

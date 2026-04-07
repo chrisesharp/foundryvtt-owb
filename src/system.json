@@ -5,7 +5,7 @@
   "version": "2.0.5",
   "compatibility": {
     "minimum": 13,
-    "verified": "13"
+    "verified": "14"
   },
   "authors": [
     {
@@ -40,6 +40,20 @@
       "path": "lang/en.json"
     }
   ],
+  "documentTypes": {
+    "Actor": {
+      "character": {},
+      "enemy": {},
+      "vehicle": {}
+    },
+    "Item": {
+      "item": {},
+      "weapon": {},
+      "armor": {},
+      "ability": {},
+      "language": {}
+    }
+  },
   "grid": {
     "distance": 5,
     "units": "ft"

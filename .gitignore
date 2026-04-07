@@ -3,3 +3,4 @@ dist
 build
 foundryconfig.json
 .DS_Store
+FOUNDRY_ARCHITECTURE_GUIDE.md

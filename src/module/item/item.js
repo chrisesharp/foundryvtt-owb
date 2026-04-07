@@ -13,8 +13,8 @@ export class OWBItem extends Item {
   /**
    * Augment the basic Item data model with additional dynamic data.
    */
-  prepareData() {
-    super.prepareData();
+  prepareBaseData() {
+    super.prepareBaseData();
     // Set default image
     let img = CONST.DEFAULT_TOKEN;
     switch (this.type) {
