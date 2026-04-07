@@ -5,7 +5,8 @@ export class ActorDataModel extends foundry.abstract.TypeDataModel {
         const schema = {};
 
         schema.hp = new fields.SchemaField({
-            value: new fields.NumberField({ initial: 20, integer: true, min: 0, required: true }),
+            value: new fields.NumberField({ initial: 1, integer: true, min: 0, required: true }),
+            max: new fields.NumberField({ initial: 1, integer: true, min: 0, required: true }),
             hd: new fields.StringField({ initial: "1d8", required: true})
         });
 

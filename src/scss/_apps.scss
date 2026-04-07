@@ -6,7 +6,7 @@
 }
 
 &.dialog.creator {
-  color: $colorFaint;
+  // color: $colorFaint;
 
   .attribute-list {
     .form-fields {
@@ -469,6 +469,6 @@
 &.ranged-attack {
   div.dialog-content {
     display: block;
-    color: $colorFaint;
+    // color: $colorFaint;
   }
 }
