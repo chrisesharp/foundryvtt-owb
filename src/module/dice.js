@@ -263,7 +263,7 @@ export class OWBDice {
       formula: parts.join(" "),
       data: data,
       rollMode: data.roll.blindroll ? "blindroll" : game.settings.get("core", "rollMode"),
-      rollModes: CONFIG.Dice.rollModes,
+      rollModes: CONFIG.ChatMessage.modes,
     };
 
     let rollData = {
@@ -334,7 +334,7 @@ export class OWBDice {
       formula: parts.join(" "),
       data: data,
       rollMode: game.settings.get("core", "rollMode"),
-      rollModes: CONFIG.Dice.rollModes,
+      rollModes: CONFIG.ChatMessage.modes,
     };
 
     const rollData = {

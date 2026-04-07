@@ -37,20 +37,40 @@ export class OWBItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     },
   }
 
-  async _prepareContext(options) {
-    let data = await super._prepareContext(options);
-    data.data = this.item.system;
-    data.item = this.item;
-    data.config = CONFIG.OWB;
-    data.isWeapon = this.item.type === 'weapon';
-    data.isAbility = this.item.type === 'ability';
-    data.enrichedNotes = await TextEditor.enrichHTML(this.item.system.description, {
+  _prepareContext(options) {
+    const context = super._prepareContext(options);
+    context.system = this.item.system;
+    context.data = this.item.system;
+    context.item = this.item;
+    context.config = CONFIG.OWB;
+    context.isWeapon = this.item.type === 'weapon';
+    context.isAbility = this.item.type === 'ability';
+    context.editable = this.isEditable;
+    context.enrichedNotes = TextEditor.enrichHTML(this.item.system.description, {
       secrets: this.document.isOwner,
       rollData: this.actor?.getRollData(),
       // Relative UUID resolution
       relativeTo: this.item,
     });
-    return data;
+    return context;
+  }
+
+  async _preparePartContext(partId, context) {
+    context = await super._preparePartContext(partId, context);
+    context.system = this.item.system;
+    context.data = this.item.system;
+    context.item = this.item;
+    context.config = CONFIG.OWB;
+    context.isWeapon = this.item.type === 'weapon';
+    context.isAbility = this.item.type === 'ability';
+    context.editable = this.isEditable;
+    context.enrichedNotes = await TextEditor.enrichHTML(this.item.system.description, {
+      secrets: this.document.isOwner,
+      rollData: this.actor?.getRollData(),
+      // Relative UUID resolution
+      relativeTo: this.item,
+    });
+    return context;
   }
 
   _onRender(_context, _options) {
@@ -78,11 +98,11 @@ export class OWBItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     this.item.popTag(value);
   }
 
-  static async _onToggleMelee() {
+  static async _onToggleMelee(event, target) {
     this.item.update({system: {melee: !this.item.system.melee}});
   }
 
-  static async  _onToggleRanged() {
+  static async _onToggleRanged(event, target) {
     this.item.update({system: {missile: !this.item.system.missile}});
   }
 }

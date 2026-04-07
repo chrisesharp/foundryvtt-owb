@@ -56,7 +56,7 @@ export class OWBCharacterCreator  extends HandlebarsApplicationMixin(Application
     return `${this.options.prototypeToken.actor.name}: ${game.i18n.localize('OWB.dialog.generator')}`;
   }
 
-  async _prepareContext(options) {
+  _prepareContext(options) {
     let data = {};
     data.user = game.user;
     data.actor = this.options.prototypeToken.actor;

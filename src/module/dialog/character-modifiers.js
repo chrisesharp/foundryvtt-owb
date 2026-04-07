@@ -23,7 +23,7 @@ export class OWBCharacterModifiers extends HandlebarsApplicationMixin(Applicatio
     },
   };
 
-  async _prepareContext(options) {
+  _prepareContext(options) {
     let data = {};
     data.user = game.user;
     data.system = this.options.prototypeToken.actor.system;
