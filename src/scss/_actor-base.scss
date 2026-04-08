@@ -407,6 +407,11 @@
           border-bottom: none;
           margin: 3px 0;
         }
+
+        &.counter input {
+          padding: revert;
+          text-align: center;
+        }
       }
       .field-short {
         font-size: 12px;
@@ -428,7 +433,7 @@
       }
       .item-controls {
         font-size: 12px;
-        flex-basis: 50px;
+        flex-basis: 60px;
         flex-grow: 0;
         text-align: right;
         margin-right: 4px;

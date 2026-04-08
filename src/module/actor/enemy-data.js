@@ -13,6 +13,7 @@ export class EnemyDataModel extends ActorDataModel {
             biography: new fields.HTMLField(),
             xp: new fields.NumberField({ initial: 0, integer: true }),
             morale: new fields.NumberField({ initial: 0, integer: true }),
+            rank: new fields.NumberField({ initial: 1, required: true}),
         });
 
         schema.attacks = new fields.StringField({ initial: "" });
